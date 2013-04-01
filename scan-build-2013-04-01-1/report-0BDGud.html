@@ -1,0 +1,1329 @@
+<!doctype html>
+<html>
+<head>
+<title>/Users/schulzch/Documents/qml-ogdf/ogdf/src/orthogonal/OrthoRep.cpp</title>
+<style type="text/css">
+ body { color:#000000; background-color:#ffffff }
+ body { font-family:Helvetica, sans-serif; font-size:10pt }
+ h1 { font-size:14pt }
+ .code { border-collapse:collapse; width:100%; }
+ .code { font-family: "Monospace", monospace; font-size:10pt }
+ .code { line-height: 1.2em }
+ .comment { color: green; font-style: oblique }
+ .keyword { color: blue }
+ .string_literal { color: red }
+ .directive { color: darkmagenta }
+ .expansion { display: none; }
+ .macro:hover .expansion { display: block; border: 2px solid #FF0000; padding: 2px; background-color:#FFF0F0; font-weight: normal;   -webkit-border-radius:5px;  -webkit-box-shadow:1px 1px 7px #000; position: absolute; top: -1em; left:10em; z-index: 1 } 
+ .macro { color: darkmagenta; background-color:LemonChiffon; position: relative }
+ .num { width:2.5em; padding-right:2ex; background-color:#eeeeee }
+ .num { text-align:right; font-size:8pt }
+ .num { color:#444444 }
+ .line { padding-left: 1ex; border-left: 3px solid #ccc }
+ .line { white-space: pre }
+ .msg { -webkit-box-shadow:1px 1px 7px #000 }
+ .msg { -webkit-border-radius:5px }
+ .msg { font-family:Helvetica, sans-serif; font-size:8pt }
+ .msg { float:left }
+ .msg { padding:0.25em 1ex 0.25em 1ex }
+ .msg { margin-top:10px; margin-bottom:10px }
+ .msg { font-weight:bold }
+ .msg { max-width:60em; word-wrap: break-word; white-space: pre-wrap }
+ .msgT { padding:0x; spacing:0x }
+ .msgEvent { background-color:#fff8b4; color:#000000 }
+ .msgControl { background-color:#bbbbbb; color:#000000 }
+ .mrange { background-color:#dfddf3 }
+ .mrange { border-bottom:1px solid #6F9DBE }
+ .PathIndex { font-weight: bold; padding:0px 5px; margin-right:5px; }
+ .PathIndex { -webkit-border-radius:8px }
+ .PathIndexEvent { background-color:#bfba87 }
+ .PathIndexControl { background-color:#8c8c8c }
+ .PathNav a { text-decoration:none; font-size: larger }
+ .CodeInsertionHint { font-weight: bold; background-color: #10dd10 }
+ .CodeRemovalHint { background-color:#de1010 }
+ .CodeRemovalHint { border-bottom:1px solid #6F9DBE }
+ table.simpletable {
+   padding: 5px;
+   font-size:12pt;
+   margin:20px;
+   border-collapse: collapse; border-spacing: 0px;
+ }
+ td.rowname {
+   text-align:right; font-weight:bold; color:#444444;
+   padding-right:2ex; }
+</style>
+</head>
+<body>
+<!-- BUGDESC Dereference of null pointer -->
+
+<!-- BUGTYPE Dereference of null pointer -->
+
+<!-- BUGCATEGORY Logic error -->
+
+<!-- BUGFILE /Users/schulzch/Documents/qml-ogdf/ogdf/src/orthogonal/OrthoRep.cpp -->
+
+<!-- BUGLINE 395 -->
+
+<!-- BUGPATHLENGTH 11 -->
+
+<!-- BUGMETAEND -->
+<!-- REPORTHEADER -->
+<h3>Bug Summary</h3>
+<table class="simpletable">
+<tr><td class="rowname">File:</td><td>src/orthogonal/OrthoRep.cpp</td></tr>
+<tr><td class="rowname">Location:</td><td><a href="#EndPath">line 395, column 6</a></td></tr>
+<tr><td class="rowname">Description:</td><td>Dereference of null pointer</td></tr>
+</table>
+<!-- REPORTSUMMARYEXTRA -->
+<h3>Annotated Source Code</h3>
+<table class="code">
+<tr><td class="num" id="LN1">1</td><td class="line"><span class='comment'>/*</span></td></tr>
+<tr><td class="num" id="LN2">2</td><td class="line"> <span class='comment'>* $Revision: 2566 $</span></td></tr>
+<tr><td class="num" id="LN3">3</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN4">4</td><td class="line"> <span class='comment'>* last checkin:</span></td></tr>
+<tr><td class="num" id="LN5">5</td><td class="line"> <span class='comment'>*   $Author: gutwenger $</span></td></tr>
+<tr><td class="num" id="LN6">6</td><td class="line"> <span class='comment'>*   $Date: 2012-07-07 23:10:08 +0200 (Sa, 07. Jul 2012) $</span></td></tr>
+<tr><td class="num" id="LN7">7</td><td class="line"> <span class='comment'>***************************************************************/</span></td></tr>
+<tr><td class="num" id="LN8">8</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN9">9</td><td class="line"><span class='comment'>/** \file</span></td></tr>
+<tr><td class="num" id="LN10">10</td><td class="line"> <span class='comment'>* \brief Implementation of classes BendString and OrthoRep.</span></td></tr>
+<tr><td class="num" id="LN11">11</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN12">12</td><td class="line"> <span class='comment'>* \author Carsten Gutwenger</span></td></tr>
+<tr><td class="num" id="LN13">13</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN14">14</td><td class="line"> <span class='comment'>* \par License:</span></td></tr>
+<tr><td class="num" id="LN15">15</td><td class="line"> <span class='comment'>* This file is part of the Open Graph Drawing Framework (OGDF).</span></td></tr>
+<tr><td class="num" id="LN16">16</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN17">17</td><td class="line"> <span class='comment'>* \par</span></td></tr>
+<tr><td class="num" id="LN18">18</td><td class="line"> <span class='comment'>* Copyright (C)&lt;br&gt;</span></td></tr>
+<tr><td class="num" id="LN19">19</td><td class="line"> <span class='comment'>* See README.txt in the root directory of the OGDF installation for details.</span></td></tr>
+<tr><td class="num" id="LN20">20</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN21">21</td><td class="line"> <span class='comment'>* \par</span></td></tr>
+<tr><td class="num" id="LN22">22</td><td class="line"> <span class='comment'>* This program is free software; you can redistribute it and/or</span></td></tr>
+<tr><td class="num" id="LN23">23</td><td class="line"> <span class='comment'>* modify it under the terms of the GNU General Public License</span></td></tr>
+<tr><td class="num" id="LN24">24</td><td class="line"> <span class='comment'>* Version 2 or 3 as published by the Free Software Foundation;</span></td></tr>
+<tr><td class="num" id="LN25">25</td><td class="line"> <span class='comment'>* see the file LICENSE.txt included in the packaging of this file</span></td></tr>
+<tr><td class="num" id="LN26">26</td><td class="line"> <span class='comment'>* for details.</span></td></tr>
+<tr><td class="num" id="LN27">27</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN28">28</td><td class="line"> <span class='comment'>* \par</span></td></tr>
+<tr><td class="num" id="LN29">29</td><td class="line"> <span class='comment'>* This program is distributed in the hope that it will be useful,</span></td></tr>
+<tr><td class="num" id="LN30">30</td><td class="line"> <span class='comment'>* but WITHOUT ANY WARRANTY; without even the implied warranty of</span></td></tr>
+<tr><td class="num" id="LN31">31</td><td class="line"> <span class='comment'>* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></td></tr>
+<tr><td class="num" id="LN32">32</td><td class="line"> <span class='comment'>* GNU General Public License for more details.</span></td></tr>
+<tr><td class="num" id="LN33">33</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN34">34</td><td class="line"> <span class='comment'>* \par</span></td></tr>
+<tr><td class="num" id="LN35">35</td><td class="line"> <span class='comment'>* You should have received a copy of the GNU General Public</span></td></tr>
+<tr><td class="num" id="LN36">36</td><td class="line"> <span class='comment'>* License along with this program; if not, write to the Free</span></td></tr>
+<tr><td class="num" id="LN37">37</td><td class="line"> <span class='comment'>* Software Foundation, Inc., 51 Franklin Street, Fifth Floor,</span></td></tr>
+<tr><td class="num" id="LN38">38</td><td class="line"> <span class='comment'>* Boston, MA 02110-1301, USA.</span></td></tr>
+<tr><td class="num" id="LN39">39</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN40">40</td><td class="line"> <span class='comment'>* \see  http://www.gnu.org/copyleft/gpl.html</span></td></tr>
+<tr><td class="num" id="LN41">41</td><td class="line"> <span class='comment'>***************************************************************/</span></td></tr>
+<tr><td class="num" id="LN42">42</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN43">43</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN44">44</td><td class="line"><span class='directive'>#include &lt;ogdf/orthogonal/OrthoRep.h&gt;</span></td></tr>
+<tr><td class="num" id="LN45">45</td><td class="line"><span class='directive'>#include &lt;ogdf/planarity/PlanRepUML.h&gt;</span></td></tr>
+<tr><td class="num" id="LN46">46</td><td class="line"><span class='directive'>#include &lt;ogdf/basic/String.h&gt;</span></td></tr>
+<tr><td class="num" id="LN47">47</td><td class="line"><span class='directive'>#include &lt;string.h&gt;</span></td></tr>
+<tr><td class="num" id="LN48">48</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN49">49</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN50">50</td><td class="line"><span class='comment'>//TODO: Verknuepfe Uebergabe von PlanRep in dissect mit option align</span></td></tr>
+<tr><td class="num" id="LN51">51</td><td class="line"><span class='comment'>//in undissect, denn nur so koennen Hierarchien korrekt erkannt werden</span></td></tr>
+<tr><td class="num" id="LN52">52</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN53">53</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN54">54</td><td class="line"><span class='keyword'>namespace</span> ogdf {</td></tr>
+<tr><td class="num" id="LN55">55</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN56">56</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN57">57</td><td class="line"><span class='comment'>//---------------------------------------------------------</span></td></tr>
+<tr><td class="num" id="LN58">58</td><td class="line"><span class='comment'>// BendString</span></td></tr>
+<tr><td class="num" id="LN59">59</td><td class="line"><span class='comment'>// represents the bends on an edge e consisting of vertical</span></td></tr>
+<tr><td class="num" id="LN60">60</td><td class="line"><span class='comment'>// and horizontal segments</span></td></tr>
+<tr><td class="num" id="LN61">61</td><td class="line"><span class='comment'>//---------------------------------------------------------</span></td></tr>
+<tr><td class="num" id="LN62">62</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN63">63</td><td class="line"><span class='comment'>// initializes bends string to a given C-string</span></td></tr>
+<tr><td class="num" id="LN64">64</td><td class="line"><span class='keyword'>void</span> BendString::init(<span class='keyword'>const</span> <span class='keyword'>char</span> *str)</td></tr>
+<tr><td class="num" id="LN65">65</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN66">66</td><td class="line"><span class='directive'>#ifdef OGDF_DEBUG</span></td></tr>
+<tr><td class="num" id="LN67">67</td><td class="line">	<span class='keyword'>const</span> <span class='keyword'>char</span> *q;</td></tr>
+<tr><td class="num" id="LN68">68</td><td class="line">	<span class='keyword'>for</span>(q  = str; *q; ++q)</td></tr>
+<tr><td class="num" id="LN69">69</td><td class="line">		OGDF_ASSERT(*q == '0' || *q == '1');</td></tr>
+<tr><td class="num" id="LN70">70</td><td class="line"><span class='directive'>#endif</span></td></tr>
+<tr><td class="num" id="LN71">71</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN72">72</td><td class="line">	m_len = strlen(str);</td></tr>
+<tr><td class="num" id="LN73">73</td><td class="line">	<span class='keyword'>if</span> (m_len &gt; 0)</td></tr>
+<tr><td class="num" id="LN74">74</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN75">75</td><td class="line">		m_pBend = <span class='keyword'>new</span> <span class='keyword'>char</span>[m_len+1];</td></tr>
+<tr><td class="num" id="LN76">76</td><td class="line">		<span class='keyword'>char</span> *p = m_pBend;</td></tr>
+<tr><td class="num" id="LN77">77</td><td class="line">		<span class='keyword'>while</span> ((*p++ = *str++) != 0) ;</td></tr>
+<tr><td class="num" id="LN78">78</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN79">79</td><td class="line">	} <span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN80">80</td><td class="line">		m_pBend = 0;</td></tr>
+<tr><td class="num" id="LN81">81</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN82">82</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN83">83</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN84">84</td><td class="line"><span class='comment'>// initializes bends string to the string consoisting of n c's</span></td></tr>
+<tr><td class="num" id="LN85">85</td><td class="line"><span class='keyword'>void</span> BendString::init(<span class='keyword'>char</span> c, size_t n)</td></tr>
+<tr><td class="num" id="LN86">86</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN87">87</td><td class="line">	OGDF_ASSERT(c == '0' || c == '1');</td></tr>
+<tr><td class="num" id="LN88">88</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN89">89</td><td class="line">	m_len = n;</td></tr>
+<tr><td class="num" id="LN90">90</td><td class="line">	<span class='keyword'>if</span> (n &gt; 0)</td></tr>
+<tr><td class="num" id="LN91">91</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN92">92</td><td class="line">		m_pBend = <span class='keyword'>new</span> <span class='keyword'>char</span>[n+1];</td></tr>
+<tr><td class="num" id="LN93">93</td><td class="line">		m_pBend[n] = 0;</td></tr>
+<tr><td class="num" id="LN94">94</td><td class="line">		<span class='keyword'>do</span></td></tr>
+<tr><td class="num" id="LN95">95</td><td class="line">			m_pBend[--n] = c;</td></tr>
+<tr><td class="num" id="LN96">96</td><td class="line">		<span class='keyword'>while</span>(n &gt; 0);</td></tr>
+<tr><td class="num" id="LN97">97</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN98">98</td><td class="line">	<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN99">99</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN100">100</td><td class="line">		m_pBend = 0;</td></tr>
+<tr><td class="num" id="LN101">101</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN102">102</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN103">103</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN104">104</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN105">105</td><td class="line"><span class='comment'>// initializes bends string to a copy of bs</span></td></tr>
+<tr><td class="num" id="LN106">106</td><td class="line"><span class='keyword'>void</span> BendString::init(<span class='keyword'>const</span> BendString &amp;bs)</td></tr>
+<tr><td class="num" id="LN107">107</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN108">108</td><td class="line">	m_len = bs.m_len;</td></tr>
+<tr><td class="num" id="LN109">109</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN110">110</td><td class="line">	<span class='keyword'>if</span> (m_len == 0) {</td></tr>
+<tr><td class="num" id="LN111">111</td><td class="line">		m_len = 0;</td></tr>
+<tr><td class="num" id="LN112">112</td><td class="line">		m_pBend = 0;</td></tr>
+<tr><td class="num" id="LN113">113</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN114">114</td><td class="line">	} <span class='keyword'>else</span> {</td></tr>
+<tr><td class="num" id="LN115">115</td><td class="line">		m_pBend = <span class='keyword'>new</span> <span class='keyword'>char</span>[m_len+1];</td></tr>
+<tr><td class="num" id="LN116">116</td><td class="line">		<span class='keyword'>char</span> *p = m_pBend;</td></tr>
+<tr><td class="num" id="LN117">117</td><td class="line">		<span class='keyword'>const</span> <span class='keyword'>char</span> *str = bs.m_pBend;</td></tr>
+<tr><td class="num" id="LN118">118</td><td class="line">		<span class='keyword'>while</span> ((*p++ = *str++) != 0) ;</td></tr>
+<tr><td class="num" id="LN119">119</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN120">120</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN121">121</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN122">122</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN123">123</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN124">124</td><td class="line"><span class='comment'>//---------------------------------------------------------</span></td></tr>
+<tr><td class="num" id="LN125">125</td><td class="line"><span class='comment'>// OrthoRep</span></td></tr>
+<tr><td class="num" id="LN126">126</td><td class="line"><span class='comment'>// orthogonal representation of an embedded graph</span></td></tr>
+<tr><td class="num" id="LN127">127</td><td class="line"><span class='comment'>//---------------------------------------------------------</span></td></tr>
+<tr><td class="num" id="LN128">128</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN129">129</td><td class="line"><span class='comment'>// constructor</span></td></tr>
+<tr><td class="num" id="LN130">130</td><td class="line">OrthoRep::OrthoRep(CombinatorialEmbedding &amp;E) : m_pE(&amp;E), m_angle(E,0),</td></tr>
+<tr><td class="num" id="LN131">131</td><td class="line">	m_bends(E)</td></tr>
+<tr><td class="num" id="LN132">132</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN133">133</td><td class="line">	m_preprocess = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN134">134</td><td class="line">	m_pattern2 = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN135">135</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN136">136</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN137">137</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN138">138</td><td class="line"><span class='comment'>// initialization function; performs actual construction</span></td></tr>
+<tr><td class="num" id="LN139">139</td><td class="line"><span class='keyword'>void</span> OrthoRep::init(CombinatorialEmbedding &amp;E)</td></tr>
+<tr><td class="num" id="LN140">140</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN141">141</td><td class="line">	m_pE = &amp;E;</td></tr>
+<tr><td class="num" id="LN142">142</td><td class="line">	m_angle.init(E,0);</td></tr>
+<tr><td class="num" id="LN143">143</td><td class="line">	m_bends.init(E);</td></tr>
+<tr><td class="num" id="LN144">144</td><td class="line">	m_preprocess = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN145">145</td><td class="line">	m_pattern2 = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN146">146</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN147">147</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN148">148</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN149">149</td><td class="line"><span class='comment'>// The check function below tests if the current OrthoRep instance really</span></td></tr>
+<tr><td class="num" id="LN150">150</td><td class="line"><span class='comment'>// represents a correct orthogonal representation, i.e., it tests if</span></td></tr>
+<tr><td class="num" id="LN151">151</td><td class="line"><span class='comment'>//    * the associated graph is embedded.</span></td></tr>
+<tr><td class="num" id="LN152">152</td><td class="line"><span class='comment'>//    * the external face of the embedding is set</span></td></tr>
+<tr><td class="num" id="LN153">153</td><td class="line"><span class='comment'>//    * the sum of the angles at each vertex is 4</span></td></tr>
+<tr><td class="num" id="LN154">154</td><td class="line"><span class='comment'>//    * if corresponding bend strings are consistent, that is, if e has</span></td></tr>
+<tr><td class="num" id="LN155">155</td><td class="line"><span class='comment'>//      adj. entries adjSrc and adjTgt, then the bend string of adjTgt</span></td></tr>
+<tr><td class="num" id="LN156">156</td><td class="line"><span class='comment'>//      is the string obtained from bend string of adjSrc by reversing the</span></td></tr>
+<tr><td class="num" id="LN157">157</td><td class="line"><span class='comment'>//      sequence and flipping the bits</span></td></tr>
+<tr><td class="num" id="LN158">158</td><td class="line"><span class='comment'>//    * the shape of each face is rectagonal, i.e., if</span></td></tr>
+<tr><td class="num" id="LN159">159</td><td class="line"><span class='comment'>//        #zeros(f) - #ones(f) - 2|f| + sum of angles at vertices in f</span></td></tr>
+<tr><td class="num" id="LN160">160</td><td class="line"><span class='comment'>//      is 4 if f is an internal face or -4 if f is the external face.</span></td></tr>
+<tr><td class="num" id="LN161">161</td><td class="line"><span class='keyword'>bool</span> OrthoRep::check(String &amp;error)</td></tr>
+<tr><td class="num" id="LN162">162</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN163">163</td><td class="line">	<span class='keyword'>const</span> Graph &amp;G = (Graph&amp;) *m_pE;</td></tr>
+<tr><td class="num" id="LN164">164</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN165">165</td><td class="line">	<span class='comment'>// is the associated graph embedded ?</span></td></tr>
+<tr><td class="num" id="LN166">166</td><td class="line">	<span class='keyword'>if</span> (G.representsCombEmbedding() == <span class='keyword'>false</span>) {</td></tr>
+<tr><td class="num" id="LN167">167</td><td class="line">		error = <span class='string_literal'>"Graph is not embedded!"</span>;</td></tr>
+<tr><td class="num" id="LN168">168</td><td class="line">		<span class='keyword'>return</span> <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN169">169</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN170">170</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN171">171</td><td class="line">	<span class='comment'>// sum of angles at each vertex equals 4 ?</span></td></tr>
+<tr><td class="num" id="LN172">172</td><td class="line">	node v;</td></tr>
+<tr><td class="num" id="LN173">173</td><td class="line">	<span class='macro'>forall_nodes(v,G)<span class='expansion'>for((v)=(G).firstNode(); (v); (v)=(v)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN174">174</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN175">175</td><td class="line">		<span class='keyword'>int</span> sumAngles = 0;</td></tr>
+<tr><td class="num" id="LN176">176</td><td class="line">		adjEntry adj;</td></tr>
+<tr><td class="num" id="LN177">177</td><td class="line">		<span class='macro'>forall_adj(adj,v)<span class='expansion'>for((adj)=(v)-&gt;firstAdj(); (adj); (adj)=(adj)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN178">178</td><td class="line">			sumAngles += angle(adj);</td></tr>
+<tr><td class="num" id="LN179">179</td><td class="line">		<span class='keyword'>if</span>(sumAngles != 4) {</td></tr>
+<tr><td class="num" id="LN180">180</td><td class="line">			error.sprintf(<span class='string_literal'>"Angle sum at vertex %d is %d."</span>,</td></tr>
+<tr><td class="num" id="LN181">181</td><td class="line">				v-&gt;index(), sumAngles);</td></tr>
+<tr><td class="num" id="LN182">182</td><td class="line">			<span class='keyword'>return</span> <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN183">183</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN184">184</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN185">185</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN186">186</td><td class="line">	<span class='comment'>// corresponding bend strings are consistent ?</span></td></tr>
+<tr><td class="num" id="LN187">187</td><td class="line">	edge e;</td></tr>
+<tr><td class="num" id="LN188">188</td><td class="line">	<span class='macro'>forall_edges(e,G)<span class='expansion'>for((e)=(G).firstEdge(); (e); (e)=(e)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN189">189</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN190">190</td><td class="line">		<span class='keyword'>const</span> BendString &amp;bs1 = bend(e-&gt;adjSource());</td></tr>
+<tr><td class="num" id="LN191">191</td><td class="line">		<span class='keyword'>const</span> BendString &amp;bs2 = bend(e-&gt;adjTarget());</td></tr>
+<tr><td class="num" id="LN192">192</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN193">193</td><td class="line">		<span class='keyword'>if</span> (bs1.size() != bs2.size()) {</td></tr>
+<tr><td class="num" id="LN194">194</td><td class="line">			error.sprintf(</td></tr>
+<tr><td class="num" id="LN195">195</td><td class="line">				<span class='string_literal'>"Size of corresponding bend strings at edge %d differ!"</span>,</td></tr>
+<tr><td class="num" id="LN196">196</td><td class="line">				e-&gt;index());</td></tr>
+<tr><td class="num" id="LN197">197</td><td class="line">			<span class='keyword'>return</span> <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN198">198</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN199">199</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN200">200</td><td class="line">		size_t i = 0, j = bs2.size()-1;</td></tr>
+<tr><td class="num" id="LN201">201</td><td class="line">		<span class='keyword'>while</span>(i &lt; bs1.size()) {</td></tr>
+<tr><td class="num" id="LN202">202</td><td class="line">			<span class='keyword'>if</span> (bs1[i] != flip(bs2[j])) {</td></tr>
+<tr><td class="num" id="LN203">203</td><td class="line">				error.sprintf(</td></tr>
+<tr><td class="num" id="LN204">204</td><td class="line">					<span class='string_literal'>"Corresponding bend strings at edge %d not consistent!"</span>,</td></tr>
+<tr><td class="num" id="LN205">205</td><td class="line">					e-&gt;index());</td></tr>
+<tr><td class="num" id="LN206">206</td><td class="line">				<span class='keyword'>return</span> <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN207">207</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN208">208</td><td class="line">			++i; --j;</td></tr>
+<tr><td class="num" id="LN209">209</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN210">210</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN211">211</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN212">212</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN213">213</td><td class="line">	<span class='comment'>// external face set ?</span></td></tr>
+<tr><td class="num" id="LN214">214</td><td class="line">	<span class='keyword'>if</span> (m_pE-&gt;externalFace() == 0) {</td></tr>
+<tr><td class="num" id="LN215">215</td><td class="line">		error = <span class='string_literal'>"External face is not set!"</span>;</td></tr>
+<tr><td class="num" id="LN216">216</td><td class="line">		<span class='keyword'>return</span> <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN217">217</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN218">218</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN219">219</td><td class="line">	<span class='comment'>// is shape of each face rectagonal ?</span></td></tr>
+<tr><td class="num" id="LN220">220</td><td class="line">	face f;</td></tr>
+<tr><td class="num" id="LN221">221</td><td class="line">	<span class='macro'>forall_faces(f,*m_pE)<span class='expansion'>for((f)=(*m_pE).firstFace(); (f); (f)=(f)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN222">222</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN223">223</td><td class="line">		<span class='keyword'>int</span> rho = 0;</td></tr>
+<tr><td class="num" id="LN224">224</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN225">225</td><td class="line">		adjEntry adj;</td></tr>
+<tr><td class="num" id="LN226">226</td><td class="line">		<span class='macro'>forall_face_adj(adj,f)<span class='expansion'>for((adj)=(f)-&gt;firstAdj(); (adj); (adj)=(f)-&gt;nextFaceEdge<br>(adj))</span></span> {</td></tr>
+<tr><td class="num" id="LN227">227</td><td class="line">			<span class='keyword'>const</span> BendString &amp;bs = bend(adj);</td></tr>
+<tr><td class="num" id="LN228">228</td><td class="line">			<span class='keyword'>int</span> zeroes = 0, ones = 0;</td></tr>
+<tr><td class="num" id="LN229">229</td><td class="line">			<span class='keyword'>for</span>(size_t i = 0; i &lt; bs.size(); ++i) {</td></tr>
+<tr><td class="num" id="LN230">230</td><td class="line">				<span class='keyword'>switch</span> (bs[i])</td></tr>
+<tr><td class="num" id="LN231">231</td><td class="line">				{</td></tr>
+<tr><td class="num" id="LN232">232</td><td class="line">				<span class='keyword'>case</span> '0':</td></tr>
+<tr><td class="num" id="LN233">233</td><td class="line">					zeroes++; <span class='keyword'>break</span>;</td></tr>
+<tr><td class="num" id="LN234">234</td><td class="line">				<span class='keyword'>case</span> '1':</td></tr>
+<tr><td class="num" id="LN235">235</td><td class="line">					ones++; <span class='keyword'>break</span>;</td></tr>
+<tr><td class="num" id="LN236">236</td><td class="line">				<span class='keyword'>default</span>:</td></tr>
+<tr><td class="num" id="LN237">237</td><td class="line">					error.sprintf(<span class='string_literal'>"bend string of adjacency entry %d contains \</span></td></tr>
+<tr><td class="num" id="LN238">238</td><td class="line"><span class='string_literal'>illegal character!"</span>, adj-&gt;index());</td></tr>
+<tr><td class="num" id="LN239">239</td><td class="line">					<span class='keyword'>return</span> <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN240">240</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN241">241</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN242">242</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN243">243</td><td class="line">			rho += zeroes - ones + 2 - angle(adj);</td></tr>
+<tr><td class="num" id="LN244">244</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN245">245</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN246">246</td><td class="line">		<span class='keyword'>if</span> (rho != ((f == m_pE-&gt;externalFace()) ? -4 : 4)) {</td></tr>
+<tr><td class="num" id="LN247">247</td><td class="line">			error.sprintf(<span class='string_literal'>"Shape of face %d not rectagonal!"</span>, f-&gt;index());</td></tr>
+<tr><td class="num" id="LN248">248</td><td class="line">			<span class='keyword'>return</span> <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN249">249</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN250">250</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN251">251</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN252">252</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN253">253</td><td class="line">	<span class='keyword'>return</span> <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN254">254</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN255">255</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN256">256</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN257">257</td><td class="line"><span class='comment'>// normalizes an orthogonal representation, i.e., replaces each bend</span></td></tr>
+<tr><td class="num" id="LN258">258</td><td class="line"><span class='comment'>// by a dummy vertex and updates the embedding as well as the orthogonal</span></td></tr>
+<tr><td class="num" id="LN259">259</td><td class="line"><span class='comment'>// representation</span></td></tr>
+<tr><td class="num" id="LN260">260</td><td class="line"><span class='keyword'>void</span> OrthoRep::normalize()</td></tr>
+<tr><td class="num" id="LN261">261</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN262">262</td><td class="line">	<span class='keyword'>const</span> Graph &amp;G = (Graph &amp;) *m_pE;</td></tr>
+<tr><td class="num" id="LN263">263</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN264">264</td><td class="line">	edge e;</td></tr>
+<tr><td class="num" id="LN265">265</td><td class="line">	<span class='macro'>forall_edges(e,G)<span class='expansion'>for((e)=(G).firstEdge(); (e); (e)=(e)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN266">266</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN267">267</td><td class="line">		<span class='comment'>// store current bend string in bs</span></td></tr>
+<tr><td class="num" id="LN268">268</td><td class="line">		BendString bs(m_bends[e-&gt;adjSource()]);</td></tr>
+<tr><td class="num" id="LN269">269</td><td class="line">		<span class='keyword'>const</span> <span class='keyword'>char</span> *str = bs.toString();</td></tr>
+<tr><td class="num" id="LN270">270</td><td class="line">		<span class='keyword'>if</span> (str == 0) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN271">271</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN272">272</td><td class="line">		m_bends[e-&gt;adjSource()].set();</td></tr>
+<tr><td class="num" id="LN273">273</td><td class="line">		m_bends[e-&gt;adjTarget()].set();</td></tr>
+<tr><td class="num" id="LN274">274</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN275">275</td><td class="line">		<span class='comment'>// for each bend in bs, introduce a new vertex by splitting</span></td></tr>
+<tr><td class="num" id="LN276">276</td><td class="line">		<span class='keyword'>for</span>(; *str; ++str)</td></tr>
+<tr><td class="num" id="LN277">277</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN278">278</td><td class="line">			edge ePrime = m_pE-&gt;split(e);</td></tr>
+<tr><td class="num" id="LN279">279</td><td class="line">			m_angle[ePrime-&gt;adjTarget()] = m_angle[e-&gt;adjTarget()];</td></tr>
+<tr><td class="num" id="LN280">280</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN281">281</td><td class="line">			<span class='keyword'>if</span>(*str == '0') {</td></tr>
+<tr><td class="num" id="LN282">282</td><td class="line">				m_angle[ePrime-&gt;adjSource()] = 1;</td></tr>
+<tr><td class="num" id="LN283">283</td><td class="line">				m_angle[e     -&gt;adjTarget()] = 3;</td></tr>
+<tr><td class="num" id="LN284">284</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN285">285</td><td class="line">			} <span class='keyword'>else</span> {</td></tr>
+<tr><td class="num" id="LN286">286</td><td class="line">				m_angle[ePrime-&gt;adjSource()] = 3;</td></tr>
+<tr><td class="num" id="LN287">287</td><td class="line">				m_angle[e     -&gt;adjTarget()] = 1;</td></tr>
+<tr><td class="num" id="LN288">288</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN289">289</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN290">290</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN291">291</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN292">292</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN293">293</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN294">294</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN295">295</td><td class="line"><span class='comment'>// checks if each bends string is empty</span></td></tr>
+<tr><td class="num" id="LN296">296</td><td class="line"><span class='keyword'>bool</span> OrthoRep::isNormalized() <span class='keyword'>const</span></td></tr>
+<tr><td class="num" id="LN297">297</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN298">298</td><td class="line">	<span class='keyword'>const</span> Graph &amp;G = (Graph &amp;) *m_pE;</td></tr>
+<tr><td class="num" id="LN299">299</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN300">300</td><td class="line">	edge e;</td></tr>
+<tr><td class="num" id="LN301">301</td><td class="line">	<span class='macro'>forall_edges(e,G)<span class='expansion'>for((e)=(G).firstEdge(); (e); (e)=(e)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN302">302</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN303">303</td><td class="line">		<span class='keyword'>if</span> (m_bends[e-&gt;adjSource()].size() != 0)</td></tr>
+<tr><td class="num" id="LN304">304</td><td class="line">			<span class='keyword'>return</span> <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN305">305</td><td class="line">		<span class='keyword'>if</span> (m_bends[e-&gt;adjTarget()].size() != 0)</td></tr>
+<tr><td class="num" id="LN306">306</td><td class="line">			<span class='keyword'>return</span> <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN307">307</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN308">308</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN309">309</td><td class="line">	<span class='keyword'>return</span> <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN310">310</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN311">311</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN312">312</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN313">313</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN314">314</td><td class="line"><span class='comment'>// Procedure dissect() modifies the orthogonal representation by splitting</span></td></tr>
+<tr><td class="num" id="LN315">315</td><td class="line"><span class='comment'>// edges and faces until no more rectangular ears are contained. A rectangular</span></td></tr>
+<tr><td class="num" id="LN316">316</td><td class="line"><span class='comment'>// ear consists of two 90 degree angles with only 180 degree angles inbetween.</span></td></tr>
+<tr><td class="num" id="LN317">317</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN318">318</td><td class="line"><span class='comment'>// More exactly, each internal face has rectangular shape afterwards. For the</span></td></tr>
+<tr><td class="num" id="LN319">319</td><td class="line"><span class='comment'>// external face, we guarantee only the absence of rectangular ears.</span></td></tr>
+<tr><td class="num" id="LN320">320</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN321">321</td><td class="line"><span class='comment'>// Precondition: The orthogonal representation is normalized and contains</span></td></tr>
+<tr><td class="num" id="LN322">322</td><td class="line"><span class='comment'>//               no 0 degree angles</span></td></tr>
+<tr><td class="num" id="LN323">323</td><td class="line"><span class='keyword'>void</span> OrthoRep::dissect()</td></tr>
+<tr><td class="num" id="LN324">324</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN325">325</td><td class="line">	<span class='comment'>// dissect() requires a normalized orthogonal representation</span></td></tr>
+<tr><td class="num" id="LN326">326</td><td class="line">	OGDF_ASSERT(isNormalized());</td></tr>
+<tr><td class="num" id="LN327">327</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN328">328</td><td class="line">	CombinatorialEmbedding &amp;E = *m_pE;</td></tr>
+<tr><td class="num" id="LN329">329</td><td class="line">	Graph &amp;G = E;</td></tr>
+<tr><td class="num" id="LN330">330</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN331">331</td><td class="line">	<span class='comment'>// assert that dissect hasn't been called before</span></td></tr>
+<tr><td class="num" id="LN332">332</td><td class="line">	OGDF_ASSERT(m_splitNodes.empty());</td></tr>
+<tr><td class="num" id="LN333">333</td><td class="line">	m_dissectionEdge.init(G,<span class='keyword'>false</span>);</td></tr>
+<tr><td class="num" id="LN334">334</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN335">335</td><td class="line">	adjEntry saveExt = E.externalFace()-&gt;firstAdj(); <span class='comment'>//should check supersink</span></td></tr>
+<tr><td class="num" id="LN336">336</td><td class="line">	m_adjExternal = saveExt;</td></tr>
+<tr><td class="num" id="LN337">337</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN338">338</td><td class="line">	face f;</td></tr>
+<tr><td class="num" id="LN339">339</td><td class="line">	<span class='macro'>forall_faces(f, E)<span class='expansion'>for((f)=(E).firstFace(); (f); (f)=(f)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN340">340</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN341">341</td><td class="line">		<span class='comment'>// dissect face f</span></td></tr>
+<tr><td class="num" id="LN342">342</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN343">343</td><td class="line">		<span class='comment'>// We build the list faceCycle consisting of all adjacency entries</span></td></tr>
+<tr><td class="num" id="LN344">344</td><td class="line">		<span class='comment'>// that do not form a 180 degree angle with their successors</span></td></tr>
+<tr><td class="num" id="LN345">345</td><td class="line">		<span class='comment'>// (180 degree angles do not contribute to the shape of the face)</span></td></tr>
+<tr><td class="num" id="LN346">346</td><td class="line">		List&lt;adjEntry&gt; faceCycle;</td></tr>
+<tr><td class="num" id="LN347">347</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN348">348</td><td class="line">		adjEntry adj;</td></tr>
+<tr><td class="num" id="LN349">349</td><td class="line">		<span class='macro'>forall_face_adj(adj,f)<span class='expansion'>for((adj)=(f)-&gt;firstAdj(); (adj); (adj)=(f)-&gt;nextFaceEdge<br>(adj))</span></span> {</td></tr>
+<tr><td class="num" id="LN350">350</td><td class="line">			<span class='comment'>// dissection does not work for graphs with 0 degree angles!</span></td></tr>
+<tr><td class="num" id="LN351">351</td><td class="line">			OGDF_ASSERT(m_angle[adj] != 0);</td></tr>
+<tr><td class="num" id="LN352">352</td><td class="line">			<span class='keyword'>if</span> (m_angle[adj] != 2)</td></tr>
+<tr><td class="num" id="LN353">353</td><td class="line">				faceCycle.pushBack(adj);</td></tr>
+<tr><td class="num" id="LN354">354</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN355">355</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN356">356</td><td class="line">		<span class='comment'>// We iterate over faceCycle and look for occurrences of two</span></td></tr>
+<tr><td class="num" id="LN357">357</td><td class="line">		<span class='comment'>// consecutive 90 degree angles</span></td></tr>
+<tr><td class="num" id="LN358">358</td><td class="line">		ListIterator&lt;adjEntry&gt; it;;</td></tr>
+<tr><td class="num" id="LN359">359</td><td class="line">		<span class='keyword'>for</span>(it = faceCycle.begin(); faceCycle.size() &gt; 4 &amp;&amp; it.valid(); ++it)</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path1" class="msg msgControl" style="margin-left:17ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">1</div></td><td>Loop condition is true.  Entering loop body</td><td><div class="PathNav"><a href="#Path2" title="Next event (2)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN360">360</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN361">361</td><td class="line">			<span class='keyword'>if</span> (m_angle[*it] == 1 &amp;&amp; m_angle[*faceCycle.cyclicPred(it)] == 1)</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path2" class="msg msgControl" style="margin-left:25ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">2</div></td><td><div class="PathNav"><a href="#Path1" title="Previous event (1)">&#x2190;</a></div></td></td><td>Taking true branch</td><td><div class="PathNav"><a href="#Path3" title="Next event (3)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN362">362</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN363">363</td><td class="line">				<span class='comment'>// now we run backwards and look for angles &gt;= 270 degree. We</span></td></tr>
+<tr><td class="num" id="LN364">364</td><td class="line">				<span class='comment'>// can eliminate such angles as long as the following two</span></td></tr>
+<tr><td class="num" id="LN365">365</td><td class="line">				<span class='comment'>// angles (faceCycle is seen as cyclic list) are 90 degree.</span></td></tr>
+<tr><td class="num" id="LN366">366</td><td class="line">				ListIterator&lt;adjEntry&gt; itBack =</td></tr>
+<tr><td class="num" id="LN367">367</td><td class="line">					faceCycle.cyclicPred(faceCycle.cyclicPred(it));</td></tr>
+<tr><td class="num" id="LN368">368</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN369">369</td><td class="line">				<span class='comment'>// Look for the next angle &gt;= 270 degree.</span></td></tr>
+<tr><td class="num" id="LN370">370</td><td class="line">				<span class='comment'>// We will find one since faceCylce has at least two elements</span></td></tr>
+<tr><td class="num" id="LN371">371</td><td class="line">				<span class='comment'>// Note: For each 90 degree angle we have to skip we can</span></td></tr>
+<tr><td class="num" id="LN372">372</td><td class="line">				<span class='comment'>// eliminate one more angle &gt;= 270 degree.</span></td></tr>
+<tr><td class="num" id="LN373">373</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN374">374</td><td class="line">				<span class='comment'>// if we did not find a &gt;= 270 degree angle until it, the</span></td></tr>
+<tr><td class="num" id="LN375">375</td><td class="line">				<span class='comment'>// face must be a rectangle and faceCycle consists of four 90</span></td></tr>
+<tr><td class="num" id="LN376">376</td><td class="line">				<span class='comment'>// degree angles. Hence, we terminate also the for-loop above!</span></td></tr>
+<tr><td class="num" id="LN377">377</td><td class="line">				<span class='keyword'>while</span>(it != itBack)</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path3" class="msg msgControl" style="margin-left:33ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">3</div></td><td><div class="PathNav"><a href="#Path2" title="Previous event (2)">&#x2190;</a></div></td></td><td>Loop condition is true.  Entering loop body</td><td><div class="PathNav"><a href="#Path4" title="Next event (4)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path8" class="msg msgControl" style="margin-left:33ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">8</div></td><td><div class="PathNav"><a href="#Path7" title="Previous event (7)">&#x2190;</a></div></td></td><td>Loop condition is true.  Entering loop body</td><td><div class="PathNav"><a href="#Path9" title="Next event (9)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN378">378</td><td class="line">				{</td></tr>
+<tr><td class="num" id="LN379">379</td><td class="line">					<span class='comment'>// If we see a 90 degree angle, we move further backwards</span></td></tr>
+<tr><td class="num" id="LN380">380</td><td class="line">					<span class='keyword'>if</span>(m_angle[*itBack] &lt; 3) {</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path4" class="msg msgControl" style="margin-left:41ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">4</div></td><td><div class="PathNav"><a href="#Path3" title="Previous event (3)">&#x2190;</a></div></td></td><td>Taking false branch</td><td><div class="PathNav"><a href="#Path5" title="Next event (5)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path9" class="msg msgControl" style="margin-left:41ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">9</div></td><td><div class="PathNav"><a href="#Path8" title="Previous event (8)">&#x2190;</a></div></td></td><td>Taking false branch</td><td><div class="PathNav"><a href="#Path10" title="Next event (10)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN381">381</td><td class="line">						itBack = faceCycle.cyclicPred(itBack);</td></tr>
+<tr><td class="num" id="LN382">382</td><td class="line">						<span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN383">383</td><td class="line">					}</td></tr>
+<tr><td class="num" id="LN384">384</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN385">385</td><td class="line">					ListIterator&lt;adjEntry&gt; itBackSucc =</td></tr>
+<tr><td class="num" id="LN386">386</td><td class="line">						faceCycle.cyclicSucc(itBack);</td></tr>
+<tr><td class="num" id="LN387">387</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN388">388</td><td class="line">					<span class='comment'>// If we see a &gt;= 270 degree angle whose successor is it,</span></td></tr>
+<tr><td class="num" id="LN389">389</td><td class="line">					<span class='comment'>// we do not have a rectangular ear anymore, so we break.</span></td></tr>
+<tr><td class="num" id="LN390">390</td><td class="line">					<span class='comment'>// We then have processed all &gt;= 270 degree angles behind</span></td></tr>
+<tr><td class="num" id="LN391">391</td><td class="line">					<span class='comment'>// it</span></td></tr>
+<tr><td class="num" id="LN392">392</td><td class="line">					<span class='keyword'>if</span>(itBackSucc == it)</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path5" class="msg msgControl" style="margin-left:41ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">5</div></td><td><div class="PathNav"><a href="#Path4" title="Previous event (4)">&#x2190;</a></div></td></td><td>Taking false branch</td><td><div class="PathNav"><a href="#Path6" title="Next event (6)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path10" class="msg msgControl" style="margin-left:41ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">10</div></td><td><div class="PathNav"><a href="#Path9" title="Previous event (9)">&#x2190;</a></div></td></td><td>Taking false branch</td><td><div class="PathNav"><a href="#EndPath" title="Next event (11)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN393">393</td><td class="line">						<span class='keyword'>break</span>;</td></tr>
+<tr><td class="num" id="LN394">394</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN395">395</td><td class="line">					<span class="mrange">adjEntry &amp;adjSplit</span> = *faceCycle.cyclicSucc(itBackSucc);</td></tr>
+<tr><td class="num"></td><td class="line"><div id="EndPath" class="msg msgEvent" style="margin-left:41ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexEvent">11</div></td><td><div class="PathNav"><a href="#Path10" title="Previous event (10)">&#x2190;</a></div></td></td><td>Dereference of null pointer</td></tr></table></div></td></tr>
+<tr><td class="num" id="LN396">396</td><td class="line">					<span class='comment'>// We now have the following situation:</span></td></tr>
+<tr><td class="num" id="LN397">397</td><td class="line">					<span class='comment'>// The rectangular ear (pattern 100) consists of</span></td></tr>
+<tr><td class="num" id="LN398">398</td><td class="line">					<span class='comment'>// *itBack -&gt; *itBackSucc -&gt; adjSplit</span></td></tr>
+<tr><td class="num" id="LN399">399</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN400">400</td><td class="line">					<span class='comment'>// Since a split operation can also change the id's of the</span></td></tr>
+<tr><td class="num" id="LN401">401</td><td class="line">					<span class='comment'>// adjacency entries at the edge, we have to backup two</span></td></tr>
+<tr><td class="num" id="LN402">402</td><td class="line">					<span class='comment'>// angles a1 and a2.</span></td></tr>
+<tr><td class="num" id="LN403">403</td><td class="line">					<span class='keyword'>int</span> a1 = m_angle[adjSplit];</td></tr>
+<tr><td class="num" id="LN404">404</td><td class="line">					adjEntry adj2 = adjSplit-&gt;twin();</td></tr>
+<tr><td class="num" id="LN405">405</td><td class="line">					<span class='keyword'>int</span> a2 = m_angle[adj2];</td></tr>
+<tr><td class="num" id="LN406">406</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN407">407</td><td class="line">					<span class='comment'>// We split *itBackSuccSucc ...</span></td></tr>
+<tr><td class="num" id="LN408">408</td><td class="line">					node u = E.split(adjSplit-&gt;theEdge())-&gt;source();</td></tr>
+<tr><td class="num" id="LN409">409</td><td class="line">					<span class='keyword'>if</span> (m_dissectionEdge[adjSplit] == <span class='keyword'>false</span>)</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path6" class="msg msgControl" style="margin-left:41ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">6</div></td><td><div class="PathNav"><a href="#Path5" title="Previous event (5)">&#x2190;</a></div></td></td><td>Taking false branch</td><td><div class="PathNav"><a href="#Path7" title="Next event (7)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN410">410</td><td class="line">						m_splitNodes.push(u);</td></tr>
+<tr><td class="num" id="LN411">411</td><td class="line">					adjEntry adjSplitSucc = adjSplit-&gt;faceCycleSucc();</td></tr>
+<tr><td class="num" id="LN412">412</td><td class="line">					<span class='comment'>// and close a rectangular face</span></td></tr>
+<tr><td class="num" id="LN413">413</td><td class="line">					edge eDissect = E.splitFace(*itBack, adjSplitSucc);</td></tr>
+<tr><td class="num" id="LN414">414</td><td class="line">					m_dissectionEdge[eDissect] = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN415">415</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN416">416</td><td class="line">					<span class='comment'>// restore backup angles</span></td></tr>
+<tr><td class="num" id="LN417">417</td><td class="line">					m_angle[adjSplit] = a1;</td></tr>
+<tr><td class="num" id="LN418">418</td><td class="line">					m_angle[adj2] = a2;</td></tr>
+<tr><td class="num" id="LN419">419</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN420">420</td><td class="line">					<span class='comment'>// set angles at the split node</span></td></tr>
+<tr><td class="num" id="LN421">421</td><td class="line">					m_angle[adjSplitSucc] = 1;</td></tr>
+<tr><td class="num" id="LN422">422</td><td class="line">					m_angle[adjSplitSucc-&gt;cyclicSucc()] = 1;</td></tr>
+<tr><td class="num" id="LN423">423</td><td class="line">					m_angle[adjSplitSucc-&gt;cyclicPred()] = 2;</td></tr>
+<tr><td class="num" id="LN424">424</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN425">425</td><td class="line">					adjEntry adjSucc = (*itBack)-&gt;cyclicSucc();</td></tr>
+<tr><td class="num" id="LN426">426</td><td class="line">					<span class='keyword'>if</span> (m_angle[*itBack] == 4) {</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path7" class="msg msgControl" style="margin-left:41ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">7</div></td><td><div class="PathNav"><a href="#Path6" title="Previous event (6)">&#x2190;</a></div></td></td><td>Taking true branch</td><td><div class="PathNav"><a href="#Path8" title="Next event (8)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN427">427</td><td class="line">						<span class='comment'>// If the former &gt;= 270 degree angle was 360 degree,</span></td></tr>
+<tr><td class="num" id="LN428">428</td><td class="line">						<span class='comment'>// we keep it as 270 degree angle ...</span></td></tr>
+<tr><td class="num" id="LN429">429</td><td class="line">						m_angle[*itBack] = 1;</td></tr>
+<tr><td class="num" id="LN430">430</td><td class="line">						m_angle[adjSucc] = 3;</td></tr>
+<tr><td class="num" id="LN431">431</td><td class="line">						*itBack = adjSucc;</td></tr>
+<tr><td class="num" id="LN432">432</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN433">433</td><td class="line">					} <span class='keyword'>else</span> {</td></tr>
+<tr><td class="num" id="LN434">434</td><td class="line">						<span class='comment'>// ... otherwise, it is now a 180 degree angle and</span></td></tr>
+<tr><td class="num" id="LN435">435</td><td class="line">						<span class='comment'>// we remove it</span></td></tr>
+<tr><td class="num" id="LN436">436</td><td class="line">						m_angle[*itBack] = 1;</td></tr>
+<tr><td class="num" id="LN437">437</td><td class="line">						m_angle[adjSucc] = 2;</td></tr>
+<tr><td class="num" id="LN438">438</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN439">439</td><td class="line">						ListIterator&lt;adjEntry&gt; itDel = itBack;</td></tr>
+<tr><td class="num" id="LN440">440</td><td class="line">						itBack = faceCycle.cyclicPred(itBack);</td></tr>
+<tr><td class="num" id="LN441">441</td><td class="line">						faceCycle.del(itDel);</td></tr>
+<tr><td class="num" id="LN442">442</td><td class="line">					}</td></tr>
+<tr><td class="num" id="LN443">443</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN444">444</td><td class="line">					<span class='comment'>// The other edge (not adjSplit) which resulted from the</span></td></tr>
+<tr><td class="num" id="LN445">445</td><td class="line">					<span class='comment'>// split edge operation is contained in the face we</span></td></tr>
+<tr><td class="num" id="LN446">446</td><td class="line">					<span class='comment'>// consider</span></td></tr>
+<tr><td class="num" id="LN447">447</td><td class="line">					adjSplit = adjSplitSucc;</td></tr>
+<tr><td class="num" id="LN448">448</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN449">449</td><td class="line">					<span class='comment'>// This 90 degree angle vanishes from our face</span></td></tr>
+<tr><td class="num" id="LN450">450</td><td class="line">					faceCycle.del(itBackSucc);</td></tr>
+<tr><td class="num" id="LN451">451</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN452">452</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN453">453</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN454">454</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN455">455</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN456">456</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN457">457</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN458">458</td><td class="line"><span class='comment'>//artificial node saving test******************************************************</span></td></tr>
+<tr><td class="num" id="LN459">459</td><td class="line"><span class='comment'>//gunnars vorschlag: segment saving</span></td></tr>
+<tr><td class="num" id="LN460">460</td><td class="line"><span class='keyword'>void</span> OrthoRep::dissect2(PlanRepUML* PG)</td></tr>
+<tr><td class="num" id="LN461">461</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN462">462</td><td class="line">	String msg;</td></tr>
+<tr><td class="num" id="LN463">463</td><td class="line">	m_adjAlign = 0;</td></tr>
+<tr><td class="num" id="LN464">464</td><td class="line">	<span class='comment'>// dissect() requires a normalized orthogonal representation</span></td></tr>
+<tr><td class="num" id="LN465">465</td><td class="line">	OGDF_ASSERT(isNormalized());</td></tr>
+<tr><td class="num" id="LN466">466</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN467">467</td><td class="line">	CombinatorialEmbedding &amp;E = *m_pE;</td></tr>
+<tr><td class="num" id="LN468">468</td><td class="line">	Graph &amp;G = E;</td></tr>
+<tr><td class="num" id="LN469">469</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN470">470</td><td class="line">	<span class='comment'>// assert that dissect hasn't been called before</span></td></tr>
+<tr><td class="num" id="LN471">471</td><td class="line">	OGDF_ASSERT(m_splitNodes.empty());</td></tr>
+<tr><td class="num" id="LN472">472</td><td class="line">	m_dissectionEdge.init(G,<span class='keyword'>false</span>);</td></tr>
+<tr><td class="num" id="LN473">473</td><td class="line">	m_alignmentEdge.init(G, <span class='keyword'>false</span>);</td></tr>
+<tr><td class="num" id="LN474">474</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN475">475</td><td class="line">	m_adjExternal = E.externalFace()-&gt;firstAdj();</td></tr>
+<tr><td class="num" id="LN476">476</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN477">477</td><td class="line">	face f;</td></tr>
+<tr><td class="num" id="LN478">478</td><td class="line">	<span class='macro'>forall_faces(f, E)<span class='expansion'>for((f)=(E).firstFace(); (f); (f)=(f)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN479">479</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN480">480</td><td class="line">		<span class='comment'>// dissect face f</span></td></tr>
+<tr><td class="num" id="LN481">481</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN482">482</td><td class="line">		<span class='comment'>// We build the list faceCycle consisting of all adjacency entries</span></td></tr>
+<tr><td class="num" id="LN483">483</td><td class="line">		<span class='comment'>// that do not form a 180 degree angle with their successors</span></td></tr>
+<tr><td class="num" id="LN484">484</td><td class="line">		<span class='comment'>// (180 degree angles do not contribute to the shape of the face)</span></td></tr>
+<tr><td class="num" id="LN485">485</td><td class="line">		List&lt;adjEntry&gt; faceCycle;</td></tr>
+<tr><td class="num" id="LN486">486</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN487">487</td><td class="line">		adjEntry adj;</td></tr>
+<tr><td class="num" id="LN488">488</td><td class="line">		<span class='macro'>forall_face_adj(adj,f)<span class='expansion'>for((adj)=(f)-&gt;firstAdj(); (adj); (adj)=(f)-&gt;nextFaceEdge<br>(adj))</span></span> {</td></tr>
+<tr><td class="num" id="LN489">489</td><td class="line">			<span class='comment'>// dissection does not work for graphs with 0 degree angles!</span></td></tr>
+<tr><td class="num" id="LN490">490</td><td class="line">			OGDF_ASSERT(m_angle[adj] != 0);</td></tr>
+<tr><td class="num" id="LN491">491</td><td class="line">			<span class='keyword'>if</span> (m_angle[adj] != 2)</td></tr>
+<tr><td class="num" id="LN492">492</td><td class="line">				faceCycle.pushBack(adj);</td></tr>
+<tr><td class="num" id="LN493">493</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN494">494</td><td class="line">		<span class='comment'>//PREPROCESSING</span></td></tr>
+<tr><td class="num" id="LN495">495</td><td class="line">		<span class='comment'>// some of the preprocessing steps could be mixed or used iteratively</span></td></tr>
+<tr><td class="num" id="LN496">496</td><td class="line">		<span class='comment'>//is it better to mix? or to iterate? pattern1 and pattern2 don't mess with</span></td></tr>
+<tr><td class="num" id="LN497">497</td><td class="line">		<span class='comment'>//each other</span></td></tr>
+<tr><td class="num" id="LN498">498</td><td class="line">		<span class='keyword'>bool</span> change = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN499">499</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN500">500</td><td class="line">		<span class='keyword'>while</span> (change)</td></tr>
+<tr><td class="num" id="LN501">501</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN502">502</td><td class="line">			change = <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN503">503</td><td class="line">			<span class='comment'>//preprocessing: we look for 311113 angle patterns and replace them by inserting an edge</span></td></tr>
+<tr><td class="num" id="LN504">504</td><td class="line">			<span class='comment'>//between the two angle 3 adjacencies, thought for generalization merger / son nodes</span></td></tr>
+<tr><td class="num" id="LN505">505</td><td class="line">			<span class='comment'>//if parameter PG is set, we use the type info to set some dissection edges as</span></td></tr>
+<tr><td class="num" id="LN506">506</td><td class="line">			<span class='comment'>//alignment edges</span></td></tr>
+<tr><td class="num" id="LN507">507</td><td class="line">			<span class='comment'>//in the case of m_align we have to take care of the situation that the adjExternal</span></td></tr>
+<tr><td class="num" id="LN508">508</td><td class="line">			<span class='comment'>//lies in the cut ear, which is an error in the improvement compaction steps</span></td></tr>
+<tr><td class="num" id="LN509">509</td><td class="line">			<span class='keyword'>if</span> (m_preprocess)</td></tr>
+<tr><td class="num" id="LN510">510</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN511">511</td><td class="line">				ListIterator&lt;adjEntry&gt; prit;</td></tr>
+<tr><td class="num" id="LN512">512</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN513">513</td><td class="line">				<span class='comment'>//only run until no more patterns left</span></td></tr>
+<tr><td class="num" id="LN514">514</td><td class="line">				<span class='comment'>//and dont iterate over the face, only check this one time</span></td></tr>
+<tr><td class="num" id="LN515">515</td><td class="line">				<span class='comment'>//int prerun = 0;</span></td></tr>
+<tr><td class="num" id="LN516">516</td><td class="line">				<span class='comment'>//prit = faceCycle.begin();</span></td></tr>
+<tr><td class="num" id="LN517">517</td><td class="line">				<span class='comment'>//while ( prit.valid() &amp;&amp; (prerun &lt; faceCycle.size() + 1))</span></td></tr>
+<tr><td class="num" id="LN518">518</td><td class="line">				<span class='comment'>//check if possible</span></td></tr>
+<tr><td class="num" id="LN519">519</td><td class="line">				ListIterator&lt;adjEntry&gt; itEnd, itStart, it1one, it1two, it1three, it1four; <span class='comment'>//pattern defining edges</span></td></tr>
+<tr><td class="num" id="LN520">520</td><td class="line">				<span class='comment'>//take care of prit, it will be deleted</span></td></tr>
+<tr><td class="num" id="LN521">521</td><td class="line">				<span class='keyword'>for</span> (prit = faceCycle.begin(); prit.valid() &amp;&amp; (faceCycle.size()&gt;7); prit++) <span class='comment'>//go clockwise around face!?</span></td></tr>
+<tr><td class="num" id="LN522">522</td><td class="line">				{</td></tr>
+<tr><td class="num" id="LN523">523</td><td class="line">					itEnd = prit; <span class='comment'>//search pattern backwards</span></td></tr>
+<tr><td class="num" id="LN524">524</td><td class="line">					<span class='keyword'>if</span> (m_angle[*itEnd]    != 3) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN525">525</td><td class="line">					it1four = faceCycle.cyclicPred(itEnd);</td></tr>
+<tr><td class="num" id="LN526">526</td><td class="line">					<span class='keyword'>if</span> (m_angle[*it1four]  != 1) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN527">527</td><td class="line">					it1three = faceCycle.cyclicPred(it1four);</td></tr>
+<tr><td class="num" id="LN528">528</td><td class="line">					<span class='keyword'>if</span> (m_angle[*it1three] != 1) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN529">529</td><td class="line">					it1two = faceCycle.cyclicPred(it1three);</td></tr>
+<tr><td class="num" id="LN530">530</td><td class="line">					<span class='keyword'>if</span> (m_angle[*it1two]   != 1) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN531">531</td><td class="line">					it1one = faceCycle.cyclicPred(it1two);</td></tr>
+<tr><td class="num" id="LN532">532</td><td class="line">					<span class='keyword'>if</span> (m_angle[*it1one]   != 1) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN533">533</td><td class="line">					itStart = faceCycle.cyclicPred(it1one);</td></tr>
+<tr><td class="num" id="LN534">534</td><td class="line">					<span class='keyword'>if</span> (m_angle[*itStart]  != 3) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN535">535</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN536">536</td><td class="line">					<span class='comment'>//PATTERN FOUND</span></td></tr>
+<tr><td class="num" id="LN537">537</td><td class="line">					<span class='comment'>// we proudly present the pattern we searched for</span></td></tr>
+<tr><td class="num" id="LN538">538</td><td class="line">					<span class='comment'>//now we insert the new dissection edge, delete the entries in faceCycle,</span></td></tr>
+<tr><td class="num" id="LN539">539</td><td class="line">					<span class='comment'>//and set the angles accordingly</span></td></tr>
+<tr><td class="num" id="LN540">540</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN541">541</td><td class="line">					<span class='comment'>//take care of the special alignment situation where alignment edges</span></td></tr>
+<tr><td class="num" id="LN542">542</td><td class="line">					<span class='comment'>//are kept during compaction</span></td></tr>
+<tr><td class="num" id="LN543">543</td><td class="line">					<span class='keyword'>if</span> ( ( (m_adjExternal == (*itEnd)) ||</td></tr>
+<tr><td class="num" id="LN544">544</td><td class="line">						(m_adjExternal == (*it1four)) ||</td></tr>
+<tr><td class="num" id="LN545">545</td><td class="line">						(m_adjExternal == (*it1three)) ||</td></tr>
+<tr><td class="num" id="LN546">546</td><td class="line">						(m_adjExternal == (*it1two)) ||</td></tr>
+<tr><td class="num" id="LN547">547</td><td class="line">						(m_adjExternal == (*it1one)) ||</td></tr>
+<tr><td class="num" id="LN548">548</td><td class="line">						(m_adjExternal == (*itStart))</td></tr>
+<tr><td class="num" id="LN549">549</td><td class="line">						)</td></tr>
+<tr><td class="num" id="LN550">550</td><td class="line">						||</td></tr>
+<tr><td class="num" id="LN551">551</td><td class="line">						( (m_adjAlign == (*itEnd)) ||</td></tr>
+<tr><td class="num" id="LN552">552</td><td class="line">						(m_adjAlign == (*it1four)) ||</td></tr>
+<tr><td class="num" id="LN553">553</td><td class="line">						(m_adjAlign == (*it1three)) ||</td></tr>
+<tr><td class="num" id="LN554">554</td><td class="line">						(m_adjAlign == (*it1two)) ||</td></tr>
+<tr><td class="num" id="LN555">555</td><td class="line">						(m_adjAlign == (*it1one)) ||</td></tr>
+<tr><td class="num" id="LN556">556</td><td class="line">						(m_adjAlign == (*itStart))</td></tr>
+<tr><td class="num" id="LN557">557</td><td class="line">						)</td></tr>
+<tr><td class="num" id="LN558">558</td><td class="line">						)</td></tr>
+<tr><td class="num" id="LN559">559</td><td class="line">						<span class='comment'>//check: is itEnd appropriate?</span></td></tr>
+<tr><td class="num" id="LN560">560</td><td class="line">						m_adjAlign = (*itEnd);<span class='comment'>//-&gt;faceCycleSucc();</span></td></tr>
+<tr><td class="num" id="LN561">561</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN562">562</td><td class="line">					adjEntry&amp; adEnd = *itEnd;</td></tr>
+<tr><td class="num" id="LN563">563</td><td class="line">					adjEntry&amp; adStart = *itStart;</td></tr>
+<tr><td class="num" id="LN564">564</td><td class="line">					<span class='comment'>//split the face between two corners</span></td></tr>
+<tr><td class="num" id="LN565">565</td><td class="line">					edge eDissect = E.splitFace(adStart, adEnd);</td></tr>
+<tr><td class="num" id="LN566">566</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN567">567</td><td class="line">					<span class='comment'>//alignment part</span></td></tr>
+<tr><td class="num" id="LN568">568</td><td class="line">					<span class='keyword'>if</span> (PG != 0)</td></tr>
+<tr><td class="num" id="LN569">569</td><td class="line">					{</td></tr>
+<tr><td class="num" id="LN570">570</td><td class="line">						<span class='keyword'>if</span> ( (PG-&gt;typeOf((*it1two)-&gt;theEdge()-&gt;source()) == Graph::generalizationExpander) &amp;&amp;</td></tr>
+<tr><td class="num" id="LN571">571</td><td class="line">							(PG-&gt;typeOf((*it1two)-&gt;theEdge()-&gt;target()) == Graph::generalizationExpander))</td></tr>
+<tr><td class="num" id="LN572">572</td><td class="line">							m_alignmentEdge[eDissect] = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN573">573</td><td class="line">					}<span class='comment'>//if  Pg</span></td></tr>
+<tr><td class="num" id="LN574">574</td><td class="line">					m_dissectionEdge[eDissect] = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN575">575</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN576">576</td><td class="line">					change = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN577">577</td><td class="line">					<span class='comment'>//if (PG) PG-&gt;typeOf(e) = Graph::dissect;</span></td></tr>
+<tr><td class="num" id="LN578">578</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN579">579</td><td class="line">					<span class='comment'>//set the angles, old values 3 are divided</span></td></tr>
+<tr><td class="num" id="LN580">580</td><td class="line">					m_angle[adEnd] = 1;</td></tr>
+<tr><td class="num" id="LN581">581</td><td class="line">					m_angle[adStart] = 2;</td></tr>
+<tr><td class="num" id="LN582">582</td><td class="line">					m_angle[adStart-&gt;cyclicSucc()] = 1; <span class='comment'>//new edge entry from start to end</span></td></tr>
+<tr><td class="num" id="LN583">583</td><td class="line">					m_angle[adEnd-&gt;cyclicSucc()] = 2; <span class='comment'>//new edge entry from end to start</span></td></tr>
+<tr><td class="num" id="LN584">584</td><td class="line">					<span class='comment'>//we dont have any angles &gt; 2 left, so delete some participants</span></td></tr>
+<tr><td class="num" id="LN585">585</td><td class="line">					<span class='comment'>//Start and all itone are out of the face in the new rectangle</span></td></tr>
+<tr><td class="num" id="LN586">586</td><td class="line">					faceCycle.del(it1four);</td></tr>
+<tr><td class="num" id="LN587">587</td><td class="line">					faceCycle.del(it1three);</td></tr>
+<tr><td class="num" id="LN588">588</td><td class="line">					faceCycle.del(it1two);</td></tr>
+<tr><td class="num" id="LN589">589</td><td class="line">					faceCycle.del(it1one);</td></tr>
+<tr><td class="num" id="LN590">590</td><td class="line">					<span class='comment'>//do not delete itStart, copy the new edges entry to this position</span></td></tr>
+<tr><td class="num" id="LN591">591</td><td class="line">					<span class='comment'>//faceCycle.del(itStart);</span></td></tr>
+<tr><td class="num" id="LN592">592</td><td class="line">					adStart = adStart-&gt;cyclicSucc();<span class='comment'>//use reference</span></td></tr>
+<tr><td class="num" id="LN593">593</td><td class="line">					<span class='comment'>//itEnd stays with angle value 1</span></td></tr>
+<tr><td class="num" id="LN594">594</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN595">595</td><td class="line">					OGDF_ASSERT_IF(dlConsistencyChecks,check(msg));</td></tr>
+<tr><td class="num" id="LN596">596</td><td class="line">				}<span class='comment'>//for</span></td></tr>
+<tr><td class="num" id="LN597">597</td><td class="line">			}<span class='comment'>//preprocessing pattern1</span></td></tr>
+<tr><td class="num" id="LN598">598</td><td class="line">			<span class='comment'>//if (m_people)</span></td></tr>
+<tr><td class="num" id="LN599">599</td><td class="line">			<span class='comment'>//we search for a 3111 pattern</span></td></tr>
+<tr><td class="num" id="LN600">600</td><td class="line">			<span class='keyword'>if</span> (m_pattern2)</td></tr>
+<tr><td class="num" id="LN601">601</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN602">602</td><td class="line">				ListIterator&lt;adjEntry&gt; prit, savenext;</td></tr>
+<tr><td class="num" id="LN603">603</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN604">604</td><td class="line">				<span class='comment'>//only run until no more patterns left</span></td></tr>
+<tr><td class="num" id="LN605">605</td><td class="line">				<span class='comment'>//and dont iterate over the face, only check this one time</span></td></tr>
+<tr><td class="num" id="LN606">606</td><td class="line">				<span class='comment'>//check if possible</span></td></tr>
+<tr><td class="num" id="LN607">607</td><td class="line">				ListIterator&lt;adjEntry&gt; it1Top, itTopSucc, it1Back, it1Base, it3Start; <span class='comment'>//pattern defining edges</span></td></tr>
+<tr><td class="num" id="LN608">608</td><td class="line">				<span class='comment'>//take care of prit, it will be deleted</span></td></tr>
+<tr><td class="num" id="LN609">609</td><td class="line">				savenext = faceCycle.begin();</td></tr>
+<tr><td class="num" id="LN610">610</td><td class="line">				<span class='keyword'>for</span> (prit = faceCycle.begin(); (prit.valid() &amp;&amp; savenext.valid()) &amp;&amp; (faceCycle.size()&gt;6); (prit = savenext)) <span class='comment'>//go clockwise around face!?</span></td></tr>
+<tr><td class="num" id="LN611">611</td><td class="line">				{</td></tr>
+<tr><td class="num" id="LN612">612</td><td class="line">					savenext++;</td></tr>
+<tr><td class="num" id="LN613">613</td><td class="line">					itTopSucc = prit; <span class='comment'>//search pattern backwards</span></td></tr>
+<tr><td class="num" id="LN614">614</td><td class="line">					it1Top = faceCycle.cyclicPred(itTopSucc);</td></tr>
+<tr><td class="num" id="LN615">615</td><td class="line">					<span class='keyword'>if</span> (m_angle[*it1Top]  != 1) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN616">616</td><td class="line">					it1Back = faceCycle.cyclicPred(it1Top);</td></tr>
+<tr><td class="num" id="LN617">617</td><td class="line">					<span class='keyword'>if</span> (m_angle[*it1Back] != 1) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN618">618</td><td class="line">					it1Base = faceCycle.cyclicPred(it1Back);</td></tr>
+<tr><td class="num" id="LN619">619</td><td class="line">					<span class='keyword'>if</span> (m_angle[*it1Base]   != 1) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN620">620</td><td class="line">					it3Start = faceCycle.cyclicPred(it1Base);</td></tr>
+<tr><td class="num" id="LN621">621</td><td class="line">					<span class='keyword'>if</span> (m_angle[*it3Start]  != 3) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN622">622</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN623">623</td><td class="line">					<span class='comment'>//first version</span></td></tr>
+<tr><td class="num" id="LN624">624</td><td class="line">					<span class='keyword'>if</span> (m_angle[*itTopSucc] &lt; 2) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN625">625</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN626">626</td><td class="line">					<span class='comment'>// we proudly present the pattern we searched for</span></td></tr>
+<tr><td class="num" id="LN627">627</td><td class="line">					<span class='comment'>//now we insert the new dissection edge, delete the entries in faceCycle,</span></td></tr>
+<tr><td class="num" id="LN628">628</td><td class="line">					<span class='comment'>//and set the angles accordingly</span></td></tr>
+<tr><td class="num" id="LN629">629</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN630">630</td><td class="line">					adjEntry&amp; adEnd = *itTopSucc;</td></tr>
+<tr><td class="num" id="LN631">631</td><td class="line">					adjEntry&amp; adStart = *it3Start;</td></tr>
+<tr><td class="num" id="LN632">632</td><td class="line">					<span class='comment'>//split the face between two corners</span></td></tr>
+<tr><td class="num" id="LN633">633</td><td class="line">					edge eDissect = E.splitFace(adStart, adEnd);</td></tr>
+<tr><td class="num" id="LN634">634</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN635">635</td><td class="line">					m_dissectionEdge[eDissect] = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN636">636</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN637">637</td><td class="line">					change = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN638">638</td><td class="line">					<span class='comment'>//if (PG) PG-&gt;typeOf(e) = Graph::dissect;</span></td></tr>
+<tr><td class="num" id="LN639">639</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN640">640</td><td class="line">					<span class='comment'>//set the angles, old values 3 are divided</span></td></tr>
+<tr><td class="num" id="LN641">641</td><td class="line">					m_angle[adEnd] = m_angle[adEnd] - 1;</td></tr>
+<tr><td class="num" id="LN642">642</td><td class="line">					m_angle[adStart] = 2;</td></tr>
+<tr><td class="num" id="LN643">643</td><td class="line">					m_angle[adStart-&gt;cyclicSucc()] = 1; <span class='comment'>//new edge entry from start to end</span></td></tr>
+<tr><td class="num" id="LN644">644</td><td class="line">					m_angle[adEnd-&gt;cyclicSucc()] = 1; <span class='comment'>//new edge entry from end to start</span></td></tr>
+<tr><td class="num" id="LN645">645</td><td class="line">					<span class='comment'>//we dont have any angles &gt; 2 left, so delete some participants</span></td></tr>
+<tr><td class="num" id="LN646">646</td><td class="line">					<span class='comment'>//Start and all itone are out of the face in the new rectangle</span></td></tr>
+<tr><td class="num" id="LN647">647</td><td class="line">					faceCycle.del(it1Top);</td></tr>
+<tr><td class="num" id="LN648">648</td><td class="line">					faceCycle.del(it1Back);</td></tr>
+<tr><td class="num" id="LN649">649</td><td class="line">					faceCycle.del(it1Base);</td></tr>
+<tr><td class="num" id="LN650">650</td><td class="line">					<span class='comment'>//do not delete itStart, copy the new edges entry to this position</span></td></tr>
+<tr><td class="num" id="LN651">651</td><td class="line">					<span class='comment'>//faceCycle.del(itStart);</span></td></tr>
+<tr><td class="num" id="LN652">652</td><td class="line">					adStart = adStart-&gt;cyclicSucc();<span class='comment'>//use reference</span></td></tr>
+<tr><td class="num" id="LN653">653</td><td class="line">					<span class='comment'>//check if itEnd stays</span></td></tr>
+<tr><td class="num" id="LN654">654</td><td class="line">					<span class='keyword'>if</span> (m_angle[adEnd] == 2)</td></tr>
+<tr><td class="num" id="LN655">655</td><td class="line">					{</td></tr>
+<tr><td class="num" id="LN656">656</td><td class="line">						faceCycle.del(itTopSucc);</td></tr>
+<tr><td class="num" id="LN657">657</td><td class="line">					}<span class='comment'>//if</span></td></tr>
+<tr><td class="num" id="LN658">658</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN659">659</td><td class="line">					<span class='comment'>//OGDF_ASSERT(check(msg));</span></td></tr>
+<tr><td class="num" id="LN660">660</td><td class="line">				}<span class='comment'>//for</span></td></tr>
+<tr><td class="num" id="LN661">661</td><td class="line">			}<span class='comment'>//pattern2</span></td></tr>
+<tr><td class="num" id="LN662">662</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN663">663</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN664">664</td><td class="line">		}<span class='comment'>//iterate pattern search</span></td></tr>
+<tr><td class="num" id="LN665">665</td><td class="line">		<span class='comment'>//search for ears in connection between two cages and fill them in a preprocessing</span></td></tr>
+<tr><td class="num" id="LN666">666</td><td class="line">		<span class='comment'>//step to avoid the separation, works only in combination with segment-saving</span></td></tr>
+<tr><td class="num" id="LN667">667</td><td class="line">		<span class='comment'>//and if PlanRep-ifnormation is known, maybe use degree1-simplification</span></td></tr>
+<tr><td class="num" id="LN668">668</td><td class="line">		<span class='keyword'>if</span> (PG != 0)</td></tr>
+<tr><td class="num" id="LN669">669</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN670">670</td><td class="line">			ListIterator&lt;adjEntry&gt; prit, savenext;</td></tr>
+<tr><td class="num" id="LN671">671</td><td class="line">			<span class='comment'>//check if possible</span></td></tr>
+<tr><td class="num" id="LN672">672</td><td class="line">			ListIterator&lt;adjEntry&gt; itEnd, itEar, itHead, itToe; <span class='comment'>//pattern defining edges</span></td></tr>
+<tr><td class="num" id="LN673">673</td><td class="line">			<span class='comment'>//take care of prit, it will be deleted</span></td></tr>
+<tr><td class="num" id="LN674">674</td><td class="line">			savenext = faceCycle.begin();</td></tr>
+<tr><td class="num" id="LN675">675</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN676">676</td><td class="line">			<span class='comment'>//if (PG-&gt;original((*savenext)-&gt;theNode()) != 0)</span></td></tr>
+<tr><td class="num" id="LN677">677</td><td class="line">			<span class='comment'>//cout &lt;&lt; "Knotengraeder: " &lt;&lt; PG-&gt;original((*savenext)-&gt;theNode())-&gt;degree() &lt;&lt;  "\n" &lt;&lt; flush;</span></td></tr>
+<tr><td class="num" id="LN678">678</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN679">679</td><td class="line">			<span class='keyword'>for</span> (prit = faceCycle.begin(); (prit.valid() &amp;&amp; savenext.valid()) &amp;&amp; (faceCycle.size()&gt;5); (prit = savenext)) <span class='comment'>//go clockwise around face!?</span></td></tr>
+<tr><td class="num" id="LN680">680</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN681">681</td><td class="line">				savenext++;</td></tr>
+<tr><td class="num" id="LN682">682</td><td class="line">				<span class='comment'>//es bleibt herauszufinden, in welcher reihenfolge die kanten ohnehin korrekt</span></td></tr>
+<tr><td class="num" id="LN683">683</td><td class="line">				<span class='comment'>//durchlaufen werden, dann die andere nehmen</span></td></tr>
+<tr><td class="num" id="LN684">684</td><td class="line">				itEnd = prit; <span class='comment'>//search pattern backwards</span></td></tr>
+<tr><td class="num" id="LN685">685</td><td class="line">				<span class='comment'>//if (m_angle[*itEnd]    != 3) continue; //nur in einer Richtung</span></td></tr>
+<tr><td class="num" id="LN686">686</td><td class="line">				itHead = faceCycle.cyclicPred(itEnd);</td></tr>
+<tr><td class="num" id="LN687">687</td><td class="line">				<span class='keyword'>if</span> (m_angle[*itHead]  != 1) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN688">688</td><td class="line">				itEar = faceCycle.cyclicPred(itHead);</td></tr>
+<tr><td class="num" id="LN689">689</td><td class="line">				<span class='keyword'>if</span> (m_angle[*itEar] != 1) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN690">690</td><td class="line">				itToe = faceCycle.cyclicPred(itEar);</td></tr>
+<tr><td class="num" id="LN691">691</td><td class="line">				<span class='keyword'>if</span> (m_angle[*itToe]   != 3) <span class='keyword'>continue</span>; <span class='comment'>//andersherum anders</span></td></tr>
+<tr><td class="num" id="LN692">692</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN693">693</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN694">694</td><td class="line">				node ov = PG-&gt;expandedNode( (*itEar)-&gt;theNode() );</td></tr>
+<tr><td class="num" id="LN695">695</td><td class="line">				<span class='keyword'>if</span> (ov == 0) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN696">696</td><td class="line">				ov = PG-&gt;original( ov );</td></tr>
+<tr><td class="num" id="LN697">697</td><td class="line">				<span class='keyword'>if</span> (ov == 0) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN698">698</td><td class="line">				<span class='comment'>//cout&lt;&lt;"Grad ist "&lt;&lt;PG-&gt;original( PG-&gt;expandedNode( (*itEar)-&gt;theNode() ) )-&gt;degree()&lt;&lt;"\n"&lt;&lt;flush;</span></td></tr>
+<tr><td class="num" id="LN699">699</td><td class="line">				<span class='comment'>//zweiter Knoten reicht auch, andere Seite</span></td></tr>
+<tr><td class="num" id="LN700">700</td><td class="line">				node ov2;</td></tr>
+<tr><td class="num" id="LN701">701</td><td class="line">				ov2 = PG-&gt;expandedNode( (*itHead)-&gt;theNode() );</td></tr>
+<tr><td class="num" id="LN702">702</td><td class="line">				<span class='keyword'>if</span> (ov2 == 0) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN703">703</td><td class="line">				ov2 = PG-&gt;original( ov2 );</td></tr>
+<tr><td class="num" id="LN704">704</td><td class="line">				<span class='keyword'>if</span> (ov2 == 0) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN705">705</td><td class="line">				<span class='comment'>//cout&lt;&lt;"Grad ist "&lt;&lt;PG-&gt;original( PG-&gt;expandedNode( (*itEar)-&gt;theNode() ) )-&gt;degree()&lt;&lt;"\n"&lt;&lt;flush;</span></td></tr>
+<tr><td class="num" id="LN706">706</td><td class="line">				<span class='keyword'>if</span> ( (ov2-&gt;degree() != 1) &amp;&amp; (ov-&gt;degree() != 1) ) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN707">707</td><td class="line">				<span class='comment'>///if ( PG-&gt;typeOf((*itEar)-&gt;theEdge()) == -1) continue;</span></td></tr>
+<tr><td class="num" id="LN708">708</td><td class="line">				<span class='comment'>//I dropped this classification due to dirty programmed edge type decision</span></td></tr>
+<tr><td class="num" id="LN709">709</td><td class="line">				<span class='comment'>//if not ass it is gen....</span></td></tr>
+<tr><td class="num" id="LN710">710</td><td class="line">				<span class='comment'>// we proudly present the pattern we searched for</span></td></tr>
+<tr><td class="num" id="LN711">711</td><td class="line">				<span class='comment'>//now we insert the new dissection edge, delete the entries in faceCycle,</span></td></tr>
+<tr><td class="num" id="LN712">712</td><td class="line">				<span class='comment'>//and set the angles accordingly</span></td></tr>
+<tr><td class="num" id="LN713">713</td><td class="line">				<span class='comment'>//cout&lt;&lt;"FOUND PATTERN \n\n";</span></td></tr>
+<tr><td class="num" id="LN714">714</td><td class="line">				<span class='comment'>//adjEntry&amp; adEnd = *itEnd;</span></td></tr>
+<tr><td class="num" id="LN715">715</td><td class="line">				adjEntry&amp; adHead = *itHead;</td></tr>
+<tr><td class="num" id="LN716">716</td><td class="line">				adjEntry&amp; adToe = *itToe;</td></tr>
+<tr><td class="num" id="LN717">717</td><td class="line">				adjEntry adjHeadSucc;</td></tr>
+<tr><td class="num" id="LN718">718</td><td class="line">				adjEntry adj2;</td></tr>
+<tr><td class="num" id="LN719">719</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN720">720</td><td class="line">				adjHeadSucc = adHead-&gt;faceCycleSucc();</td></tr>
+<tr><td class="num" id="LN721">721</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN722">722</td><td class="line">				<span class='keyword'>int</span> a1 = m_angle[adjHeadSucc];</td></tr>
+<tr><td class="num" id="LN723">723</td><td class="line">				<span class='keyword'>int</span> a2;</td></tr>
+<tr><td class="num" id="LN724">724</td><td class="line">				<span class='comment'>//bool splitted = false;</span></td></tr>
+<tr><td class="num" id="LN725">725</td><td class="line">				edge eDissect;</td></tr>
+<tr><td class="num" id="LN726">726</td><td class="line">				node u;</td></tr>
+<tr><td class="num" id="LN727">727</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN728">728</td><td class="line">				<span class='comment'>//cout&lt;&lt;"PRE2splitting: head "&lt;&lt;adHead&lt;&lt;"/"&lt;&lt;adHead-&gt;twin()&lt;&lt;"\n";</span></td></tr>
+<tr><td class="num" id="LN729">729</td><td class="line">				<span class='comment'>//cout&lt;&lt;"Winkel: "&lt;&lt;m_angle[adHead]&lt;&lt;"/"&lt;&lt;m_angle[adHead-&gt;twin()]&lt;&lt;"\n";</span></td></tr>
+<tr><td class="num" id="LN730">730</td><td class="line">				<span class='comment'>//Hier noch einfuegen: natuerlich muss head.fcsucc statt faceCycle.succ getestet werden, da auch 180 Grad zulaessig</span></td></tr>
+<tr><td class="num" id="LN731">731</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN732">732</td><td class="line">				<span class='comment'>//if (m_angle[*itEnd] != 1)</span></td></tr>
+<tr><td class="num" id="LN733">733</td><td class="line">				<span class='keyword'>if</span> (m_angle[adjHeadSucc] != 1)</td></tr>
+<tr><td class="num" id="LN734">734</td><td class="line">				{</td></tr>
+<tr><td class="num" id="LN735">735</td><td class="line">					<span class='comment'>//split the face between two corners</span></td></tr>
+<tr><td class="num" id="LN736">736</td><td class="line">					eDissect = E.splitFace(adToe, adjHeadSucc);</td></tr>
+<tr><td class="num" id="LN737">737</td><td class="line">					<span class='comment'>//if (PG) PG-&gt;typeOf(e) = Graph::dissect;</span></td></tr>
+<tr><td class="num" id="LN738">738</td><td class="line">					<span class='comment'>//hier koennte man highprio type gen setzen</span></td></tr>
+<tr><td class="num" id="LN739">739</td><td class="line">					m_angle[adjHeadSucc] = a1 - 1;</td></tr>
+<tr><td class="num" id="LN740">740</td><td class="line">					m_angle[adjHeadSucc-&gt;cyclicSucc()] = 1; <span class='comment'>//new edge entry from end to start</span></td></tr>
+<tr><td class="num" id="LN741">741</td><td class="line">					<span class='keyword'>if</span> (m_angle[adjHeadSucc] == 1) adHead = adjHeadSucc;</td></tr>
+<tr><td class="num" id="LN742">742</td><td class="line">					<span class='keyword'>else</span> faceCycle.del(itHead);</td></tr>
+<tr><td class="num" id="LN743">743</td><td class="line">					<span class='keyword'>if</span> (m_angle[adjHeadSucc] == 2) faceCycle.del(itEnd); <span class='comment'>//it must have been in list</span></td></tr>
+<tr><td class="num" id="LN744">744</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN745">745</td><td class="line">				<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN746">746</td><td class="line">				{</td></tr>
+<tr><td class="num" id="LN747">747</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN748">748</td><td class="line">					<span class='comment'>//split edge</span></td></tr>
+<tr><td class="num" id="LN749">749</td><td class="line">					a1 = m_angle[adHead];</td></tr>
+<tr><td class="num" id="LN750">750</td><td class="line">					adj2 = adHead-&gt;twin();</td></tr>
+<tr><td class="num" id="LN751">751</td><td class="line">					a2 = m_angle[adj2];</td></tr>
+<tr><td class="num" id="LN752">752</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN753">753</td><td class="line">					edge savee = adHead-&gt;theEdge();</td></tr>
+<tr><td class="num" id="LN754">754</td><td class="line">					<span class='keyword'>bool</span> wasDissected =  m_dissectionEdge[savee];</td></tr>
+<tr><td class="num" id="LN755">755</td><td class="line">					<span class='keyword'>bool</span> wasAlign = m_alignmentEdge[savee];</td></tr>
+<tr><td class="num" id="LN756">756</td><td class="line">					Graph::EdgeType savetype;</td></tr>
+<tr><td class="num" id="LN757">757</td><td class="line">					<span class='keyword'>if</span> (PG) savetype = PG-&gt;typeOf(adHead-&gt;theEdge());</td></tr>
+<tr><td class="num" id="LN758">758</td><td class="line">					edge se = E.split(adHead-&gt;theEdge());</td></tr>
+<tr><td class="num" id="LN759">759</td><td class="line">					<span class='keyword'>if</span> (PG) PG-&gt;typeOf(se) = savetype;</td></tr>
+<tr><td class="num" id="LN760">760</td><td class="line">					adjHeadSucc = adHead-&gt;faceCycleSucc();</td></tr>
+<tr><td class="num" id="LN761">761</td><td class="line">					<span class='comment'>//cout&lt;&lt;"headsucc: "&lt;&lt;adjHeadSucc&lt;&lt;"\n";</span></td></tr>
+<tr><td class="num" id="LN762">762</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN763">763</td><td class="line">					u = se-&gt;source();</td></tr>
+<tr><td class="num" id="LN764">764</td><td class="line">					<span class='comment'>//cout&lt;&lt;"Neuer Knoten: "&lt;&lt;u&lt;&lt;"\n";</span></td></tr>
+<tr><td class="num" id="LN765">765</td><td class="line">					<span class='keyword'>if</span> (m_dissectionEdge[adHead] == <span class='keyword'>false</span>)</td></tr>
+<tr><td class="num" id="LN766">766</td><td class="line">						m_splitNodes.push(u);</td></tr>
+<tr><td class="num" id="LN767">767</td><td class="line">					<span class='keyword'>if</span> (wasDissected) m_dissectionEdge[se] = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN768">768</td><td class="line">					<span class='keyword'>if</span> (wasAlign) m_alignmentEdge[se] = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN769">769</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN770">770</td><td class="line">					<span class='comment'>//splitted = true;</span></td></tr>
+<tr><td class="num" id="LN771">771</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN772">772</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN773">773</td><td class="line">					eDissect = E.splitFace(adToe, adjHeadSucc);</td></tr>
+<tr><td class="num" id="LN774">774</td><td class="line">					<span class='comment'>//cout&lt;&lt;"restore: head"&lt;&lt;adHead&lt;&lt;" "&lt;&lt;a1&lt;&lt;"\n";</span></td></tr>
+<tr><td class="num" id="LN775">775</td><td class="line">					<span class='comment'>//cout&lt;&lt;"restore: adj2"&lt;&lt;adj2&lt;&lt;" "&lt;&lt;a2&lt;&lt;"\n";</span></td></tr>
+<tr><td class="num" id="LN776">776</td><td class="line">					<span class='comment'>//cout&lt;&lt;"restore: headsucc"&lt;&lt;adjHeadSucc&lt;&lt;" "&lt;&lt;1&lt;&lt;"\n";</span></td></tr>
+<tr><td class="num" id="LN777">777</td><td class="line">					<span class='comment'>//cout&lt;&lt;"restore: headsucccyclicpred"&lt;&lt;adjHeadSucc-&gt;cyclicPred()&lt;&lt;" "&lt;&lt;2&lt;&lt;"\n";</span></td></tr>
+<tr><td class="num" id="LN778">778</td><td class="line">					<span class='comment'>//cout&lt;&lt;"restore: headsucccyclicSucc"&lt;&lt;adjHeadSucc-&gt;cyclicSucc()&lt;&lt;" "&lt;&lt;1&lt;&lt;"\n";</span></td></tr>
+<tr><td class="num" id="LN779">779</td><td class="line">					<span class='comment'>// restore backup angles</span></td></tr>
+<tr><td class="num" id="LN780">780</td><td class="line">					m_angle[adHead] = a1; <span class='comment'>//alter Winkel unten</span></td></tr>
+<tr><td class="num" id="LN781">781</td><td class="line">					m_angle[adj2] = a2;   <span class='comment'>//alter winkel oben</span></td></tr>
+<tr><td class="num" id="LN782">782</td><td class="line">					m_angle[adjHeadSucc] = 1; <span class='comment'>//Winkel oben zu neuer Kante</span></td></tr>
+<tr><td class="num" id="LN783">783</td><td class="line">					m_angle[adjHeadSucc-&gt;cyclicPred()] = 2;</td></tr>
+<tr><td class="num" id="LN784">784</td><td class="line">					m_angle[adjHeadSucc-&gt;cyclicSucc()] = 1;</td></tr>
+<tr><td class="num" id="LN785">785</td><td class="line">					adHead = adjHeadSucc;</td></tr>
+<tr><td class="num" id="LN786">786</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN787">787</td><td class="line">				}<span class='comment'>//else</span></td></tr>
+<tr><td class="num" id="LN788">788</td><td class="line">				<span class='comment'>//cout&lt;&lt;"inserted edge "&lt;&lt;eDissect&lt;&lt;"\n"&lt;&lt;flush;</span></td></tr>
+<tr><td class="num" id="LN789">789</td><td class="line">				m_dissectionEdge[eDissect] = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN790">790</td><td class="line">				<span class='comment'>//set the angles, old values 3 are divided</span></td></tr>
+<tr><td class="num" id="LN791">791</td><td class="line">				m_angle[adToe-&gt;cyclicSucc()] = 2; <span class='comment'>//new edge entry from start to end</span></td></tr>
+<tr><td class="num" id="LN792">792</td><td class="line">				m_angle[adToe] = 1;</td></tr>
+<tr><td class="num" id="LN793">793</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN794">794</td><td class="line">				<span class='comment'>//we dont have any angles &gt; 2 left, so delete some participants</span></td></tr>
+<tr><td class="num" id="LN795">795</td><td class="line">				faceCycle.del(itEar);</td></tr>
+<tr><td class="num" id="LN796">796</td><td class="line">				faceCycle.del(itToe);</td></tr>
+<tr><td class="num" id="LN797">797</td><td class="line">				<span class='comment'>//do not delete itStart, copy the new edges entry to this position</span></td></tr>
+<tr><td class="num" id="LN798">798</td><td class="line">				<span class='comment'>//if (splitted)</span></td></tr>
+<tr><td class="num" id="LN799">799</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN800">800</td><td class="line">				<span class='comment'>//OGDF_ASSERT(check(msg));</span></td></tr>
+<tr><td class="num" id="LN801">801</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN802">802</td><td class="line">			}<span class='comment'>//for</span></td></tr>
+<tr><td class="num" id="LN803">803</td><td class="line">		}<span class='comment'>//preprocessing 2</span></td></tr>
+<tr><td class="num" id="LN804">804</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN805">805</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN806">806</td><td class="line">		<span class='comment'>// We iterate over faceCycle and look for occurrences of two</span></td></tr>
+<tr><td class="num" id="LN807">807</td><td class="line">		<span class='comment'>// consecutive 90 degree angles</span></td></tr>
+<tr><td class="num" id="LN808">808</td><td class="line">		ListIterator&lt;adjEntry&gt; it;</td></tr>
+<tr><td class="num" id="LN809">809</td><td class="line">		<span class='keyword'>int</span> runcount = 0; <span class='comment'>//check progress</span></td></tr>
+<tr><td class="num" id="LN810">810</td><td class="line">		it = faceCycle.begin();</td></tr>
+<tr><td class="num" id="LN811">811</td><td class="line">		<span class='keyword'>while</span> ((faceCycle.size() &gt; 4) &amp;&amp; it.valid() &amp;&amp; (runcount &lt;= 2*faceCycle.size()))</td></tr>
+<tr><td class="num" id="LN812">812</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN813">813</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN814">814</td><td class="line">			<span class='keyword'>if</span> (m_angle[*it] == 1 &amp;&amp; m_angle[*faceCycle.cyclicPred(it)] == 1)</td></tr>
+<tr><td class="num" id="LN815">815</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN816">816</td><td class="line">				runcount = 0; <span class='comment'>//start it over again</span></td></tr>
+<tr><td class="num" id="LN817">817</td><td class="line">				<span class='comment'>// now we run backwards and look for angles &gt;= 270 degree. We</span></td></tr>
+<tr><td class="num" id="LN818">818</td><td class="line">				<span class='comment'>// can eliminate such angles as long as the following two</span></td></tr>
+<tr><td class="num" id="LN819">819</td><td class="line">				<span class='comment'>// angles (faceCycle is seen as cyclic list) are 90 degree.</span></td></tr>
+<tr><td class="num" id="LN820">820</td><td class="line">				ListIterator&lt;adjEntry&gt; itBack =</td></tr>
+<tr><td class="num" id="LN821">821</td><td class="line">					faceCycle.cyclicPred(faceCycle.cyclicPred(it));</td></tr>
+<tr><td class="num" id="LN822">822</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN823">823</td><td class="line">				<span class='comment'>// Look for the next angle &gt;= 270 degree.</span></td></tr>
+<tr><td class="num" id="LN824">824</td><td class="line">				<span class='comment'>// We will find one since faceCylce has at least two elements</span></td></tr>
+<tr><td class="num" id="LN825">825</td><td class="line">				<span class='comment'>// Note: For each 90 degree angle we have to skip we can</span></td></tr>
+<tr><td class="num" id="LN826">826</td><td class="line">				<span class='comment'>// eliminate one more angle &gt;= 270 degree.</span></td></tr>
+<tr><td class="num" id="LN827">827</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN828">828</td><td class="line">				<span class='comment'>// if we did not find a &gt;= 270 degree angle until it, the</span></td></tr>
+<tr><td class="num" id="LN829">829</td><td class="line">				<span class='comment'>// face must be a rectangle and faceCycle consists of four 90</span></td></tr>
+<tr><td class="num" id="LN830">830</td><td class="line">				<span class='comment'>// degree angles. Hence, we terminate also the while-loop above!</span></td></tr>
+<tr><td class="num" id="LN831">831</td><td class="line">				<span class='keyword'>while</span>((it != itBack) &amp;&amp; (faceCycle.size() &gt; 4))</td></tr>
+<tr><td class="num" id="LN832">832</td><td class="line">				{</td></tr>
+<tr><td class="num" id="LN833">833</td><td class="line">					<span class='keyword'>if</span> ((m_angle[*it] != 1) || (m_angle[*faceCycle.cyclicPred(it)] != 1)) <span class='keyword'>break</span>;</td></tr>
+<tr><td class="num" id="LN834">834</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN835">835</td><td class="line">					<span class='comment'>// If we see a 90 degree angle, we move further backwards</span></td></tr>
+<tr><td class="num" id="LN836">836</td><td class="line">					<span class='keyword'>if</span>( m_angle[*itBack] &lt; 3) {</td></tr>
+<tr><td class="num" id="LN837">837</td><td class="line">						itBack = faceCycle.cyclicPred(itBack);</td></tr>
+<tr><td class="num" id="LN838">838</td><td class="line">						<span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN839">839</td><td class="line">					}</td></tr>
+<tr><td class="num" id="LN840">840</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN841">841</td><td class="line">					ListIterator&lt;adjEntry&gt; itBackSucc =</td></tr>
+<tr><td class="num" id="LN842">842</td><td class="line">						faceCycle.cyclicSucc(itBack);</td></tr>
+<tr><td class="num" id="LN843">843</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN844">844</td><td class="line">					<span class='comment'>// If we see a &gt;= 270 degree angle whose successor is it,</span></td></tr>
+<tr><td class="num" id="LN845">845</td><td class="line">					<span class='comment'>// we do not have a rectangular ear anymore, so we break.</span></td></tr>
+<tr><td class="num" id="LN846">846</td><td class="line">					<span class='comment'>// We then have processed all &gt;= 270 degree angles behind</span></td></tr>
+<tr><td class="num" id="LN847">847</td><td class="line">					<span class='comment'>// it</span></td></tr>
+<tr><td class="num" id="LN848">848</td><td class="line">					<span class='comment'>//if (itBackSucc == it)</span></td></tr>
+<tr><td class="num" id="LN849">849</td><td class="line">					<span class='comment'>//	break;</span></td></tr>
+<tr><td class="num" id="LN850">850</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN851">851</td><td class="line">					adjEntry &amp;adjSplit = *faceCycle.cyclicSucc(itBackSucc);</td></tr>
+<tr><td class="num" id="LN852">852</td><td class="line">					ListIterator&lt;adjEntry&gt; itsplit = faceCycle.cyclicSucc(itBackSucc);</td></tr>
+<tr><td class="num" id="LN853">853</td><td class="line">					<span class='comment'>// We now have the following situation:</span></td></tr>
+<tr><td class="num" id="LN854">854</td><td class="line">					<span class='comment'>// The rectangular ear (pattern 100) consists of</span></td></tr>
+<tr><td class="num" id="LN855">855</td><td class="line">					<span class='comment'>// *itBack -&gt; *itBackSucc -&gt; adjSplit</span></td></tr>
+<tr><td class="num" id="LN856">856</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN857">857</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN858">858</td><td class="line">					<span class='comment'>// Since a split operation can also change the id's of the</span></td></tr>
+<tr><td class="num" id="LN859">859</td><td class="line">					<span class='comment'>// adjacency entries at the edge, we have to backup two</span></td></tr>
+<tr><td class="num" id="LN860">860</td><td class="line">					<span class='comment'>// angles a1 and a2.</span></td></tr>
+<tr><td class="num" id="LN861">861</td><td class="line">					<span class='keyword'>int</span> a1 = m_angle[adjSplit];</td></tr>
+<tr><td class="num" id="LN862">862</td><td class="line">					adjEntry adj2 = adjSplit-&gt;twin();</td></tr>
+<tr><td class="num" id="LN863">863</td><td class="line">					<span class='keyword'>int</span> a2 = m_angle[adj2];</td></tr>
+<tr><td class="num" id="LN864">864</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN865">865</td><td class="line">					<span class='comment'>//hier nur splitten, falls noetig, aber testen, ob es in der Reihenfolge</span></td></tr>
+<tr><td class="num" id="LN866">866</td><td class="line">					<span class='comment'>//Probleme macht, wenn man auch fuer 180 Grad, die nicht im cycle sind, nicht splittet</span></td></tr>
+<tr><td class="num" id="LN867">867</td><td class="line">					<span class='comment'>//save the angle</span></td></tr>
+<tr><td class="num" id="LN868">868</td><td class="line">					<span class='keyword'>int</span> earSlope = m_angle[adjSplit-&gt;faceCycleSucc()];</td></tr>
+<tr><td class="num" id="LN869">869</td><td class="line">					<span class='comment'>//the target node of the split operation</span></td></tr>
+<tr><td class="num" id="LN870">870</td><td class="line">					node u;</td></tr>
+<tr><td class="num" id="LN871">871</td><td class="line">					<span class='keyword'>bool</span> savevertex = (earSlope &gt;= 2); <span class='comment'>//should be &gt;= 2, but 2 not in cycle</span></td></tr>
+<tr><td class="num" id="LN872">872</td><td class="line">					ListIterator&lt;adjEntry&gt; itsucc;</td></tr>
+<tr><td class="num" id="LN873">873</td><td class="line">					<span class='comment'>//check if we cant save a bend</span></td></tr>
+<tr><td class="num" id="LN874">874</td><td class="line">					<span class='keyword'>if</span> (!savevertex)</td></tr>
+<tr><td class="num" id="LN875">875</td><td class="line">					{</td></tr>
+<tr><td class="num" id="LN876">876</td><td class="line">						<span class='comment'>// We split *itBackSuccSucc ...</span></td></tr>
+<tr><td class="num" id="LN877">877</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN878">878</td><td class="line">						edge savee = adjSplit-&gt;theEdge();</td></tr>
+<tr><td class="num" id="LN879">879</td><td class="line">						<span class='keyword'>bool</span> wasDissected =  m_dissectionEdge[savee];</td></tr>
+<tr><td class="num" id="LN880">880</td><td class="line">						<span class='keyword'>bool</span> wasAlign = m_alignmentEdge[savee];</td></tr>
+<tr><td class="num" id="LN881">881</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN882">882</td><td class="line">						edge se = E.split(adjSplit-&gt;theEdge());</td></tr>
+<tr><td class="num" id="LN883">883</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN884">884</td><td class="line">						u = se-&gt;source();</td></tr>
+<tr><td class="num" id="LN885">885</td><td class="line">						<span class='comment'>//die neue Kante erhaelt adj, ist aber adjSplit, also immer false?Nein, aber nicht korrekt</span></td></tr>
+<tr><td class="num" id="LN886">886</td><td class="line">						<span class='comment'>//order problem: first delete disection edges, then unsplit, but what if split(dissection)</span></td></tr>
+<tr><td class="num" id="LN887">887</td><td class="line">						<span class='keyword'>if</span> (m_dissectionEdge[adjSplit] == <span class='keyword'>false</span>)</td></tr>
+<tr><td class="num" id="LN888">888</td><td class="line">							m_splitNodes.push(u);</td></tr>
+<tr><td class="num" id="LN889">889</td><td class="line">						<span class='keyword'>if</span> (wasDissected) m_dissectionEdge[se] = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN890">890</td><td class="line">						<span class='keyword'>if</span> (wasAlign) m_alignmentEdge[se] = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN891">891</td><td class="line">					}</td></tr>
+<tr><td class="num" id="LN892">892</td><td class="line">					<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN893">893</td><td class="line">					{</td></tr>
+<tr><td class="num" id="LN894">894</td><td class="line">						u = (adjSplit-&gt;faceCycleSucc())-&gt;theNode(); <span class='comment'>//use this node instead</span></td></tr>
+<tr><td class="num" id="LN895">895</td><td class="line">						itsucc = faceCycle.cyclicSucc(faceCycle.cyclicSucc(itBackSucc));</td></tr>
+<tr><td class="num" id="LN896">896</td><td class="line">						<span class='comment'>//cout&lt;&lt;"we will save a vertex\n"&lt;&lt;flush;</span></td></tr>
+<tr><td class="num" id="LN897">897</td><td class="line">					}</td></tr>
+<tr><td class="num" id="LN898">898</td><td class="line">					adjEntry adjSplitSucc = adjSplit-&gt;faceCycleSucc();</td></tr>
+<tr><td class="num" id="LN899">899</td><td class="line">					<span class='comment'>//if (savevertex) OGDF_ASSERT(adjSplitSucc == *itsucc);//doesnt work with 180 degree</span></td></tr>
+<tr><td class="num" id="LN900">900</td><td class="line">					<span class='comment'>// and close a rectangular face</span></td></tr>
+<tr><td class="num" id="LN901">901</td><td class="line">					edge eDissect = E.splitFace(*itBack, adjSplitSucc);</td></tr>
+<tr><td class="num" id="LN902">902</td><td class="line">					m_dissectionEdge[eDissect] = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN903">903</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN904">904</td><td class="line">					<span class='comment'>//cout&lt;&lt;"inserted new edge "&lt;&lt;eDissect&lt;&lt;"\n"&lt;&lt;flush;</span></td></tr>
+<tr><td class="num" id="LN905">905</td><td class="line">					<span class='comment'>//cout&lt;&lt;"setting angles split/adj2 : "&lt;&lt;adjSplit&lt;&lt;":"&lt;&lt;a1&lt;&lt;" / "&lt;&lt;adj2&lt;&lt;":"&lt;&lt;a2&lt;&lt;"\n"&lt;&lt;flush;</span></td></tr>
+<tr><td class="num" id="LN906">906</td><td class="line">					<span class='comment'>// restore backup angles</span></td></tr>
+<tr><td class="num" id="LN907">907</td><td class="line">					m_angle[adjSplit] = a1;</td></tr>
+<tr><td class="num" id="LN908">908</td><td class="line">					m_angle[adj2] = a2;</td></tr>
+<tr><td class="num" id="LN909">909</td><td class="line">					<span class='comment'>//but this should be splitsucccyclicpred???? why reset value if not savevertex</span></td></tr>
+<tr><td class="num" id="LN910">910</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN911">911</td><td class="line">					<span class='comment'>// set angles at the split node</span></td></tr>
+<tr><td class="num" id="LN912">912</td><td class="line">					<span class='keyword'>bool</span> shiftedit = <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN913">913</td><td class="line">					<span class='keyword'>if</span> (savevertex)</td></tr>
+<tr><td class="num" id="LN914">914</td><td class="line">					{</td></tr>
+<tr><td class="num" id="LN915">915</td><td class="line">						m_angle[adjSplitSucc] = earSlope - 1;</td></tr>
+<tr><td class="num" id="LN916">916</td><td class="line">						<span class='comment'>//cout&lt;&lt;"setting splitsucc angle to    : "&lt;&lt;adjSplitSucc&lt;&lt;": "&lt;&lt;earSlope - 1&lt;&lt;"\n"&lt;&lt;flush;</span></td></tr>
+<tr><td class="num" id="LN917">917</td><td class="line">						<span class='comment'>//if the former split_to angle was a 270 degree angle, then it</span></td></tr>
+<tr><td class="num" id="LN918">918</td><td class="line">						<span class='comment'>//is now 180 and we delete it</span></td></tr>
+<tr><td class="num" id="LN919">919</td><td class="line">						<span class='keyword'>if</span> (m_angle[adjSplitSucc] == 2)</td></tr>
+<tr><td class="num" id="LN920">920</td><td class="line">						{</td></tr>
+<tr><td class="num" id="LN921">921</td><td class="line">							<span class='keyword'>if</span> (itsucc == it)</td></tr>
+<tr><td class="num" id="LN922">922</td><td class="line">							{</td></tr>
+<tr><td class="num" id="LN923">923</td><td class="line">								<span class='comment'>//cout&lt;&lt;"shifted it from to          "&lt;&lt;*it&lt;&lt;*faceCycle.cyclicSucc(it)&lt;&lt;"\n"&lt;&lt;flush;</span></td></tr>
+<tr><td class="num" id="LN924">924</td><td class="line">								shiftedit = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN925">925</td><td class="line">								it = faceCycle.cyclicSucc(it);</td></tr>
+<tr><td class="num" id="LN926">926</td><td class="line">							}</td></tr>
+<tr><td class="num" id="LN927">927</td><td class="line">							<span class='comment'>//cout&lt;&lt;"deleted itsucc              "&lt;&lt;*itsucc&lt;&lt;"\n"&lt;&lt;flush;</span></td></tr>
+<tr><td class="num" id="LN928">928</td><td class="line">							faceCycle.del(itsucc);</td></tr>
+<tr><td class="num" id="LN929">929</td><td class="line">						}</td></tr>
+<tr><td class="num" id="LN930">930</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN931">931</td><td class="line">					}</td></tr>
+<tr><td class="num" id="LN932">932</td><td class="line">					<span class='keyword'>else</span> {</td></tr>
+<tr><td class="num" id="LN933">933</td><td class="line">						m_angle[adjSplitSucc] = 1;</td></tr>
+<tr><td class="num" id="LN934">934</td><td class="line">						<span class='comment'>//cout &lt;&lt; "setting adjsplitsucc angle to : " &lt;&lt;adjSplitSucc&lt;&lt;" : "&lt;&lt;m_angle[adjSplitSucc]&lt;&lt;"\n"&lt;&lt;flush;</span></td></tr>
+<tr><td class="num" id="LN935">935</td><td class="line">					}</td></tr>
+<tr><td class="num" id="LN936">936</td><td class="line">					<span class='comment'>//cout &lt;&lt; "setting asscyclicsucc angle to: " &lt;&lt;adjSplitSucc-&gt;cyclicSucc()&lt;&lt;" : "&lt;&lt;1&lt;&lt;"\n"&lt;&lt;flush;</span></td></tr>
+<tr><td class="num" id="LN937">937</td><td class="line">					m_angle[adjSplitSucc-&gt;cyclicSucc()] = 1;</td></tr>
+<tr><td class="num" id="LN938">938</td><td class="line">					<span class='comment'>//m_angle[adjSplitSucc-&gt;cyclicPred()] = 2;</span></td></tr>
+<tr><td class="num" id="LN939">939</td><td class="line">					<span class='comment'>//Achtung, geht nur, wenn nicht vorher 180, sonst abhaengig von u.U. v. dritter Kante abziehen</span></td></tr>
+<tr><td class="num" id="LN940">940</td><td class="line">					<span class='comment'>//spaeter zusammenlegen</span></td></tr>
+<tr><td class="num" id="LN941">941</td><td class="line">					<span class='keyword'>if</span> (!savevertex)</td></tr>
+<tr><td class="num" id="LN942">942</td><td class="line">						<span class='keyword'>if</span> (earSlope != 4) <span class='comment'>//already has new value</span></td></tr>
+<tr><td class="num" id="LN943">943</td><td class="line">							m_angle[adjSplitSucc-&gt;cyclicPred()] = 4 - 1 - m_angle[adjSplitSucc];</td></tr>
+<tr><td class="num" id="LN944">944</td><td class="line">					<span class='comment'>//if (savevertex &amp;&amp; (earSlope == 2)) m_angle[adjSplitSucc-&gt;cyclicPred()] = ???</span></td></tr>
+<tr><td class="num" id="LN945">945</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN946">946</td><td class="line">					adjEntry adjSucc = (*itBack)-&gt;cyclicSucc();</td></tr>
+<tr><td class="num" id="LN947">947</td><td class="line">					<span class='keyword'>if</span> (m_angle[*itBack] == 4) {</td></tr>
+<tr><td class="num" id="LN948">948</td><td class="line">						<span class='comment'>// If the former &gt;= 270 degree angle was 360 degree,</span></td></tr>
+<tr><td class="num" id="LN949">949</td><td class="line">						<span class='comment'>// we keep it as 270 degree angle ...</span></td></tr>
+<tr><td class="num" id="LN950">950</td><td class="line">						m_angle[*itBack] = 1;</td></tr>
+<tr><td class="num" id="LN951">951</td><td class="line">						m_angle[adjSucc] = 3;</td></tr>
+<tr><td class="num" id="LN952">952</td><td class="line">						*itBack = adjSucc;</td></tr>
+<tr><td class="num" id="LN953">953</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN954">954</td><td class="line">					} <span class='keyword'>else</span> {</td></tr>
+<tr><td class="num" id="LN955">955</td><td class="line">						<span class='comment'>// ... otherwise, it is now a 180 degree angle and</span></td></tr>
+<tr><td class="num" id="LN956">956</td><td class="line">						<span class='comment'>// we remove it</span></td></tr>
+<tr><td class="num" id="LN957">957</td><td class="line">						m_angle[*itBack] = 1;</td></tr>
+<tr><td class="num" id="LN958">958</td><td class="line">						m_angle[adjSucc] = 2;</td></tr>
+<tr><td class="num" id="LN959">959</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN960">960</td><td class="line">						ListIterator&lt;adjEntry&gt; itDel = itBack;</td></tr>
+<tr><td class="num" id="LN961">961</td><td class="line">						itBack = faceCycle.cyclicPred(itBack);</td></tr>
+<tr><td class="num" id="LN962">962</td><td class="line">						<span class='keyword'>if</span> (it == itDel)</td></tr>
+<tr><td class="num" id="LN963">963</td><td class="line">						{</td></tr>
+<tr><td class="num" id="LN964">964</td><td class="line">							it = faceCycle.cyclicSucc(it); shiftedit = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN965">965</td><td class="line">							<span class='comment'>//cout&lt;&lt;"shifted it to "&lt;&lt;*it&lt;&lt;"\n"&lt;&lt;flush;</span></td></tr>
+<tr><td class="num" id="LN966">966</td><td class="line">						}</td></tr>
+<tr><td class="num" id="LN967">967</td><td class="line">						faceCycle.del(itDel);</td></tr>
+<tr><td class="num" id="LN968">968</td><td class="line">					}</td></tr>
+<tr><td class="num" id="LN969">969</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN970">970</td><td class="line">					<span class='comment'>// The other edge (not adjSplit) which resulted from the</span></td></tr>
+<tr><td class="num" id="LN971">971</td><td class="line">					<span class='comment'>// split edge operation is contained in the face we</span></td></tr>
+<tr><td class="num" id="LN972">972</td><td class="line">					<span class='comment'>// consider instead of adjsplit if its not 180 degree</span></td></tr>
+<tr><td class="num" id="LN973">973</td><td class="line">					<span class='keyword'>if</span> ((!savevertex) || (earSlope == 2))</td></tr>
+<tr><td class="num" id="LN974">974</td><td class="line">						adjSplit = adjSplitSucc;</td></tr>
+<tr><td class="num" id="LN975">975</td><td class="line">					<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN976">976</td><td class="line">					{</td></tr>
+<tr><td class="num" id="LN977">977</td><td class="line">						<span class='keyword'>if</span> (itsplit == it)</td></tr>
+<tr><td class="num" id="LN978">978</td><td class="line">						{</td></tr>
+<tr><td class="num" id="LN979">979</td><td class="line">							<span class='comment'>//cout&lt;&lt;"deleting itsplit, shifting it "&lt;&lt;*itsplit&lt;&lt;", "&lt;&lt;*it&lt;&lt;" - "&lt;&lt;*faceCycle.cyclicSucc(it)&lt;&lt;"\n"&lt;&lt;flush;</span></td></tr>
+<tr><td class="num" id="LN980">980</td><td class="line">							it = faceCycle.cyclicSucc(it);</td></tr>
+<tr><td class="num" id="LN981">981</td><td class="line">							shiftedit = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN982">982</td><td class="line">						}</td></tr>
+<tr><td class="num" id="LN983">983</td><td class="line">						<span class='comment'>//else cout&lt;&lt;"deleting itsplit             "&lt;&lt;*itsplit&lt;&lt;"\n"&lt;&lt;flush;</span></td></tr>
+<tr><td class="num" id="LN984">984</td><td class="line">						faceCycle.del(itsplit);</td></tr>
+<tr><td class="num" id="LN985">985</td><td class="line">					}</td></tr>
+<tr><td class="num" id="LN986">986</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN987">987</td><td class="line">					<span class='comment'>// This 90 degree angle vanishes from our face</span></td></tr>
+<tr><td class="num" id="LN988">988</td><td class="line">					faceCycle.del(itBackSucc);</td></tr>
+<tr><td class="num" id="LN989">989</td><td class="line">					<span class='keyword'>if</span> (shiftedit) <span class='keyword'>break</span>;</td></tr>
+<tr><td class="num" id="LN990">990</td><td class="line">				}<span class='comment'>//while run backwards</span></td></tr>
+<tr><td class="num" id="LN991">991</td><td class="line">			}<span class='comment'>//if double 1</span></td></tr>
+<tr><td class="num" id="LN992">992</td><td class="line">			it = faceCycle.cyclicSucc(it);</td></tr>
+<tr><td class="num" id="LN993">993</td><td class="line">			runcount++;</td></tr>
+<tr><td class="num" id="LN994">994</td><td class="line">		}<span class='comment'>//while</span></td></tr>
+<tr><td class="num" id="LN995">995</td><td class="line">		<span class='comment'>//OGDF_ASSERT(check(msg));</span></td></tr>
+<tr><td class="num" id="LN996">996</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN997">997</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN998">998</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN999">999</td><td class="line"><span class='comment'>//test end ************************************************************************</span></td></tr>
+<tr><td class="num" id="LN1000">1000</td><td class="line"><span class='comment'>// undoes a previous dissect()</span></td></tr>
+<tr><td class="num" id="LN1001">1001</td><td class="line"><span class='comment'>// important: recomputes list of faces, so previous faces are no</span></td></tr>
+<tr><td class="num" id="LN1002">1002</td><td class="line"><span class='comment'>//            longer valid</span></td></tr>
+<tr><td class="num" id="LN1003">1003</td><td class="line"><span class='keyword'>void</span> OrthoRep::undissect(<span class='keyword'>bool</span> align) <span class='comment'>//default false</span></td></tr>
+<tr><td class="num" id="LN1004">1004</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN1005">1005</td><td class="line">	<span class='comment'>// assert that dissect() has been called before</span></td></tr>
+<tr><td class="num" id="LN1006">1006</td><td class="line">	OGDF_ASSERT(m_dissectionEdge.valid() == <span class='keyword'>true</span>);</td></tr>
+<tr><td class="num" id="LN1007">1007</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1008">1008</td><td class="line">	Graph &amp;G = *m_pE;</td></tr>
+<tr><td class="num" id="LN1009">1009</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1010">1010</td><td class="line">	<span class='comment'>// remove all dissection edges</span></td></tr>
+<tr><td class="num" id="LN1011">1011</td><td class="line">	edge e, eSucc;</td></tr>
+<tr><td class="num" id="LN1012">1012</td><td class="line">	<span class='keyword'>for</span>(e = G.firstEdge(); e != 0; e = eSucc)</td></tr>
+<tr><td class="num" id="LN1013">1013</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN1014">1014</td><td class="line">		eSucc = e-&gt;succ();</td></tr>
+<tr><td class="num" id="LN1015">1015</td><td class="line">		<span class='keyword'>if</span> (m_dissectionEdge[e] == <span class='keyword'>true</span>) {</td></tr>
+<tr><td class="num" id="LN1016">1016</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1017">1017</td><td class="line">			<span class='keyword'>if</span> (!(align &amp;&amp; m_alignmentEdge[e]))</td></tr>
+<tr><td class="num" id="LN1018">1018</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN1019">1019</td><td class="line">				<span class='comment'>// angles at source and target node are joined ...</span></td></tr>
+<tr><td class="num" id="LN1020">1020</td><td class="line">				adjEntry adjSrc = e-&gt;adjSource();</td></tr>
+<tr><td class="num" id="LN1021">1021</td><td class="line">				m_angle[adjSrc-&gt;cyclicPred()] += m_angle[adjSrc];</td></tr>
+<tr><td class="num" id="LN1022">1022</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1023">1023</td><td class="line">				adjEntry adjTgt = e-&gt;adjTarget();</td></tr>
+<tr><td class="num" id="LN1024">1024</td><td class="line">				m_angle[adjTgt-&gt;cyclicPred()] += m_angle[adjTgt];</td></tr>
+<tr><td class="num" id="LN1025">1025</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1026">1026</td><td class="line">				<span class='comment'>// ... when dissection edge is removed</span></td></tr>
+<tr><td class="num" id="LN1027">1027</td><td class="line">				node sv = adjSrc-&gt;theNode();</td></tr>
+<tr><td class="num" id="LN1028">1028</td><td class="line">				node tv = adjTgt-&gt;theNode();</td></tr>
+<tr><td class="num" id="LN1029">1029</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1030">1030</td><td class="line">				G.delEdge(e);</td></tr>
+<tr><td class="num" id="LN1031">1031</td><td class="line">				<span class='comment'>//remember that sv and tv are not allowed to be in splitNodes, see dissect</span></td></tr>
+<tr><td class="num" id="LN1032">1032</td><td class="line">				<span class='keyword'>if</span> (sv-&gt;degree() == 0) G.delNode(sv);</td></tr>
+<tr><td class="num" id="LN1033">1033</td><td class="line">				<span class='keyword'>if</span> (tv-&gt;degree() == 0) G.delNode(tv);</td></tr>
+<tr><td class="num" id="LN1034">1034</td><td class="line">			}<span class='comment'>//if</span></td></tr>
+<tr><td class="num" id="LN1035">1035</td><td class="line">		}<span class='comment'>//if</span></td></tr>
+<tr><td class="num" id="LN1036">1036</td><td class="line">	}<span class='comment'>//for</span></td></tr>
+<tr><td class="num" id="LN1037">1037</td><td class="line">	<span class='comment'>// free allocated memory</span></td></tr>
+<tr><td class="num" id="LN1038">1038</td><td class="line">	<span class='keyword'>if</span> (!align) m_dissectionEdge.init();</td></tr>
+<tr><td class="num" id="LN1039">1039</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1040">1040</td><td class="line">	<span class='comment'>//alignment edges never split</span></td></tr>
+<tr><td class="num" id="LN1041">1041</td><td class="line">	<span class='comment'>// unsplit remaining split nodes</span></td></tr>
+<tr><td class="num" id="LN1042">1042</td><td class="line">	<span class='keyword'>while</span>(!m_splitNodes.empty())</td></tr>
+<tr><td class="num" id="LN1043">1043</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN1044">1044</td><td class="line">		G.unsplit(m_splitNodes.pop());</td></tr>
+<tr><td class="num" id="LN1045">1045</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN1046">1046</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1047">1047</td><td class="line">	<span class='comment'>// recompute list of faces and restore external face</span></td></tr>
+<tr><td class="num" id="LN1048">1048</td><td class="line">	m_pE-&gt;computeFaces();</td></tr>
+<tr><td class="num" id="LN1049">1049</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1050">1050</td><td class="line">	<span class='comment'>//may be the external face is still in the alignment part</span></td></tr>
+<tr><td class="num" id="LN1051">1051</td><td class="line">	<span class='keyword'>if</span> (align &amp;&amp; (m_adjAlign != 0))</td></tr>
+<tr><td class="num" id="LN1052">1052</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN1053">1053</td><td class="line">		m_pE-&gt;setExternalFace(m_pE-&gt;rightFace(m_adjAlign));</td></tr>
+<tr><td class="num" id="LN1054">1054</td><td class="line">		<span class='comment'>//m_adjAlign = 0;</span></td></tr>
+<tr><td class="num" id="LN1055">1055</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN1056">1056</td><td class="line">	<span class='keyword'>else</span> m_pE-&gt;setExternalFace(m_pE-&gt;rightFace(m_adjExternal));</td></tr>
+<tr><td class="num" id="LN1057">1057</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1058">1058</td><td class="line">	<span class='comment'>//ofstream out("c:\\outerface.txt");</span></td></tr>
+<tr><td class="num" id="LN1059">1059</td><td class="line">	<span class='comment'>//out&lt;&lt;"Aeusseres Face: \n";</span></td></tr>
+<tr><td class="num" id="LN1060">1060</td><td class="line">	<span class='comment'>//adjEntry eo = m_pE-&gt;externalFace()-&gt;firstAdj();</span></td></tr>
+<tr><td class="num" id="LN1061">1061</td><td class="line">	<span class='comment'>//adjEntry stop = eo;</span></td></tr>
+<tr><td class="num" id="LN1062">1062</td><td class="line">	<span class='comment'>//do</span></td></tr>
+<tr><td class="num" id="LN1063">1063</td><td class="line">	<span class='comment'>//{</span></td></tr>
+<tr><td class="num" id="LN1064">1064</td><td class="line">	<span class='comment'>//  out&lt;&lt;eo&lt;&lt;"\n";</span></td></tr>
+<tr><td class="num" id="LN1065">1065</td><td class="line">	<span class='comment'>//  eo = eo-&gt;faceCycleSucc();</span></td></tr>
+<tr><td class="num" id="LN1066">1066</td><td class="line">	<span class='comment'>//} while (eo!=stop);</span></td></tr>
+<tr><td class="num" id="LN1067">1067</td><td class="line">}<span class='comment'>//undissect</span></td></tr>
+<tr><td class="num" id="LN1068">1068</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1069">1069</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1070">1070</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1071">1071</td><td class="line"><span class='comment'>// assigns consistent directions (vertical or horizontal) to adj. entries</span></td></tr>
+<tr><td class="num" id="LN1072">1072</td><td class="line"><span class='keyword'>void</span> OrthoRep::orientate()</td></tr>
+<tr><td class="num" id="LN1073">1073</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN1074">1074</td><td class="line">	orientate(m_pE-&gt;getGraph().firstEdge()-&gt;adjSource(), odWest);</td></tr>
+<tr><td class="num" id="LN1075">1075</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN1076">1076</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1077">1077</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1078">1078</td><td class="line"><span class='comment'>// assigns consistent directions to adj. entries such that most</span></td></tr>
+<tr><td class="num" id="LN1079">1079</td><td class="line"><span class='comment'>// generalizations are directed in preferedDir</span></td></tr>
+<tr><td class="num" id="LN1080">1080</td><td class="line"><span class='keyword'>void</span> OrthoRep::orientate(<span class='keyword'>const</span> PlanRep &amp;PG, OrthoDir preferedDir)</td></tr>
+<tr><td class="num" id="LN1081">1081</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN1082">1082</td><td class="line">	<span class='comment'>// assign an arbitrary orientation</span></td></tr>
+<tr><td class="num" id="LN1083">1083</td><td class="line">	orientate();</td></tr>
+<tr><td class="num" id="LN1084">1084</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1085">1085</td><td class="line">	<span class='comment'>// count how many adjacency entries are orientated in a direction</span></td></tr>
+<tr><td class="num" id="LN1086">1086</td><td class="line">	Array&lt;<span class='keyword'>int</span>&gt; num(0,3,0);</td></tr>
+<tr><td class="num" id="LN1087">1087</td><td class="line">	edge e;</td></tr>
+<tr><td class="num" id="LN1088">1088</td><td class="line">	<span class='macro'>forall_edges(e,PG)<span class='expansion'>for((e)=(PG).firstEdge(); (e); (e)=(e)-&gt;succ())</span></span> {</td></tr>
+<tr><td class="num" id="LN1089">1089</td><td class="line">		<span class='keyword'>if</span> (PG.typeOf(e) == Graph::generalization)</td></tr>
+<tr><td class="num" id="LN1090">1090</td><td class="line">			++num[m_dir[e-&gt;adjSource()]];</td></tr>
+<tr><td class="num" id="LN1091">1091</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN1092">1092</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1093">1093</td><td class="line">	<span class='comment'>// find direction with maximum number</span></td></tr>
+<tr><td class="num" id="LN1094">1094</td><td class="line">	<span class='keyword'>int</span> maxDir = 0;</td></tr>
+<tr><td class="num" id="LN1095">1095</td><td class="line">	<span class='keyword'>for</span>(<span class='keyword'>int</span> i = 1; i &lt; 4; ++i)</td></tr>
+<tr><td class="num" id="LN1096">1096</td><td class="line">		<span class='keyword'>if</span> (num[i] &gt; num[maxDir])</td></tr>
+<tr><td class="num" id="LN1097">1097</td><td class="line">			maxDir = i;</td></tr>
+<tr><td class="num" id="LN1098">1098</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1099">1099</td><td class="line">	<span class='comment'>// rotate directions by (preferedDir - maxDir)</span></td></tr>
+<tr><td class="num" id="LN1100">1100</td><td class="line">	rotate(preferedDir - maxDir);</td></tr>
+<tr><td class="num" id="LN1101">1101</td><td class="line">	<span class='comment'>//orientate(PG.firstEdge()-&gt;adjSource(),m_dir[PG.firstEdge()-&gt;adjSource()]);</span></td></tr>
+<tr><td class="num" id="LN1102">1102</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN1103">1103</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1104">1104</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1105">1105</td><td class="line"><span class='comment'>// assigns consistent directions (vertical or horizontal) to adj. entries,</span></td></tr>
+<tr><td class="num" id="LN1106">1106</td><td class="line"><span class='comment'>// assigning dir to adj (this fixes all others!)</span></td></tr>
+<tr><td class="num" id="LN1107">1107</td><td class="line"><span class='keyword'>void</span> OrthoRep::orientate(adjEntry adj, OrthoDir dir)</td></tr>
+<tr><td class="num" id="LN1108">1108</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN1109">1109</td><td class="line">	OGDF_ASSERT(isNormalized());</td></tr>
+<tr><td class="num" id="LN1110">1110</td><td class="line">	OGDF_ASSERT(adj != 0);</td></tr>
+<tr><td class="num" id="LN1111">1111</td><td class="line">	OGDF_ASSERT(</td></tr>
+<tr><td class="num" id="LN1112">1112</td><td class="line">		dir == odEast || dir == odWest || dir == odNorth || dir == odSouth</td></tr>
+<tr><td class="num" id="LN1113">1113</td><td class="line">	);</td></tr>
+<tr><td class="num" id="LN1114">1114</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1115">1115</td><td class="line">	<span class='keyword'>const</span> Graph &amp;G = (Graph &amp;) *m_pE;</td></tr>
+<tr><td class="num" id="LN1116">1116</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1117">1117</td><td class="line">	m_dir.init(G, odUndefined);</td></tr>
+<tr><td class="num" id="LN1118">1118</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1119">1119</td><td class="line">	orientateFace(adj, dir);</td></tr>
+<tr><td class="num" id="LN1120">1120</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN1121">1121</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1122">1122</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1123">1123</td><td class="line"><span class='keyword'>void</span> OrthoRep::orientateFace(adjEntry adj, OrthoDir dir)</td></tr>
+<tr><td class="num" id="LN1124">1124</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN1125">1125</td><td class="line">	<span class='comment'>// We run only till the next already processed adj. entry, potentially</span></td></tr>
+<tr><td class="num" id="LN1126">1126</td><td class="line">	<span class='comment'>// not around the whole face. This is important for linear runtime</span></td></tr>
+<tr><td class="num" id="LN1127">1127</td><td class="line">	<span class='keyword'>while</span> (m_dir[adj] == odUndefined)</td></tr>
+<tr><td class="num" id="LN1128">1128</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN1129">1129</td><td class="line">		m_dir[adj] = dir;</td></tr>
+<tr><td class="num" id="LN1130">1130</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1131">1131</td><td class="line">		adj = adj-&gt;twin();</td></tr>
+<tr><td class="num" id="LN1132">1132</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1133">1133</td><td class="line">		dir = oppDir(dir);</td></tr>
+<tr><td class="num" id="LN1134">1134</td><td class="line">		<span class='keyword'>if</span> (m_dir[adj] == odUndefined)</td></tr>
+<tr><td class="num" id="LN1135">1135</td><td class="line">			orientateFace(adj, dir);</td></tr>
+<tr><td class="num" id="LN1136">1136</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1137">1137</td><td class="line">		<span class='comment'>// orientation changes at 90 and 270 degree angles</span></td></tr>
+<tr><td class="num" id="LN1138">1138</td><td class="line">		dir = OrthoDir((dir + m_angle[adj]) &amp; 3);</td></tr>
+<tr><td class="num" id="LN1139">1139</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1140">1140</td><td class="line">		<span class='comment'>// next adjacency entry in the face</span></td></tr>
+<tr><td class="num" id="LN1141">1141</td><td class="line">		adj = adj-&gt;cyclicSucc();</td></tr>
+<tr><td class="num" id="LN1142">1142</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN1143">1143</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN1144">1144</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1145">1145</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1146">1146</td><td class="line"><span class='comment'>// rotate directions of adjacency entries by r</span></td></tr>
+<tr><td class="num" id="LN1147">1147</td><td class="line"><span class='keyword'>void</span> OrthoRep::rotate(<span class='keyword'>int</span> r)</td></tr>
+<tr><td class="num" id="LN1148">1148</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN1149">1149</td><td class="line">	<span class='keyword'>const</span> Graph &amp;G = (Graph &amp;) *m_pE;</td></tr>
+<tr><td class="num" id="LN1150">1150</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1151">1151</td><td class="line">	<span class='keyword'>if</span> (r &lt; 0) {</td></tr>
+<tr><td class="num" id="LN1152">1152</td><td class="line">		r = r + (-r / 4 + 1) * 4;</td></tr>
+<tr><td class="num" id="LN1153">1153</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN1154">1154</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1155">1155</td><td class="line">	edge e;</td></tr>
+<tr><td class="num" id="LN1156">1156</td><td class="line">	<span class='macro'>forall_edges(e,G)<span class='expansion'>for((e)=(G).firstEdge(); (e); (e)=(e)-&gt;succ())</span></span> {</td></tr>
+<tr><td class="num" id="LN1157">1157</td><td class="line">		m_dir[e-&gt;adjSource()] =</td></tr>
+<tr><td class="num" id="LN1158">1158</td><td class="line">			OrthoDir((m_dir[e-&gt;adjSource()] + r) &amp; 3);</td></tr>
+<tr><td class="num" id="LN1159">1159</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1160">1160</td><td class="line">		m_dir[e-&gt;adjTarget()] =</td></tr>
+<tr><td class="num" id="LN1161">1161</td><td class="line">			OrthoDir((m_dir[e-&gt;adjTarget()] + r) &amp; 3);</td></tr>
+<tr><td class="num" id="LN1162">1162</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN1163">1163</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN1164">1164</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1165">1165</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1166">1166</td><td class="line"><span class='comment'>// computes further information about cages which are collected in class</span></td></tr>
+<tr><td class="num" id="LN1167">1167</td><td class="line"><span class='comment'>// VertexInfoUML</span></td></tr>
+<tr><td class="num" id="LN1168">1168</td><td class="line"><span class='keyword'>void</span> OrthoRep::computeCageInfoUML(</td></tr>
+<tr><td class="num" id="LN1169">1169</td><td class="line">	<span class='keyword'>const</span> PlanRep &amp;PG)</td></tr>
+<tr><td class="num" id="LN1170">1170</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN1171">1171</td><td class="line">	OGDF_ASSERT(&amp;(<span class='keyword'>const</span> Graph &amp;)PG == &amp;m_pE-&gt;getGraph());</td></tr>
+<tr><td class="num" id="LN1172">1172</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1173">1173</td><td class="line">	<span class='keyword'>if</span> (m_umlCageInfo.valid())</td></tr>
+<tr><td class="num" id="LN1174">1174</td><td class="line">		freeCageInfoUML();</td></tr>
+<tr><td class="num" id="LN1175">1175</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1176">1176</td><td class="line">	m_umlCageInfo.init(PG,0);</td></tr>
+<tr><td class="num" id="LN1177">1177</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1178">1178</td><td class="line">	node v;</td></tr>
+<tr><td class="num" id="LN1179">1179</td><td class="line">	<span class='macro'>forall_nodes(v,PG)<span class='expansion'>for((v)=(PG).firstNode(); (v); (v)=(v)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN1180">1180</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN1181">1181</td><td class="line">		adjEntry adj = PG.expandAdj(v);</td></tr>
+<tr><td class="num" id="LN1182">1182</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1183">1183</td><td class="line">		<span class='keyword'>if</span> (adj == 0) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN1184">1184</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1185">1185</td><td class="line">		m_umlCageInfo[v] = <span class='macro'>OGDF_NEW<span class='expansion'>new</span></span> VertexInfoUML;</td></tr>
+<tr><td class="num" id="LN1186">1186</td><td class="line">		VertexInfoUML &amp;vi = *m_umlCageInfo[v];</td></tr>
+<tr><td class="num" id="LN1187">1187</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1188">1188</td><td class="line">		adjEntry adjSucc = adj-&gt;faceCycleSucc();</td></tr>
+<tr><td class="num" id="LN1189">1189</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1190">1190</td><td class="line">		<span class='comment'>// look for a corner such that the while-loop below starts by</span></td></tr>
+<tr><td class="num" id="LN1191">1191</td><td class="line">		<span class='comment'>// considering adjacency entry adj at the beginning of a side</span></td></tr>
+<tr><td class="num" id="LN1192">1192</td><td class="line">		<span class='keyword'>while</span>(m_dir[adj] == m_dir[adjSucc]) {</td></tr>
+<tr><td class="num" id="LN1193">1193</td><td class="line">			adj = adjSucc;</td></tr>
+<tr><td class="num" id="LN1194">1194</td><td class="line">			adjSucc = adj-&gt;faceCycleSucc();</td></tr>
+<tr><td class="num" id="LN1195">1195</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN1196">1196</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1197">1197</td><td class="line">		<span class='keyword'>int</span> nCorners = 0;</td></tr>
+<tr><td class="num" id="LN1198">1198</td><td class="line">		<span class='keyword'>int</span> attSide = 0;</td></tr>
+<tr><td class="num" id="LN1199">1199</td><td class="line">		<span class='keyword'>while</span>(nCorners &lt; 4) {</td></tr>
+<tr><td class="num" id="LN1200">1200</td><td class="line">			adj = adjSucc;</td></tr>
+<tr><td class="num" id="LN1201">1201</td><td class="line">			adjSucc = adj-&gt;faceCycleSucc();</td></tr>
+<tr><td class="num" id="LN1202">1202</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1203">1203</td><td class="line">			<span class='comment'>// reached a corner ?</span></td></tr>
+<tr><td class="num" id="LN1204">1204</td><td class="line">			<span class='keyword'>if</span>(m_dir[adj] != m_dir[adjSucc]) {</td></tr>
+<tr><td class="num" id="LN1205">1205</td><td class="line">				++nCorners;</td></tr>
+<tr><td class="num" id="LN1206">1206</td><td class="line">				attSide = 0;</td></tr>
+<tr><td class="num" id="LN1207">1207</td><td class="line">				vi.m_corner[m_dir[adjSucc]] = adjSucc;</td></tr>
+<tr><td class="num" id="LN1208">1208</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1209">1209</td><td class="line">			} <span class='keyword'>else</span> {</td></tr>
+<tr><td class="num" id="LN1210">1210</td><td class="line">				adjEntry adjAttached = adjSucc-&gt;cyclicPred();</td></tr>
+<tr><td class="num" id="LN1211">1211</td><td class="line">				edge eAttached = adjAttached-&gt;theEdge();</td></tr>
+<tr><td class="num" id="LN1212">1212</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1213">1213</td><td class="line">				<span class='keyword'>if</span> (PG.typeOf(eAttached) == Graph::generalization) {</td></tr>
+<tr><td class="num" id="LN1214">1214</td><td class="line">					vi.m_side[m_dir[adj]].m_adjGen = adjAttached;</td></tr>
+<tr><td class="num" id="LN1215">1215</td><td class="line">					++attSide;</td></tr>
+<tr><td class="num" id="LN1216">1216</td><td class="line">				} <span class='keyword'>else</span> <span class='keyword'>if</span> (PG.original(eAttached) != 0) {</td></tr>
+<tr><td class="num" id="LN1217">1217</td><td class="line">					vi.m_side[m_dir[adj]].m_nAttached[attSide]++;</td></tr>
+<tr><td class="num" id="LN1218">1218</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN1219">1219</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN1220">1220</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN1221">1221</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN1222">1222</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN1223">1223</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1224">1224</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1225">1225</td><td class="line"><span class='keyword'>void</span> OrthoRep::freeCageInfoUML()</td></tr>
+<tr><td class="num" id="LN1226">1226</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN1227">1227</td><td class="line">	<span class='keyword'>if</span>( !m_umlCageInfo.valid() ) <span class='keyword'>return</span>;</td></tr>
+<tr><td class="num" id="LN1228">1228</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1229">1229</td><td class="line">	<span class='keyword'>const</span> Graph &amp;G = (Graph &amp;) *m_pE;</td></tr>
+<tr><td class="num" id="LN1230">1230</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1231">1231</td><td class="line">	node v;</td></tr>
+<tr><td class="num" id="LN1232">1232</td><td class="line">	<span class='macro'>forall_nodes(v,G)<span class='expansion'>for((v)=(G).firstNode(); (v); (v)=(v)-&gt;succ())</span></span> {</td></tr>
+<tr><td class="num" id="LN1233">1233</td><td class="line">		<span class='keyword'>delete</span> m_umlCageInfo[v];</td></tr>
+<tr><td class="num" id="LN1234">1234</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN1235">1235</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN1236">1236</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1237">1237</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN1238">1238</td><td class="line">} <span class='comment'>// end namespace ogdf</span></td></tr>
+</table></body></html>

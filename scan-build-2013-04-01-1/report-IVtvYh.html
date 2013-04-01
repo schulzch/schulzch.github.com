@@ -1,0 +1,818 @@
+<!doctype html>
+<html>
+<head>
+<title>/Users/schulzch/Documents/qml-ogdf/ogdf/src/cluster/CconnectClusterPlanar.cpp</title>
+<style type="text/css">
+ body { color:#000000; background-color:#ffffff }
+ body { font-family:Helvetica, sans-serif; font-size:10pt }
+ h1 { font-size:14pt }
+ .code { border-collapse:collapse; width:100%; }
+ .code { font-family: "Monospace", monospace; font-size:10pt }
+ .code { line-height: 1.2em }
+ .comment { color: green; font-style: oblique }
+ .keyword { color: blue }
+ .string_literal { color: red }
+ .directive { color: darkmagenta }
+ .expansion { display: none; }
+ .macro:hover .expansion { display: block; border: 2px solid #FF0000; padding: 2px; background-color:#FFF0F0; font-weight: normal;   -webkit-border-radius:5px;  -webkit-box-shadow:1px 1px 7px #000; position: absolute; top: -1em; left:10em; z-index: 1 } 
+ .macro { color: darkmagenta; background-color:LemonChiffon; position: relative }
+ .num { width:2.5em; padding-right:2ex; background-color:#eeeeee }
+ .num { text-align:right; font-size:8pt }
+ .num { color:#444444 }
+ .line { padding-left: 1ex; border-left: 3px solid #ccc }
+ .line { white-space: pre }
+ .msg { -webkit-box-shadow:1px 1px 7px #000 }
+ .msg { -webkit-border-radius:5px }
+ .msg { font-family:Helvetica, sans-serif; font-size:8pt }
+ .msg { float:left }
+ .msg { padding:0.25em 1ex 0.25em 1ex }
+ .msg { margin-top:10px; margin-bottom:10px }
+ .msg { font-weight:bold }
+ .msg { max-width:60em; word-wrap: break-word; white-space: pre-wrap }
+ .msgT { padding:0x; spacing:0x }
+ .msgEvent { background-color:#fff8b4; color:#000000 }
+ .msgControl { background-color:#bbbbbb; color:#000000 }
+ .mrange { background-color:#dfddf3 }
+ .mrange { border-bottom:1px solid #6F9DBE }
+ .PathIndex { font-weight: bold; padding:0px 5px; margin-right:5px; }
+ .PathIndex { -webkit-border-radius:8px }
+ .PathIndexEvent { background-color:#bfba87 }
+ .PathIndexControl { background-color:#8c8c8c }
+ .PathNav a { text-decoration:none; font-size: larger }
+ .CodeInsertionHint { font-weight: bold; background-color: #10dd10 }
+ .CodeRemovalHint { background-color:#de1010 }
+ .CodeRemovalHint { border-bottom:1px solid #6F9DBE }
+ table.simpletable {
+   padding: 5px;
+   font-size:12pt;
+   margin:20px;
+   border-collapse: collapse; border-spacing: 0px;
+ }
+ td.rowname {
+   text-align:right; font-weight:bold; color:#444444;
+   padding-right:2ex; }
+</style>
+</head>
+<body>
+<!-- BUGDESC Value stored to 'pre' is never read -->
+
+<!-- BUGTYPE Dead assignment -->
+
+<!-- BUGCATEGORY Dead store -->
+
+<!-- BUGFILE /Users/schulzch/Documents/qml-ogdf/ogdf/src/cluster/CconnectClusterPlanar.cpp -->
+
+<!-- BUGLINE 342 -->
+
+<!-- BUGPATHLENGTH 1 -->
+
+<!-- BUGMETAEND -->
+<!-- REPORTHEADER -->
+<h3>Bug Summary</h3>
+<table class="simpletable">
+<tr><td class="rowname">File:</td><td>src/cluster/CconnectClusterPlanar.cpp</td></tr>
+<tr><td class="rowname">Location:</td><td><a href="#EndPath">line 342, column 4</a></td></tr>
+<tr><td class="rowname">Description:</td><td>Value stored to 'pre' is never read</td></tr>
+</table>
+<!-- REPORTSUMMARYEXTRA -->
+<h3>Annotated Source Code</h3>
+<table class="code">
+<tr><td class="num" id="LN1">1</td><td class="line"><span class='comment'>/*</span></td></tr>
+<tr><td class="num" id="LN2">2</td><td class="line"> <span class='comment'>* $Revision: 2599 $</span></td></tr>
+<tr><td class="num" id="LN3">3</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN4">4</td><td class="line"> <span class='comment'>* last checkin:</span></td></tr>
+<tr><td class="num" id="LN5">5</td><td class="line"> <span class='comment'>*   $Author: chimani $</span></td></tr>
+<tr><td class="num" id="LN6">6</td><td class="line"> <span class='comment'>*   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $</span></td></tr>
+<tr><td class="num" id="LN7">7</td><td class="line"> <span class='comment'>***************************************************************/</span></td></tr>
+<tr><td class="num" id="LN8">8</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN9">9</td><td class="line"><span class='comment'>/** \file</span></td></tr>
+<tr><td class="num" id="LN10">10</td><td class="line"> <span class='comment'>* \brief Implementation of cluster planarity tests and cluster</span></td></tr>
+<tr><td class="num" id="LN11">11</td><td class="line"> <span class='comment'>* planar embedding for c-connected clustered graphs. Based on</span></td></tr>
+<tr><td class="num" id="LN12">12</td><td class="line"> <span class='comment'>* the algorithm by Cohen, Feng and Eades which uses PQ-trees.</span></td></tr>
+<tr><td class="num" id="LN13">13</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN14">14</td><td class="line"> <span class='comment'>* \author Sebastian Leipert</span></td></tr>
+<tr><td class="num" id="LN15">15</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN16">16</td><td class="line"> <span class='comment'>* \par License:</span></td></tr>
+<tr><td class="num" id="LN17">17</td><td class="line"> <span class='comment'>* This file is part of the Open Graph Drawing Framework (OGDF).</span></td></tr>
+<tr><td class="num" id="LN18">18</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN19">19</td><td class="line"> <span class='comment'>* \par</span></td></tr>
+<tr><td class="num" id="LN20">20</td><td class="line"> <span class='comment'>* Copyright (C)&lt;br&gt;</span></td></tr>
+<tr><td class="num" id="LN21">21</td><td class="line"> <span class='comment'>* See README.txt in the root directory of the OGDF installation for details.</span></td></tr>
+<tr><td class="num" id="LN22">22</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN23">23</td><td class="line"> <span class='comment'>* \par</span></td></tr>
+<tr><td class="num" id="LN24">24</td><td class="line"> <span class='comment'>* This program is free software; you can redistribute it and/or</span></td></tr>
+<tr><td class="num" id="LN25">25</td><td class="line"> <span class='comment'>* modify it under the terms of the GNU General Public License</span></td></tr>
+<tr><td class="num" id="LN26">26</td><td class="line"> <span class='comment'>* Version 2 or 3 as published by the Free Software Foundation;</span></td></tr>
+<tr><td class="num" id="LN27">27</td><td class="line"> <span class='comment'>* see the file LICENSE.txt included in the packaging of this file</span></td></tr>
+<tr><td class="num" id="LN28">28</td><td class="line"> <span class='comment'>* for details.</span></td></tr>
+<tr><td class="num" id="LN29">29</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN30">30</td><td class="line"> <span class='comment'>* \par</span></td></tr>
+<tr><td class="num" id="LN31">31</td><td class="line"> <span class='comment'>* This program is distributed in the hope that it will be useful,</span></td></tr>
+<tr><td class="num" id="LN32">32</td><td class="line"> <span class='comment'>* but WITHOUT ANY WARRANTY; without even the implied warranty of</span></td></tr>
+<tr><td class="num" id="LN33">33</td><td class="line"> <span class='comment'>* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></td></tr>
+<tr><td class="num" id="LN34">34</td><td class="line"> <span class='comment'>* GNU General Public License for more details.</span></td></tr>
+<tr><td class="num" id="LN35">35</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN36">36</td><td class="line"> <span class='comment'>* \par</span></td></tr>
+<tr><td class="num" id="LN37">37</td><td class="line"> <span class='comment'>* You should have received a copy of the GNU General Public</span></td></tr>
+<tr><td class="num" id="LN38">38</td><td class="line"> <span class='comment'>* License along with this program; if not, write to the Free</span></td></tr>
+<tr><td class="num" id="LN39">39</td><td class="line"> <span class='comment'>* Software Foundation, Inc., 51 Franklin Street, Fifth Floor,</span></td></tr>
+<tr><td class="num" id="LN40">40</td><td class="line"> <span class='comment'>* Boston, MA 02110-1301, USA.</span></td></tr>
+<tr><td class="num" id="LN41">41</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN42">42</td><td class="line"> <span class='comment'>* \see  http://www.gnu.org/copyleft/gpl.html</span></td></tr>
+<tr><td class="num" id="LN43">43</td><td class="line"> <span class='comment'>***************************************************************/</span></td></tr>
+<tr><td class="num" id="LN44">44</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN45">45</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN46">46</td><td class="line"><span class='directive'>#include &lt;ogdf/cluster/CconnectClusterPlanar.h&gt;</span></td></tr>
+<tr><td class="num" id="LN47">47</td><td class="line"><span class='directive'>#include &lt;ogdf/basic/simple_graph_alg.h&gt;</span></td></tr>
+<tr><td class="num" id="LN48">48</td><td class="line"><span class='directive'>#include &lt;ogdf/basic/extended_graph_alg.h&gt;</span></td></tr>
+<tr><td class="num" id="LN49">49</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN50">50</td><td class="line"><span class='keyword'>namespace</span> ogdf {</td></tr>
+<tr><td class="num" id="LN51">51</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN52">52</td><td class="line"><span class='comment'>// Constructor</span></td></tr>
+<tr><td class="num" id="LN53">53</td><td class="line">CconnectClusterPlanar::CconnectClusterPlanar()</td></tr>
+<tr><td class="num" id="LN54">54</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN55">55</td><td class="line">	ogdf::strcpy(errorCode,124,<span class='string_literal'>"\0"</span>);</td></tr>
+<tr><td class="num" id="LN56">56</td><td class="line">	m_errorCode = none;</td></tr>
+<tr><td class="num" id="LN57">57</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN58">58</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN59">59</td><td class="line"><span class='comment'>// Destructor</span></td></tr>
+<tr><td class="num" id="LN60">60</td><td class="line">CconnectClusterPlanar::~CconnectClusterPlanar()</td></tr>
+<tr><td class="num" id="LN61">61</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN62">62</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN63">63</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN64">64</td><td class="line"><span class='comment'>// Tests if a ClusterGraph is C-planar</span></td></tr>
+<tr><td class="num" id="LN65">65</td><td class="line"><span class='comment'>// Specifies reason for non planarity</span></td></tr>
+<tr><td class="num" id="LN66">66</td><td class="line"><span class='keyword'>bool</span> CconnectClusterPlanar::call(ClusterGraph &amp;C, <span class='keyword'>char</span> (&amp;code)[124])</td></tr>
+<tr><td class="num" id="LN67">67</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN68">68</td><td class="line">	<span class='keyword'>bool</span> cPlanar =  call(C);</td></tr>
+<tr><td class="num" id="LN69">69</td><td class="line">	strcpy(code,124,errorCode);</td></tr>
+<tr><td class="num" id="LN70">70</td><td class="line">	<span class='keyword'>return</span> cPlanar;</td></tr>
+<tr><td class="num" id="LN71">71</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN72">72</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN73">73</td><td class="line"><span class='comment'>// Tests if a ClusterGraph is C-planar</span></td></tr>
+<tr><td class="num" id="LN74">74</td><td class="line"><span class='keyword'>bool</span> CconnectClusterPlanar::call(ClusterGraph &amp;C)</td></tr>
+<tr><td class="num" id="LN75">75</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN76">76</td><td class="line">	Graph G;</td></tr>
+<tr><td class="num" id="LN77">77</td><td class="line">	ClusterGraph Cp(C,G);</td></tr>
+<tr><td class="num" id="LN78">78</td><td class="line">	OGDF_ASSERT(Cp.consistencyCheck());</td></tr>
+<tr><td class="num" id="LN79">79</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN80">80</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN81">81</td><td class="line">	m_clusterPQTree.init(Cp,0);</td></tr>
+<tr><td class="num" id="LN82">82</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN83">83</td><td class="line">	<span class='keyword'>bool</span> cPlanar = preProcess(Cp,G);</td></tr>
+<tr><td class="num" id="LN84">84</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN85">85</td><td class="line">	m_parallelEdges.init();</td></tr>
+<tr><td class="num" id="LN86">86</td><td class="line">	m_isParallel.init();</td></tr>
+<tr><td class="num" id="LN87">87</td><td class="line">	m_clusterPQTree.init();</td></tr>
+<tr><td class="num" id="LN88">88</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN89">89</td><td class="line">	<span class='keyword'>return</span> cPlanar;</td></tr>
+<tr><td class="num" id="LN90">90</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN91">91</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN92">92</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN93">93</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN94">94</td><td class="line"><span class='comment'>// Tests if a ClusterGraph is C-planar</span></td></tr>
+<tr><td class="num" id="LN95">95</td><td class="line"><span class='keyword'>bool</span> CconnectClusterPlanar::call(<span class='keyword'>const</span> ClusterGraph &amp;C)</td></tr>
+<tr><td class="num" id="LN96">96</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN97">97</td><td class="line">	Graph G;</td></tr>
+<tr><td class="num" id="LN98">98</td><td class="line">	ClusterGraph Cp(C,G);</td></tr>
+<tr><td class="num" id="LN99">99</td><td class="line">	OGDF_ASSERT(Cp.consistencyCheck());</td></tr>
+<tr><td class="num" id="LN100">100</td><td class="line">	OGDF_ASSERT(&amp;G == &amp;(Graph&amp;) Cp);</td></tr>
+<tr><td class="num" id="LN101">101</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN102">102</td><td class="line">	m_clusterPQTree.init(Cp,0);</td></tr>
+<tr><td class="num" id="LN103">103</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN104">104</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN105">105</td><td class="line">	<span class='keyword'>bool</span> cPlanar = preProcess(Cp,G);</td></tr>
+<tr><td class="num" id="LN106">106</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN107">107</td><td class="line">	m_parallelEdges.init();</td></tr>
+<tr><td class="num" id="LN108">108</td><td class="line">	m_isParallel.init();</td></tr>
+<tr><td class="num" id="LN109">109</td><td class="line">	m_clusterPQTree.init();</td></tr>
+<tr><td class="num" id="LN110">110</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN111">111</td><td class="line">	<span class='keyword'>return</span> cPlanar;</td></tr>
+<tr><td class="num" id="LN112">112</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN113">113</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN114">114</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN115">115</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN116">116</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN117">117</td><td class="line"><span class='comment'>//	CallTree:</span></td></tr>
+<tr><td class="num" id="LN118">118</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN119">119</td><td class="line"><span class='comment'>//  call(ClusterGraph &amp;C)</span></td></tr>
+<tr><td class="num" id="LN120">120</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN121">121</td><td class="line"><span class='comment'>//		preProcess(ClusterGraph &amp;C,Graph &amp;G)</span></td></tr>
+<tr><td class="num" id="LN122">122</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN123">123</td><td class="line"><span class='comment'>//			planarityTest(ClusterGraph &amp;C,cluster &amp;act,Graph &amp;G)</span></td></tr>
+<tr><td class="num" id="LN124">124</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN125">125</td><td class="line"><span class='comment'>//				foreach ChildCluster</span></td></tr>
+<tr><td class="num" id="LN126">126</td><td class="line"><span class='comment'>//					planarityTest(ClusterGraph &amp;C,cluster &amp;act,Graph &amp;G)</span></td></tr>
+<tr><td class="num" id="LN127">127</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN128">128</td><td class="line"><span class='comment'>//				preparation(Graph  &amp;G,cluster &amp;cl)</span></td></tr>
+<tr><td class="num" id="LN129">129</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN130">130</td><td class="line"><span class='comment'>//					foreach biconnected Component</span></td></tr>
+<tr><td class="num" id="LN131">131</td><td class="line"><span class='comment'>//						doTest(Graph &amp;G,NodeArray&lt;int&gt; &amp;numbering,cluster &amp;cl)</span></td></tr>
+<tr><td class="num" id="LN132">132</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN133">133</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN134">134</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN135">135</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN136">136</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN137">137</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN138">138</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN139">139</td><td class="line"><span class='keyword'>bool</span> CconnectClusterPlanar::preProcess(ClusterGraph &amp;C,Graph &amp;G)</td></tr>
+<tr><td class="num" id="LN140">140</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN141">141</td><td class="line">	<span class='keyword'>if</span> (!isCConnected(C))</td></tr>
+<tr><td class="num" id="LN142">142</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN143">143</td><td class="line">		ogdf::sprintf(errorCode,124,<span class='string_literal'>"Graph is not C-connected \n"</span>);</td></tr>
+<tr><td class="num" id="LN144">144</td><td class="line">		m_errorCode = nonCConnected;</td></tr>
+<tr><td class="num" id="LN145">145</td><td class="line">		<span class='keyword'>return</span> <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN146">146</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN147">147</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN148">148</td><td class="line">	<span class='keyword'>if</span> (!isPlanar(C))</td></tr>
+<tr><td class="num" id="LN149">149</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN150">150</td><td class="line">		ogdf::sprintf(errorCode,124,<span class='string_literal'>"Graph is not planar\n"</span>);</td></tr>
+<tr><td class="num" id="LN151">151</td><td class="line">		m_errorCode = nonPlanar;</td></tr>
+<tr><td class="num" id="LN152">152</td><td class="line">		<span class='keyword'>return</span> <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN153">153</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN154">154</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN155">155</td><td class="line">	cluster c;</td></tr>
+<tr><td class="num" id="LN156">156</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN157">157</td><td class="line">	SListPure&lt;node&gt; selfLoops;</td></tr>
+<tr><td class="num" id="LN158">158</td><td class="line">	makeLoopFree(G,selfLoops);</td></tr>
+<tr><td class="num" id="LN159">159</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN160">160</td><td class="line">	c = C.rootCluster();</td></tr>
+<tr><td class="num" id="LN161">161</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN162">162</td><td class="line">	<span class='keyword'>bool</span> cPlanar = planarityTest(C,c,G);</td></tr>
+<tr><td class="num" id="LN163">163</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN164">164</td><td class="line">	<span class='keyword'>return</span> cPlanar;</td></tr>
+<tr><td class="num" id="LN165">165</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN166">166</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN167">167</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN168">168</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN169">169</td><td class="line"><span class='comment'>// Recursive call for testing c-planarity of the clustered graph</span></td></tr>
+<tr><td class="num" id="LN170">170</td><td class="line"><span class='comment'>// that is induced by cluster act</span></td></tr>
+<tr><td class="num" id="LN171">171</td><td class="line"><span class='keyword'>bool</span> CconnectClusterPlanar::planarityTest(</td></tr>
+<tr><td class="num" id="LN172">172</td><td class="line">	ClusterGraph &amp;C,</td></tr>
+<tr><td class="num" id="LN173">173</td><td class="line">	cluster &amp;act,</td></tr>
+<tr><td class="num" id="LN174">174</td><td class="line">	Graph &amp;G)</td></tr>
+<tr><td class="num" id="LN175">175</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN176">176</td><td class="line">	<span class='comment'>// Test children first</span></td></tr>
+<tr><td class="num" id="LN177">177</td><td class="line">	ListConstIterator&lt;cluster&gt; it;</td></tr>
+<tr><td class="num" id="LN178">178</td><td class="line">	<span class='keyword'>for</span> (it = act-&gt;cBegin(); it.valid();)</td></tr>
+<tr><td class="num" id="LN179">179</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN180">180</td><td class="line">		ListConstIterator&lt;cluster&gt; succ = it.succ();</td></tr>
+<tr><td class="num" id="LN181">181</td><td class="line">		cluster next = (*it);</td></tr>
+<tr><td class="num" id="LN182">182</td><td class="line">		<span class='keyword'>if</span> (!planarityTest(C,next,G))</td></tr>
+<tr><td class="num" id="LN183">183</td><td class="line">			<span class='keyword'>return</span> <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN184">184</td><td class="line">		it = succ;</td></tr>
+<tr><td class="num" id="LN185">185</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN186">186</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN187">187</td><td class="line">	<span class='comment'>// Get induced subgraph of cluster act and test it for planarity</span></td></tr>
+<tr><td class="num" id="LN188">188</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN189">189</td><td class="line">	List&lt;node&gt; subGraphNodes;</td></tr>
+<tr><td class="num" id="LN190">190</td><td class="line">	ListIterator&lt;node&gt; its;</td></tr>
+<tr><td class="num" id="LN191">191</td><td class="line">	<span class='keyword'>for</span> (its = act-&gt;nBegin(); its.valid(); its++)</td></tr>
+<tr><td class="num" id="LN192">192</td><td class="line">		subGraphNodes.pushBack(*its);</td></tr>
+<tr><td class="num" id="LN193">193</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN194">194</td><td class="line">	Graph subGraph;</td></tr>
+<tr><td class="num" id="LN195">195</td><td class="line">	NodeArray&lt;node&gt; table;</td></tr>
+<tr><td class="num" id="LN196">196</td><td class="line">	inducedSubGraph(G,subGraphNodes.begin(),subGraph,table);</td></tr>
+<tr><td class="num" id="LN197">197</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN198">198</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN199">199</td><td class="line">	<span class='comment'>// Introduce super sink and add edges corresponding</span></td></tr>
+<tr><td class="num" id="LN200">200</td><td class="line">	<span class='comment'>// to outgoing edges of the cluster</span></td></tr>
+<tr><td class="num" id="LN201">201</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN202">202</td><td class="line">	node superSink = subGraph.newNode();</td></tr>
+<tr><td class="num" id="LN203">203</td><td class="line">	EdgeArray&lt;node&gt; outgoingTable(subGraph,0);</td></tr>
+<tr><td class="num" id="LN204">204</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN205">205</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN206">206</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN207">207</td><td class="line">	<span class='keyword'>for</span> (its = act-&gt;nBegin(); its.valid(); its++)</td></tr>
+<tr><td class="num" id="LN208">208</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN209">209</td><td class="line">		node w = (*its);</td></tr>
+<tr><td class="num" id="LN210">210</td><td class="line">		adjEntry adj = w-&gt;firstAdj();</td></tr>
+<tr><td class="num" id="LN211">211</td><td class="line">		<span class='macro'>forall_adj(adj,w)<span class='expansion'>for((adj)=(w)-&gt;firstAdj(); (adj); (adj)=(adj)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN212">212</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN213">213</td><td class="line">			edge e = adj-&gt;theEdge();</td></tr>
+<tr><td class="num" id="LN214">214</td><td class="line">			edge cor = 0;</td></tr>
+<tr><td class="num" id="LN215">215</td><td class="line">			<span class='keyword'>if</span> (table[e-&gt;source()] == 0) <span class='comment'>// edge is connected to a node outside the cluster</span></td></tr>
+<tr><td class="num" id="LN216">216</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN217">217</td><td class="line">				cor = subGraph.newEdge(table[e-&gt;target()],superSink);</td></tr>
+<tr><td class="num" id="LN218">218</td><td class="line">				outgoingTable[cor] = e-&gt;source();</td></tr>
+<tr><td class="num" id="LN219">219</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN220">220</td><td class="line">			<span class='keyword'>else</span> <span class='keyword'>if</span> (table[e-&gt;target()] == 0) <span class='comment'>// dito</span></td></tr>
+<tr><td class="num" id="LN221">221</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN222">222</td><td class="line">				cor = subGraph.newEdge(table[e-&gt;source()],superSink);</td></tr>
+<tr><td class="num" id="LN223">223</td><td class="line">				outgoingTable[cor] = e-&gt;target();</td></tr>
+<tr><td class="num" id="LN224">224</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN225">225</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN226">226</td><td class="line">			<span class='comment'>// else edge connects two nodes of the cluster</span></td></tr>
+<tr><td class="num" id="LN227">227</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN228">228</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN229">229</td><td class="line">	<span class='keyword'>if</span> (superSink-&gt;degree() == 0) <span class='comment'>// root cluster is not connected to outside clusters</span></td></tr>
+<tr><td class="num" id="LN230">230</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN231">231</td><td class="line">		subGraph.delNode(superSink);</td></tr>
+<tr><td class="num" id="LN232">232</td><td class="line">		superSink = 0;</td></tr>
+<tr><td class="num" id="LN233">233</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN234">234</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN235">235</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN236">236</td><td class="line">	<span class='keyword'>bool</span> cPlanar = preparation(subGraph,act,superSink);</td></tr>
+<tr><td class="num" id="LN237">237</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN238">238</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN239">239</td><td class="line">	<span class='keyword'>if</span> (cPlanar &amp;&amp; act != C.rootCluster())</td></tr>
+<tr><td class="num" id="LN240">240</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN241">241</td><td class="line">		<span class='comment'>// Remove induced subgraph and the cluster act.</span></td></tr>
+<tr><td class="num" id="LN242">242</td><td class="line">		<span class='comment'>// Replace it by a wheel graph</span></td></tr>
+<tr><td class="num" id="LN243">243</td><td class="line">		<span class='keyword'>while</span> (!subGraphNodes.empty())</td></tr>
+<tr><td class="num" id="LN244">244</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN245">245</td><td class="line">			node w = subGraphNodes.popFrontRet();</td></tr>
+<tr><td class="num" id="LN246">246</td><td class="line"><span class='comment'>//			C.unassignNode(w);</span></td></tr>
+<tr><td class="num" id="LN247">247</td><td class="line">			G.delNode(w);</td></tr>
+<tr><td class="num" id="LN248">248</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN249">249</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN250">250</td><td class="line">		cluster parent = act-&gt;parent();</td></tr>
+<tr><td class="num" id="LN251">251</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN252">252</td><td class="line">		<span class='keyword'>if</span> (superSink &amp;&amp; m_clusterPQTree[act])</td></tr>
+<tr><td class="num" id="LN253">253</td><td class="line">			constructWheelGraph(C,G,parent,m_clusterPQTree[act],outgoingTable);</td></tr>
+<tr><td class="num" id="LN254">254</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN255">255</td><td class="line">		C.delCluster(act);</td></tr>
+<tr><td class="num" id="LN256">256</td><td class="line">		<span class='keyword'>if</span> (m_clusterPQTree[act] != 0) <span class='comment'>// if query necessary for clusters with just one child</span></td></tr>
+<tr><td class="num" id="LN257">257</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN258">258</td><td class="line">			m_clusterPQTree[act]-&gt;emptyAllPertinentNodes();</td></tr>
+<tr><td class="num" id="LN259">259</td><td class="line">			<span class='keyword'>delete</span> m_clusterPQTree[act];</td></tr>
+<tr><td class="num" id="LN260">260</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN261">261</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN262">262</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN263">263</td><td class="line">	<span class='keyword'>else</span> <span class='keyword'>if</span> (!cPlanar)</td></tr>
+<tr><td class="num" id="LN264">264</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN265">265</td><td class="line">			ogdf::sprintf(errorCode,124,<span class='string_literal'>"Graph is not planar at cluster %d.\n"</span>,act-&gt;index());</td></tr>
+<tr><td class="num" id="LN266">266</td><td class="line">			m_errorCode = nonCPlanar;</td></tr>
+<tr><td class="num" id="LN267">267</td><td class="line">		}<span class='comment'>//if not cplanar</span></td></tr>
+<tr><td class="num" id="LN268">268</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN269">269</td><td class="line">	<span class='keyword'>return</span> cPlanar;</td></tr>
+<tr><td class="num" id="LN270">270</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN271">271</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN272">272</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN273">273</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN274">274</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN275">275</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN276">276</td><td class="line"><span class='keyword'>void</span> CconnectClusterPlanar::constructWheelGraph(ClusterGraph &amp;C,</td></tr>
+<tr><td class="num" id="LN277">277</td><td class="line">												Graph &amp;G,</td></tr>
+<tr><td class="num" id="LN278">278</td><td class="line">												cluster &amp;parent,</td></tr>
+<tr><td class="num" id="LN279">279</td><td class="line">												PlanarPQTree* T,</td></tr>
+<tr><td class="num" id="LN280">280</td><td class="line">												EdgeArray&lt;node&gt; &amp;outgoingTable)</td></tr>
+<tr><td class="num" id="LN281">281</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN282">282</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN283">283</td><td class="line">	<span class='keyword'>const</span> PQNode&lt;edge,IndInfo*,<span class='keyword'>bool</span>&gt;* root = T-&gt;root();</td></tr>
+<tr><td class="num" id="LN284">284</td><td class="line">	<span class='keyword'>const</span> PQNode&lt;edge,IndInfo*,<span class='keyword'>bool</span>&gt;*  checkNode = 0;</td></tr>
+<tr><td class="num" id="LN285">285</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN286">286</td><td class="line">	Queue&lt;<span class='keyword'>const</span> PQNode&lt;edge,IndInfo*,<span class='keyword'>bool</span>&gt;*&gt; treeNodes;</td></tr>
+<tr><td class="num" id="LN287">287</td><td class="line">	treeNodes.append(root);</td></tr>
+<tr><td class="num" id="LN288">288</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN289">289</td><td class="line">	node correspond = G.newNode(); <span class='comment'>// Corresponds to the root node.</span></td></tr>
+<tr><td class="num" id="LN290">290</td><td class="line">		 						   <span class='comment'>// root node is either a leaf or a P-node</span></td></tr>
+<tr><td class="num" id="LN291">291</td><td class="line">	C.reassignNode(correspond,parent);</td></tr>
+<tr><td class="num" id="LN292">292</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN293">293</td><td class="line">	Queue&lt;node&gt; graphNodes;</td></tr>
+<tr><td class="num" id="LN294">294</td><td class="line">	graphNodes.append(correspond);</td></tr>
+<tr><td class="num" id="LN295">295</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN296">296</td><td class="line">	node hub;</td></tr>
+<tr><td class="num" id="LN297">297</td><td class="line">	node next = 0;</td></tr>
+<tr><td class="num" id="LN298">298</td><td class="line">	node pre;</td></tr>
+<tr><td class="num" id="LN299">299</td><td class="line">	node newNode; <span class='comment'>// corresponds to anchor of a hub or a cut node</span></td></tr>
+<tr><td class="num" id="LN300">300</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN301">301</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN302">302</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN303">303</td><td class="line">	<span class='keyword'>while</span> (!treeNodes.empty())</td></tr>
+<tr><td class="num" id="LN304">304</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN305">305</td><td class="line">		checkNode = treeNodes.pop();</td></tr>
+<tr><td class="num" id="LN306">306</td><td class="line">		correspond = graphNodes.pop();</td></tr>
+<tr><td class="num" id="LN307">307</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN308">308</td><td class="line">		PQNode&lt;edge,IndInfo*,<span class='keyword'>bool</span>&gt;*  firstSon  = 0;</td></tr>
+<tr><td class="num" id="LN309">309</td><td class="line">		PQNode&lt;edge,IndInfo*,<span class='keyword'>bool</span>&gt;*  nextSon   = 0;</td></tr>
+<tr><td class="num" id="LN310">310</td><td class="line">		PQNode&lt;edge,IndInfo*,<span class='keyword'>bool</span>&gt;*  oldSib    = 0;</td></tr>
+<tr><td class="num" id="LN311">311</td><td class="line">		PQNode&lt;edge,IndInfo*,<span class='keyword'>bool</span>&gt;*  holdSib   = 0;</td></tr>
+<tr><td class="num" id="LN312">312</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN313">313</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN314">314</td><td class="line">		<span class='keyword'>if</span> (checkNode-&gt;type() == PQNodeRoot::PNode)</td></tr>
+<tr><td class="num" id="LN315">315</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN316">316</td><td class="line">			<span class='comment'>// correspond is a cut node</span></td></tr>
+<tr><td class="num" id="LN317">317</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN318">318</td><td class="line">			OGDF_ASSERT(checkNode-&gt;referenceChild())</td></tr>
+<tr><td class="num" id="LN319">319</td><td class="line">			firstSon = checkNode-&gt;referenceChild();</td></tr>
+<tr><td class="num" id="LN320">320</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN321">321</td><td class="line">			<span class='keyword'>if</span> (firstSon-&gt;type() != PQNodeRoot::leaf)</td></tr>
+<tr><td class="num" id="LN322">322</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN323">323</td><td class="line">				treeNodes.append(firstSon);</td></tr>
+<tr><td class="num" id="LN324">324</td><td class="line">				newNode = G.newNode();</td></tr>
+<tr><td class="num" id="LN325">325</td><td class="line">				C.reassignNode(newNode,parent);</td></tr>
+<tr><td class="num" id="LN326">326</td><td class="line">				graphNodes.append(newNode);</td></tr>
+<tr><td class="num" id="LN327">327</td><td class="line">				G.newEdge(correspond,newNode);</td></tr>
+<tr><td class="num" id="LN328">328</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN329">329</td><td class="line">			<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN330">330</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN331">331</td><td class="line">				<span class='comment'>// insert Edge to the outside</span></td></tr>
+<tr><td class="num" id="LN332">332</td><td class="line">				PQLeaf&lt;edge,IndInfo*,<span class='keyword'>bool</span>&gt;* leaf =</td></tr>
+<tr><td class="num" id="LN333">333</td><td class="line">					(PQLeaf&lt;edge,IndInfo*,<span class='keyword'>bool</span>&gt;*) firstSon;</td></tr>
+<tr><td class="num" id="LN334">334</td><td class="line">				edge f = leaf-&gt;getKey()-&gt;m_userStructKey;</td></tr>
+<tr><td class="num" id="LN335">335</td><td class="line">				<span class='comment'>//node x = outgoingTable[f];</span></td></tr>
+<tr><td class="num" id="LN336">336</td><td class="line">				G.newEdge(correspond,outgoingTable[f]);</td></tr>
+<tr><td class="num" id="LN337">337</td><td class="line">				<span class='keyword'>delete</span> leaf-&gt;getKey();</td></tr>
+<tr><td class="num" id="LN338">338</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN339">339</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN340">340</td><td class="line">			nextSon = firstSon-&gt;getNextSib(oldSib);</td></tr>
+<tr><td class="num" id="LN341">341</td><td class="line">			oldSib = firstSon;</td></tr>
+<tr><td class="num" id="LN342">342</td><td class="line">			pre = <span class="mrange">next</span>;</td></tr>
+<tr><td class="num"></td><td class="line"><div id="EndPath" class="msg msgEvent" style="margin-left:25ex">Value stored to 'pre' is never read</div></td></tr>
+<tr><td class="num" id="LN343">343</td><td class="line">			<span class='keyword'>while</span> (nextSon &amp;&amp; nextSon != firstSon)</td></tr>
+<tr><td class="num" id="LN344">344</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN345">345</td><td class="line">				<span class='keyword'>if</span> (nextSon-&gt;type() != PQNodeRoot::leaf)</td></tr>
+<tr><td class="num" id="LN346">346</td><td class="line">				{</td></tr>
+<tr><td class="num" id="LN347">347</td><td class="line">					treeNodes.append(nextSon);</td></tr>
+<tr><td class="num" id="LN348">348</td><td class="line">					newNode = G.newNode();  <span class='comment'>// new node corresponding to anchor</span></td></tr>
+<tr><td class="num" id="LN349">349</td><td class="line">											<span class='comment'>// or cutnode</span></td></tr>
+<tr><td class="num" id="LN350">350</td><td class="line">					C.reassignNode(newNode,parent);</td></tr>
+<tr><td class="num" id="LN351">351</td><td class="line">					graphNodes.append(newNode);</td></tr>
+<tr><td class="num" id="LN352">352</td><td class="line">					G.newEdge(correspond,newNode);</td></tr>
+<tr><td class="num" id="LN353">353</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN354">354</td><td class="line">				<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN355">355</td><td class="line">				{</td></tr>
+<tr><td class="num" id="LN356">356</td><td class="line">					<span class='comment'>// insert Edge to the outside</span></td></tr>
+<tr><td class="num" id="LN357">357</td><td class="line">					PQLeaf&lt;edge,IndInfo*,<span class='keyword'>bool</span>&gt;* leaf =</td></tr>
+<tr><td class="num" id="LN358">358</td><td class="line">						(PQLeaf&lt;edge,IndInfo*,<span class='keyword'>bool</span>&gt;*) nextSon;</td></tr>
+<tr><td class="num" id="LN359">359</td><td class="line">					edge f = leaf-&gt;getKey()-&gt;m_userStructKey;</td></tr>
+<tr><td class="num" id="LN360">360</td><td class="line">					<span class='comment'>//node x = outgoingTable[f];</span></td></tr>
+<tr><td class="num" id="LN361">361</td><td class="line">					G.newEdge(correspond,outgoingTable[f]);</td></tr>
+<tr><td class="num" id="LN362">362</td><td class="line">					<span class='keyword'>delete</span> leaf-&gt;getKey();</td></tr>
+<tr><td class="num" id="LN363">363</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN364">364</td><td class="line">				holdSib = nextSon-&gt;getNextSib(oldSib);</td></tr>
+<tr><td class="num" id="LN365">365</td><td class="line">				oldSib = nextSon;</td></tr>
+<tr><td class="num" id="LN366">366</td><td class="line">				nextSon = holdSib;</td></tr>
+<tr><td class="num" id="LN367">367</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN368">368</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN369">369</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN370">370</td><td class="line"> 		<span class='keyword'>else</span> <span class='keyword'>if</span> (checkNode-&gt;type() == PQNodeRoot::QNode)</td></tr>
+<tr><td class="num" id="LN371">371</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN372">372</td><td class="line">			<span class='comment'>// correspond is the anchor of a hub</span></td></tr>
+<tr><td class="num" id="LN373">373</td><td class="line">			OGDF_ASSERT(checkNode-&gt;getEndmost(PQNodeRoot::LEFT))</td></tr>
+<tr><td class="num" id="LN374">374</td><td class="line">			firstSon = checkNode-&gt;getEndmost(PQNodeRoot::LEFT);</td></tr>
+<tr><td class="num" id="LN375">375</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN376">376</td><td class="line">			hub = G.newNode();</td></tr>
+<tr><td class="num" id="LN377">377</td><td class="line">			C.reassignNode(hub,parent);</td></tr>
+<tr><td class="num" id="LN378">378</td><td class="line">			G.newEdge(hub,correspond); <span class='comment'>// link anchor and hub</span></td></tr>
+<tr><td class="num" id="LN379">379</td><td class="line">			next = G.newNode();   <span class='comment'>// for first son</span></td></tr>
+<tr><td class="num" id="LN380">380</td><td class="line">			C.reassignNode(next,parent);</td></tr>
+<tr><td class="num" id="LN381">381</td><td class="line">			G.newEdge(hub,next);</td></tr>
+<tr><td class="num" id="LN382">382</td><td class="line">			G.newEdge(correspond,next);</td></tr>
+<tr><td class="num" id="LN383">383</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN384">384</td><td class="line">			<span class='keyword'>if</span> (firstSon-&gt;type() != PQNodeRoot::leaf)</td></tr>
+<tr><td class="num" id="LN385">385</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN386">386</td><td class="line">				treeNodes.append(firstSon);</td></tr>
+<tr><td class="num" id="LN387">387</td><td class="line">				newNode = G.newNode();</td></tr>
+<tr><td class="num" id="LN388">388</td><td class="line">				C.reassignNode(newNode,parent);</td></tr>
+<tr><td class="num" id="LN389">389</td><td class="line">				graphNodes.append(newNode);</td></tr>
+<tr><td class="num" id="LN390">390</td><td class="line">				G.newEdge(next,newNode);</td></tr>
+<tr><td class="num" id="LN391">391</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN392">392</td><td class="line">			<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN393">393</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN394">394</td><td class="line">				<span class='comment'>// insert Edge to the outside</span></td></tr>
+<tr><td class="num" id="LN395">395</td><td class="line">				PQLeaf&lt;edge,IndInfo*,<span class='keyword'>bool</span>&gt;* leaf =</td></tr>
+<tr><td class="num" id="LN396">396</td><td class="line">					(PQLeaf&lt;edge,IndInfo*,<span class='keyword'>bool</span>&gt;*) firstSon;</td></tr>
+<tr><td class="num" id="LN397">397</td><td class="line">				edge f = leaf-&gt;getKey()-&gt;m_userStructKey;</td></tr>
+<tr><td class="num" id="LN398">398</td><td class="line">				<span class='comment'>//node x = outgoingTable[f];</span></td></tr>
+<tr><td class="num" id="LN399">399</td><td class="line">				G.newEdge(next,outgoingTable[f]);</td></tr>
+<tr><td class="num" id="LN400">400</td><td class="line">				<span class='keyword'>delete</span> leaf-&gt;getKey();</td></tr>
+<tr><td class="num" id="LN401">401</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN402">402</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN403">403</td><td class="line">			nextSon = firstSon-&gt;getNextSib(oldSib);</td></tr>
+<tr><td class="num" id="LN404">404</td><td class="line">			oldSib = firstSon;</td></tr>
+<tr><td class="num" id="LN405">405</td><td class="line">			pre = next;</td></tr>
+<tr><td class="num" id="LN406">406</td><td class="line">			<span class='keyword'>while</span> (nextSon)</td></tr>
+<tr><td class="num" id="LN407">407</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN408">408</td><td class="line">				next = G.newNode();</td></tr>
+<tr><td class="num" id="LN409">409</td><td class="line">				C.reassignNode(next,parent);</td></tr>
+<tr><td class="num" id="LN410">410</td><td class="line">				G.newEdge(hub,next);</td></tr>
+<tr><td class="num" id="LN411">411</td><td class="line">				G.newEdge(pre,next);</td></tr>
+<tr><td class="num" id="LN412">412</td><td class="line">				<span class='keyword'>if</span> (nextSon-&gt;type() != PQNodeRoot::leaf)</td></tr>
+<tr><td class="num" id="LN413">413</td><td class="line">				{</td></tr>
+<tr><td class="num" id="LN414">414</td><td class="line">					treeNodes.append(nextSon);</td></tr>
+<tr><td class="num" id="LN415">415</td><td class="line">					newNode = G.newNode();  <span class='comment'>// new node corresponding to anchor</span></td></tr>
+<tr><td class="num" id="LN416">416</td><td class="line">											<span class='comment'>// or cutnode</span></td></tr>
+<tr><td class="num" id="LN417">417</td><td class="line">					C.reassignNode(newNode,parent);</td></tr>
+<tr><td class="num" id="LN418">418</td><td class="line">					graphNodes.append(newNode);</td></tr>
+<tr><td class="num" id="LN419">419</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN420">420</td><td class="line">					G.newEdge(next,newNode);</td></tr>
+<tr><td class="num" id="LN421">421</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN422">422</td><td class="line">				<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN423">423</td><td class="line">				{</td></tr>
+<tr><td class="num" id="LN424">424</td><td class="line">					<span class='comment'>// insert Edge to the outside</span></td></tr>
+<tr><td class="num" id="LN425">425</td><td class="line">					PQLeaf&lt;edge,IndInfo*,<span class='keyword'>bool</span>&gt;* leaf =</td></tr>
+<tr><td class="num" id="LN426">426</td><td class="line">						(PQLeaf&lt;edge,IndInfo*,<span class='keyword'>bool</span>&gt;*) nextSon;</td></tr>
+<tr><td class="num" id="LN427">427</td><td class="line">					edge f = leaf-&gt;getKey()-&gt;m_userStructKey;</td></tr>
+<tr><td class="num" id="LN428">428</td><td class="line">					G.newEdge(next,outgoingTable[f]);</td></tr>
+<tr><td class="num" id="LN429">429</td><td class="line">					<span class='keyword'>delete</span> leaf-&gt;getKey();</td></tr>
+<tr><td class="num" id="LN430">430</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN431">431</td><td class="line">				holdSib = nextSon-&gt;getNextSib(oldSib);</td></tr>
+<tr><td class="num" id="LN432">432</td><td class="line">				oldSib = nextSon;</td></tr>
+<tr><td class="num" id="LN433">433</td><td class="line">				nextSon = holdSib;</td></tr>
+<tr><td class="num" id="LN434">434</td><td class="line">				pre = next;</td></tr>
+<tr><td class="num" id="LN435">435</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN436">436</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN437">437</td><td class="line">			G.newEdge(next,correspond);</td></tr>
+<tr><td class="num" id="LN438">438</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN439">439</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN440">440</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN441">441</td><td class="line">	OGDF_ASSERT(C.consistencyCheck());</td></tr>
+<tr><td class="num" id="LN442">442</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN443">443</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN444">444</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN445">445</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN446">446</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN447">447</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN448">448</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN449">449</td><td class="line"><span class='comment'>// Prepare planarity test for one cluster</span></td></tr>
+<tr><td class="num" id="LN450">450</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN451">451</td><td class="line"><span class='keyword'>bool</span> CconnectClusterPlanar::preparation(Graph  &amp;G,</td></tr>
+<tr><td class="num" id="LN452">452</td><td class="line">										cluster &amp;cl,</td></tr>
+<tr><td class="num" id="LN453">453</td><td class="line">										node superSink)</td></tr>
+<tr><td class="num" id="LN454">454</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN455">455</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN456">456</td><td class="line">	node v;</td></tr>
+<tr><td class="num" id="LN457">457</td><td class="line">	edge e;</td></tr>
+<tr><td class="num" id="LN458">458</td><td class="line">	<span class='keyword'>int</span>  bcIdSuperSink = -1; <span class='comment'>// ID of biconnected component that contains superSink</span></td></tr>
+<tr><td class="num" id="LN459">459</td><td class="line">							 <span class='comment'>// Initialization with -1 necessary for assertion</span></td></tr>
+<tr><td class="num" id="LN460">460</td><td class="line">	<span class='keyword'>bool</span> cPlanar = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN461">461</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN462">462</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN463">463</td><td class="line">	NodeArray&lt;node&gt; tableNodes(G,0);</td></tr>
+<tr><td class="num" id="LN464">464</td><td class="line">	EdgeArray&lt;edge&gt; tableEdges(G,0);</td></tr>
+<tr><td class="num" id="LN465">465</td><td class="line">	NodeArray&lt;<span class='keyword'>bool</span>&gt; mark(G,0);</td></tr>
+<tr><td class="num" id="LN466">466</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN467">467</td><td class="line">	EdgeArray&lt;<span class='keyword'>int</span>&gt; componentID(G);</td></tr>
+<tr><td class="num" id="LN468">468</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN469">469</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN470">470</td><td class="line">	<span class='comment'>// Determine Biconnected Components</span></td></tr>
+<tr><td class="num" id="LN471">471</td><td class="line">	<span class='keyword'>int</span> bcCount = biconnectedComponents(G,componentID);</td></tr>
+<tr><td class="num" id="LN472">472</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN473">473</td><td class="line">	<span class='comment'>// Determine edges per biconnected component</span></td></tr>
+<tr><td class="num" id="LN474">474</td><td class="line">	Array&lt;SList&lt;edge&gt; &gt; blockEdges(0,bcCount-1);</td></tr>
+<tr><td class="num" id="LN475">475</td><td class="line">	<span class='macro'>forall_edges(e,G)<span class='expansion'>for((e)=(G).firstEdge(); (e); (e)=(e)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN476">476</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN477">477</td><td class="line">		blockEdges[componentID[e]].pushFront(e);</td></tr>
+<tr><td class="num" id="LN478">478</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN479">479</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN480">480</td><td class="line">	<span class='comment'>// Determine nodes per biconnected component.</span></td></tr>
+<tr><td class="num" id="LN481">481</td><td class="line">	Array&lt;SList&lt;node&gt; &gt; blockNodes(0,bcCount-1);</td></tr>
+<tr><td class="num" id="LN482">482</td><td class="line">	<span class='keyword'>for</span> (<span class='keyword'>int</span> i = 0; i &lt; bcCount; i++)</td></tr>
+<tr><td class="num" id="LN483">483</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN484">484</td><td class="line">		SListIterator&lt;edge&gt; it;</td></tr>
+<tr><td class="num" id="LN485">485</td><td class="line">		<span class='keyword'>for</span> (it = blockEdges[i].begin(); it.valid(); ++it)</td></tr>
+<tr><td class="num" id="LN486">486</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN487">487</td><td class="line">			e = *it;</td></tr>
+<tr><td class="num" id="LN488">488</td><td class="line">			<span class='keyword'>if</span> (!mark[e-&gt;source()])</td></tr>
+<tr><td class="num" id="LN489">489</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN490">490</td><td class="line">				blockNodes[i].pushBack(e-&gt;source());</td></tr>
+<tr><td class="num" id="LN491">491</td><td class="line">				mark[e-&gt;source()] = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN492">492</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN493">493</td><td class="line">			<span class='keyword'>if</span> (!mark[e-&gt;target()])</td></tr>
+<tr><td class="num" id="LN494">494</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN495">495</td><td class="line">				blockNodes[i].pushBack(e-&gt;target());</td></tr>
+<tr><td class="num" id="LN496">496</td><td class="line">				mark[e-&gt;target()] = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN497">497</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN498">498</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN499">499</td><td class="line">		<span class='keyword'>if</span> (superSink &amp;&amp; mark[superSink])</td></tr>
+<tr><td class="num" id="LN500">500</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN501">501</td><td class="line">			OGDF_ASSERT(bcIdSuperSink == -1);</td></tr>
+<tr><td class="num" id="LN502">502</td><td class="line">			bcIdSuperSink = i;</td></tr>
+<tr><td class="num" id="LN503">503</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN504">504</td><td class="line">		SListIterator&lt;node&gt; itn;</td></tr>
+<tr><td class="num" id="LN505">505</td><td class="line">		<span class='keyword'>for</span> (itn = blockNodes[i].begin(); itn.valid(); ++itn)</td></tr>
+<tr><td class="num" id="LN506">506</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN507">507</td><td class="line">			v = *itn;</td></tr>
+<tr><td class="num" id="LN508">508</td><td class="line">			<span class='keyword'>if</span> (mark[v])</td></tr>
+<tr><td class="num" id="LN509">509</td><td class="line">				mark[v] = <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN510">510</td><td class="line">			<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN511">511</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN512">512</td><td class="line">				OGDF_ASSERT(mark[v]); <span class='comment'>// v has been placed two times on the list.</span></td></tr>
+<tr><td class="num" id="LN513">513</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN514">514</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN515">515</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN516">516</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN517">517</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN518">518</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN519">519</td><td class="line">	<span class='comment'>// Perform planarity test for every biconnected component</span></td></tr>
+<tr><td class="num" id="LN520">520</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN521">521</td><td class="line">	<span class='keyword'>if</span> (bcCount == 1)</td></tr>
+<tr><td class="num" id="LN522">522</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN523">523</td><td class="line">		<span class='comment'>// Compute st-numbering</span></td></tr>
+<tr><td class="num" id="LN524">524</td><td class="line">		NodeArray&lt;<span class='keyword'>int</span>&gt; numbering(G,0);</td></tr>
+<tr><td class="num" id="LN525">525</td><td class="line">		<span class='keyword'>int</span> n;</td></tr>
+<tr><td class="num" id="LN526">526</td><td class="line">		<span class='keyword'>if</span> (superSink)</td></tr>
+<tr><td class="num" id="LN527">527</td><td class="line">			n = stNumber(G,numbering,0,superSink);</td></tr>
+<tr><td class="num" id="LN528">528</td><td class="line">		<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN529">529</td><td class="line">			n = stNumber(G,numbering);</td></tr>
+<tr><td class="num" id="LN530">530</td><td class="line">		OGDF_ASSERT_IF(dlConsistencyChecks,testSTnumber(G,numbering,n))</td></tr>
+<tr><td class="num" id="LN531">531</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN532">532</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN533">533</td><td class="line">		EdgeArray&lt;edge&gt; backTableEdges(G,0);</td></tr>
+<tr><td class="num" id="LN534">534</td><td class="line">		<span class='macro'>forall_edges(e,G)<span class='expansion'>for((e)=(G).firstEdge(); (e); (e)=(e)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN535">535</td><td class="line">			backTableEdges[e] = e;</td></tr>
+<tr><td class="num" id="LN536">536</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN537">537</td><td class="line">		cPlanar = doTest(G,numbering,cl,superSink,backTableEdges);</td></tr>
+<tr><td class="num" id="LN538">538</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN539">539</td><td class="line">	<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN540">540</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN541">541</td><td class="line">		<span class='keyword'>for</span> (<span class='keyword'>int</span> i = 0; i &lt; bcCount; i++)</td></tr>
+<tr><td class="num" id="LN542">542</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN543">543</td><td class="line">			<span class='directive'>#ifdef OGDF_DEBUG</span></td></tr>
+<tr><td class="num" id="LN544">544</td><td class="line">			<span class='keyword'>if</span>(<span class='keyword'>int</span>(ogdf::debugLevel)&gt;=<span class='keyword'>int</span>(dlHeavyChecks)){</td></tr>
+<tr><td class="num" id="LN545">545</td><td class="line">				cout&lt;&lt;endl&lt;&lt;endl&lt;&lt;<span class='string_literal'>"-----------------------------------"</span>;</td></tr>
+<tr><td class="num" id="LN546">546</td><td class="line">				cout&lt;&lt;endl&lt;&lt;endl&lt;&lt;<span class='string_literal'>"Component "</span>&lt;&lt;i&lt;&lt;endl;}</td></tr>
+<tr><td class="num" id="LN547">547</td><td class="line">			<span class='directive'>#endif</span></td></tr>
+<tr><td class="num" id="LN548">548</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN549">549</td><td class="line">			Graph C;</td></tr>
+<tr><td class="num" id="LN550">550</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN551">551</td><td class="line">			SListIterator&lt;node&gt; itn;</td></tr>
+<tr><td class="num" id="LN552">552</td><td class="line">			<span class='keyword'>for</span> (itn = blockNodes[i].begin(); itn.valid(); ++ itn)</td></tr>
+<tr><td class="num" id="LN553">553</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN554">554</td><td class="line">				v = *itn;</td></tr>
+<tr><td class="num" id="LN555">555</td><td class="line">				node w = C.newNode();</td></tr>
+<tr><td class="num" id="LN556">556</td><td class="line">				tableNodes[v] = w;</td></tr>
+<tr><td class="num" id="LN557">557</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN558">558</td><td class="line">				<span class='directive'>#ifdef OGDF_DEBUG</span></td></tr>
+<tr><td class="num" id="LN559">559</td><td class="line">				<span class='keyword'>if</span>(<span class='keyword'>int</span>(ogdf::debugLevel)&gt;=<span class='keyword'>int</span>(dlHeavyChecks)){</td></tr>
+<tr><td class="num" id="LN560">560</td><td class="line">					cout &lt;&lt;<span class='string_literal'>"Original: "</span> &lt;&lt; v &lt;&lt; <span class='string_literal'>" New: "</span> &lt;&lt; w&lt;&lt; endl;}</td></tr>
+<tr><td class="num" id="LN561">561</td><td class="line">				<span class='directive'>#endif</span></td></tr>
+<tr><td class="num" id="LN562">562</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN563">563</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN564">564</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN565">565</td><td class="line">			NodeArray&lt;node&gt; backTableNodes(C,0);</td></tr>
+<tr><td class="num" id="LN566">566</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN567">567</td><td class="line">			SListIterator&lt;edge&gt; it;</td></tr>
+<tr><td class="num" id="LN568">568</td><td class="line">			<span class='keyword'>for</span> (it = blockEdges[i].begin(); it.valid(); ++it)</td></tr>
+<tr><td class="num" id="LN569">569</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN570">570</td><td class="line">				e = *it;</td></tr>
+<tr><td class="num" id="LN571">571</td><td class="line">				edge f = C.newEdge(tableNodes[e-&gt;source()],tableNodes[e-&gt;target()]);</td></tr>
+<tr><td class="num" id="LN572">572</td><td class="line">				tableEdges[e] = f;</td></tr>
+<tr><td class="num" id="LN573">573</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN574">574</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN575">575</td><td class="line">			EdgeArray&lt;edge&gt; backTableEdges(C,0);</td></tr>
+<tr><td class="num" id="LN576">576</td><td class="line">			<span class='keyword'>for</span> (it = blockEdges[i].begin(); it.valid(); ++it)</td></tr>
+<tr><td class="num" id="LN577">577</td><td class="line">				backTableEdges[tableEdges[*it]] = *it;</td></tr>
+<tr><td class="num" id="LN578">578</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN579">579</td><td class="line">			<span class='comment'>// Compute st-numbering</span></td></tr>
+<tr><td class="num" id="LN580">580</td><td class="line">			NodeArray&lt;<span class='keyword'>int</span>&gt; numbering(C,0);</td></tr>
+<tr><td class="num" id="LN581">581</td><td class="line">			<span class='keyword'>int</span> n;</td></tr>
+<tr><td class="num" id="LN582">582</td><td class="line">			<span class='keyword'>if</span> (bcIdSuperSink == i)</td></tr>
+<tr><td class="num" id="LN583">583</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN584">584</td><td class="line">				n = stNumber(C,numbering,0,tableNodes[superSink]);</td></tr>
+<tr><td class="num" id="LN585">585</td><td class="line">				OGDF_ASSERT_IF(dlConsistencyChecks,testSTnumber(C,numbering,n))</td></tr>
+<tr><td class="num" id="LN586">586</td><td class="line">				cPlanar = doTest(C,numbering,cl,tableNodes[superSink],backTableEdges);</td></tr>
+<tr><td class="num" id="LN587">587</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN588">588</td><td class="line">			<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN589">589</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN590">590</td><td class="line">				n = stNumber(C,numbering);</td></tr>
+<tr><td class="num" id="LN591">591</td><td class="line">				OGDF_ASSERT_IF(dlConsistencyChecks,testSTnumber(C,numbering,n))</td></tr>
+<tr><td class="num" id="LN592">592</td><td class="line">				cPlanar = doTest(C,numbering,cl,0,backTableEdges);</td></tr>
+<tr><td class="num" id="LN593">593</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN594">594</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN595">595</td><td class="line">			<span class='keyword'>if</span> (!cPlanar)</td></tr>
+<tr><td class="num" id="LN596">596</td><td class="line">				<span class='keyword'>break</span>;</td></tr>
+<tr><td class="num" id="LN597">597</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN598">598</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN599">599</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN600">600</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN601">601</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN602">602</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN603">603</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN604">604</td><td class="line">	<span class='keyword'>return</span> cPlanar;</td></tr>
+<tr><td class="num" id="LN605">605</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN606">606</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN607">607</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN608">608</td><td class="line"><span class='comment'>// Performs a planarity test on a biconnected component</span></td></tr>
+<tr><td class="num" id="LN609">609</td><td class="line"><span class='comment'>// of G. numbering contains an st-numbering of the component.</span></td></tr>
+<tr><td class="num" id="LN610">610</td><td class="line"><span class='keyword'>bool</span> CconnectClusterPlanar::doTest(</td></tr>
+<tr><td class="num" id="LN611">611</td><td class="line">	Graph &amp;G,</td></tr>
+<tr><td class="num" id="LN612">612</td><td class="line">	NodeArray&lt;<span class='keyword'>int</span>&gt; &amp;numbering,</td></tr>
+<tr><td class="num" id="LN613">613</td><td class="line">	cluster &amp;cl,</td></tr>
+<tr><td class="num" id="LN614">614</td><td class="line">	node superSink,</td></tr>
+<tr><td class="num" id="LN615">615</td><td class="line">	EdgeArray&lt;edge&gt; &amp;edgeTable)</td></tr>
+<tr><td class="num" id="LN616">616</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN617">617</td><td class="line">	node v;</td></tr>
+<tr><td class="num" id="LN618">618</td><td class="line">	<span class='keyword'>bool</span> cPlanar = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN619">619</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN620">620</td><td class="line">	NodeArray&lt;SListPure&lt;PlanarLeafKey&lt;IndInfo*&gt;* &gt; &gt; inLeaves(G);</td></tr>
+<tr><td class="num" id="LN621">621</td><td class="line">	NodeArray&lt;SListPure&lt;PlanarLeafKey&lt;IndInfo*&gt;* &gt; &gt; outLeaves(G);</td></tr>
+<tr><td class="num" id="LN622">622</td><td class="line">	Array&lt;node&gt; table(G.numberOfNodes()+1);</td></tr>
+<tr><td class="num" id="LN623">623</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN624">624</td><td class="line">	<span class='macro'>forall_nodes(v,G)<span class='expansion'>for((v)=(G).firstNode(); (v); (v)=(v)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN625">625</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN626">626</td><td class="line">		edge e;</td></tr>
+<tr><td class="num" id="LN627">627</td><td class="line">		<span class='macro'>forall_adj_edges(e,v)<span class='expansion'>for(ogdf::adjEntry ogdf_loop_var=(v)-&gt;firstAdj(); ogdf::test_forall_adj_edges<br>(ogdf_loop_var,(e)); ogdf_loop_var=ogdf_loop_var-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN628">628</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN629">629</td><td class="line">			<span class='keyword'>if</span> (numbering[e-&gt;opposite(v)] &gt; numbering[v])</td></tr>
+<tr><td class="num" id="LN630">630</td><td class="line">				<span class='comment'>//sideeffect: loops are ignored</span></td></tr>
+<tr><td class="num" id="LN631">631</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN632">632</td><td class="line">				PlanarLeafKey&lt;IndInfo*&gt;* L = <span class='macro'>OGDF_NEW<span class='expansion'>new</span></span> PlanarLeafKey&lt;IndInfo*&gt;(e);</td></tr>
+<tr><td class="num" id="LN633">633</td><td class="line">				inLeaves[v].pushFront(L);</td></tr>
+<tr><td class="num" id="LN634">634</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN635">635</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN636">636</td><td class="line">		table[numbering[v]] = v;</td></tr>
+<tr><td class="num" id="LN637">637</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN638">638</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN639">639</td><td class="line">	<span class='macro'>forall_nodes(v,G)<span class='expansion'>for((v)=(G).firstNode(); (v); (v)=(v)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN640">640</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN641">641</td><td class="line">		SListIterator&lt;PlanarLeafKey&lt;IndInfo*&gt;* &gt; it;</td></tr>
+<tr><td class="num" id="LN642">642</td><td class="line">		<span class='keyword'>for</span> (it = inLeaves[v].begin(); it.valid(); ++it)</td></tr>
+<tr><td class="num" id="LN643">643</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN644">644</td><td class="line">			PlanarLeafKey&lt;IndInfo*&gt;* L = *it;</td></tr>
+<tr><td class="num" id="LN645">645</td><td class="line">			outLeaves[L-&gt;userStructKey()-&gt;opposite(v)].pushFront(L);</td></tr>
+<tr><td class="num" id="LN646">646</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN647">647</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN648">648</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN649">649</td><td class="line">	PlanarPQTree* T = <span class='keyword'>new</span> PlanarPQTree();</td></tr>
+<tr><td class="num" id="LN650">650</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN651">651</td><td class="line">	T-&gt;Initialize(inLeaves[table[1]]);</td></tr>
+<tr><td class="num" id="LN652">652</td><td class="line">	<span class='keyword'>for</span> (<span class='keyword'>int</span> i = 2; i &lt; G.numberOfNodes(); i++)</td></tr>
+<tr><td class="num" id="LN653">653</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN654">654</td><td class="line">		<span class='keyword'>if</span> (T-&gt;Reduction(outLeaves[table[i]]))</td></tr>
+<tr><td class="num" id="LN655">655</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN656">656</td><td class="line">			T-&gt;ReplaceRoot(inLeaves[table[i]]);</td></tr>
+<tr><td class="num" id="LN657">657</td><td class="line">			T-&gt;emptyAllPertinentNodes();</td></tr>
+<tr><td class="num" id="LN658">658</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN659">659</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN660">660</td><td class="line">		<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN661">661</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN662">662</td><td class="line">			cPlanar = <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN663">663</td><td class="line">			<span class='keyword'>break</span>;</td></tr>
+<tr><td class="num" id="LN664">664</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN665">665</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN666">666</td><td class="line">	<span class='keyword'>if</span> (cPlanar &amp;&amp; cl &amp;&amp; superSink)</td></tr>
+<tr><td class="num" id="LN667">667</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN668">668</td><td class="line">		<span class='comment'>// Keep the PQTree to construct a wheelgraph</span></td></tr>
+<tr><td class="num" id="LN669">669</td><td class="line">		<span class='comment'>// Replace the edge stored in the keys of T</span></td></tr>
+<tr><td class="num" id="LN670">670</td><td class="line">		<span class='comment'>// by the original edges.</span></td></tr>
+<tr><td class="num" id="LN671">671</td><td class="line">		<span class='comment'>// Necessary, since the edges currently in T</span></td></tr>
+<tr><td class="num" id="LN672">672</td><td class="line">		<span class='comment'>// correspond to a graph that mirrors a biconnected</span></td></tr>
+<tr><td class="num" id="LN673">673</td><td class="line">		<span class='comment'>// component and thus is deallocated</span></td></tr>
+<tr><td class="num" id="LN674">674</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN675">675</td><td class="line">		SListIterator&lt;PlanarLeafKey&lt;IndInfo*&gt;* &gt;  it;</td></tr>
+<tr><td class="num" id="LN676">676</td><td class="line">		<span class='keyword'>int</span> n = G.numberOfNodes();</td></tr>
+<tr><td class="num" id="LN677">677</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN678">678</td><td class="line">		<span class='keyword'>for</span> (it = outLeaves[table[n]].begin(); it.valid(); ++it)</td></tr>
+<tr><td class="num" id="LN679">679</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN680">680</td><td class="line">			PQLeafKey&lt;edge,IndInfo*,<span class='keyword'>bool</span>&gt;* key = (PQLeafKey&lt;edge,IndInfo*,<span class='keyword'>bool</span>&gt;*) *it;</td></tr>
+<tr><td class="num" id="LN681">681</td><td class="line">			key-&gt;m_userStructKey = edgeTable[key-&gt;m_userStructKey];</td></tr>
+<tr><td class="num" id="LN682">682</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN683">683</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN684">684</td><td class="line">		m_clusterPQTree[cl] = T;</td></tr>
+<tr><td class="num" id="LN685">685</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN686">686</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN687">687</td><td class="line">	<span class='keyword'>else</span> <span class='comment'>//if (cPlanar)</span></td></tr>
+<tr><td class="num" id="LN688">688</td><td class="line">		<span class='keyword'>delete</span> T;</td></tr>
+<tr><td class="num" id="LN689">689</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN690">690</td><td class="line">	<span class='comment'>// Cleanup</span></td></tr>
+<tr><td class="num" id="LN691">691</td><td class="line">	<span class='macro'>forall_nodes(v,G)<span class='expansion'>for((v)=(G).firstNode(); (v); (v)=(v)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN692">692</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN693">693</td><td class="line">		<span class='keyword'>if</span> (v != superSink || !cPlanar)</td></tr>
+<tr><td class="num" id="LN694">694</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN695">695</td><td class="line">			<span class='keyword'>while</span> (!outLeaves[v].empty())</td></tr>
+<tr><td class="num" id="LN696">696</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN697">697</td><td class="line">				PlanarLeafKey&lt;IndInfo*&gt;* L = outLeaves[v].popFrontRet();</td></tr>
+<tr><td class="num" id="LN698">698</td><td class="line">				<span class='keyword'>delete</span> L;</td></tr>
+<tr><td class="num" id="LN699">699</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN700">700</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN701">701</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN702">702</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN703">703</td><td class="line">	<span class='keyword'>return</span> cPlanar;</td></tr>
+<tr><td class="num" id="LN704">704</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN705">705</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN706">706</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN707">707</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN708">708</td><td class="line"><span class='keyword'>void</span> CconnectClusterPlanar::prepareParallelEdges(Graph &amp;G)</td></tr>
+<tr><td class="num" id="LN709">709</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN710">710</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN711">711</td><td class="line">	edge e;</td></tr>
+<tr><td class="num" id="LN712">712</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN713">713</td><td class="line">	<span class='comment'>// Stores for one reference edge all parallel edges.</span></td></tr>
+<tr><td class="num" id="LN714">714</td><td class="line">	m_parallelEdges.init(G);</td></tr>
+<tr><td class="num" id="LN715">715</td><td class="line">	<span class='comment'>// Is true for any multiedge, except for the reference edge.</span></td></tr>
+<tr><td class="num" id="LN716">716</td><td class="line">	m_isParallel.init(G,<span class='keyword'>false</span>);</td></tr>
+<tr><td class="num" id="LN717">717</td><td class="line">	getParallelFreeUndirected(G,m_parallelEdges);</td></tr>
+<tr><td class="num" id="LN718">718</td><td class="line">	m_parallelCount = 0;</td></tr>
+<tr><td class="num" id="LN719">719</td><td class="line">	<span class='macro'>forall_edges(e,G)<span class='expansion'>for((e)=(G).firstEdge(); (e); (e)=(e)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN720">720</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN721">721</td><td class="line">		<span class='keyword'>if</span> (!m_parallelEdges[e].empty())</td></tr>
+<tr><td class="num" id="LN722">722</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN723">723</td><td class="line">			ListIterator&lt;edge&gt; it;</td></tr>
+<tr><td class="num" id="LN724">724</td><td class="line">			<span class='keyword'>for</span> (it = m_parallelEdges[e].begin(); it.valid(); it++)</td></tr>
+<tr><td class="num" id="LN725">725</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN726">726</td><td class="line">				m_isParallel[*it] = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN727">727</td><td class="line">				m_parallelCount++;</td></tr>
+<tr><td class="num" id="LN728">728</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN729">729</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN730">730</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN731">731</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN732">732</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN733">733</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN734">734</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN735">735</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN736">736</td><td class="line">} <span class='comment'>// end namespace ogdf</span></td></tr>
+<tr><td class="num" id="LN737">737</td><td class="line"> </td></tr>
+</table></body></html>

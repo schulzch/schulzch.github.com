@@ -1,0 +1,961 @@
+<!doctype html>
+<html>
+<head>
+<title>/Users/schulzch/Documents/qml-ogdf/ogdf/src/planarity/FixedEmbeddingInserter.cpp</title>
+<style type="text/css">
+ body { color:#000000; background-color:#ffffff }
+ body { font-family:Helvetica, sans-serif; font-size:10pt }
+ h1 { font-size:14pt }
+ .code { border-collapse:collapse; width:100%; }
+ .code { font-family: "Monospace", monospace; font-size:10pt }
+ .code { line-height: 1.2em }
+ .comment { color: green; font-style: oblique }
+ .keyword { color: blue }
+ .string_literal { color: red }
+ .directive { color: darkmagenta }
+ .expansion { display: none; }
+ .macro:hover .expansion { display: block; border: 2px solid #FF0000; padding: 2px; background-color:#FFF0F0; font-weight: normal;   -webkit-border-radius:5px;  -webkit-box-shadow:1px 1px 7px #000; position: absolute; top: -1em; left:10em; z-index: 1 } 
+ .macro { color: darkmagenta; background-color:LemonChiffon; position: relative }
+ .num { width:2.5em; padding-right:2ex; background-color:#eeeeee }
+ .num { text-align:right; font-size:8pt }
+ .num { color:#444444 }
+ .line { padding-left: 1ex; border-left: 3px solid #ccc }
+ .line { white-space: pre }
+ .msg { -webkit-box-shadow:1px 1px 7px #000 }
+ .msg { -webkit-border-radius:5px }
+ .msg { font-family:Helvetica, sans-serif; font-size:8pt }
+ .msg { float:left }
+ .msg { padding:0.25em 1ex 0.25em 1ex }
+ .msg { margin-top:10px; margin-bottom:10px }
+ .msg { font-weight:bold }
+ .msg { max-width:60em; word-wrap: break-word; white-space: pre-wrap }
+ .msgT { padding:0x; spacing:0x }
+ .msgEvent { background-color:#fff8b4; color:#000000 }
+ .msgControl { background-color:#bbbbbb; color:#000000 }
+ .mrange { background-color:#dfddf3 }
+ .mrange { border-bottom:1px solid #6F9DBE }
+ .PathIndex { font-weight: bold; padding:0px 5px; margin-right:5px; }
+ .PathIndex { -webkit-border-radius:8px }
+ .PathIndexEvent { background-color:#bfba87 }
+ .PathIndexControl { background-color:#8c8c8c }
+ .PathNav a { text-decoration:none; font-size: larger }
+ .CodeInsertionHint { font-weight: bold; background-color: #10dd10 }
+ .CodeRemovalHint { background-color:#de1010 }
+ .CodeRemovalHint { border-bottom:1px solid #6F9DBE }
+ table.simpletable {
+   padding: 5px;
+   font-size:12pt;
+   margin:20px;
+   border-collapse: collapse; border-spacing: 0px;
+ }
+ td.rowname {
+   text-align:right; font-weight:bold; color:#444444;
+   padding-right:2ex; }
+</style>
+</head>
+<body>
+<!-- BUGDESC Called C++ object pointer is null -->
+
+<!-- BUGTYPE Called C++ object pointer is null -->
+
+<!-- BUGCATEGORY Logic error -->
+
+<!-- BUGFILE /Users/schulzch/Documents/qml-ogdf/ogdf/src/planarity/FixedEmbeddingInserter.cpp -->
+
+<!-- BUGLINE 808 -->
+
+<!-- BUGPATHLENGTH 19 -->
+
+<!-- BUGMETAEND -->
+<!-- REPORTHEADER -->
+<h3>Bug Summary</h3>
+<table class="simpletable">
+<tr><td class="rowname">File:</td><td>src/planarity/FixedEmbeddingInserter.cpp</td></tr>
+<tr><td class="rowname">Location:</td><td><a href="#EndPath">line 808, column 3</a></td></tr>
+<tr><td class="rowname">Description:</td><td>Called C++ object pointer is null</td></tr>
+</table>
+<!-- REPORTSUMMARYEXTRA -->
+<h3>Annotated Source Code</h3>
+<table class="code">
+<tr><td class="num" id="LN1">1</td><td class="line"><span class='comment'>/*</span></td></tr>
+<tr><td class="num" id="LN2">2</td><td class="line"> <span class='comment'>* $Revision: 2559 $</span></td></tr>
+<tr><td class="num" id="LN3">3</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN4">4</td><td class="line"> <span class='comment'>* last checkin:</span></td></tr>
+<tr><td class="num" id="LN5">5</td><td class="line"> <span class='comment'>*   $Author: gutwenger $</span></td></tr>
+<tr><td class="num" id="LN6">6</td><td class="line"> <span class='comment'>*   $Date: 2012-07-06 15:04:28 +0200 (Fr, 06. Jul 2012) $</span></td></tr>
+<tr><td class="num" id="LN7">7</td><td class="line"> <span class='comment'>***************************************************************/</span></td></tr>
+<tr><td class="num" id="LN8">8</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN9">9</td><td class="line"><span class='comment'>/** \file</span></td></tr>
+<tr><td class="num" id="LN10">10</td><td class="line"> <span class='comment'>* \brief implementation of FixedEmbeddingInserter class</span></td></tr>
+<tr><td class="num" id="LN11">11</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN12">12</td><td class="line"> <span class='comment'>* \author Carsten Gutwenger</span></td></tr>
+<tr><td class="num" id="LN13">13</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN14">14</td><td class="line"> <span class='comment'>* \par License:</span></td></tr>
+<tr><td class="num" id="LN15">15</td><td class="line"> <span class='comment'>* This file is part of the Open Graph Drawing Framework (OGDF).</span></td></tr>
+<tr><td class="num" id="LN16">16</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN17">17</td><td class="line"> <span class='comment'>* \par</span></td></tr>
+<tr><td class="num" id="LN18">18</td><td class="line"> <span class='comment'>* Copyright (C)&lt;br&gt;</span></td></tr>
+<tr><td class="num" id="LN19">19</td><td class="line"> <span class='comment'>* See README.txt in the root directory of the OGDF installation for details.</span></td></tr>
+<tr><td class="num" id="LN20">20</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN21">21</td><td class="line"> <span class='comment'>* \par</span></td></tr>
+<tr><td class="num" id="LN22">22</td><td class="line"> <span class='comment'>* This program is free software; you can redistribute it and/or</span></td></tr>
+<tr><td class="num" id="LN23">23</td><td class="line"> <span class='comment'>* modify it under the terms of the GNU General Public License</span></td></tr>
+<tr><td class="num" id="LN24">24</td><td class="line"> <span class='comment'>* Version 2 or 3 as published by the Free Software Foundation;</span></td></tr>
+<tr><td class="num" id="LN25">25</td><td class="line"> <span class='comment'>* see the file LICENSE.txt included in the packaging of this file</span></td></tr>
+<tr><td class="num" id="LN26">26</td><td class="line"> <span class='comment'>* for details.</span></td></tr>
+<tr><td class="num" id="LN27">27</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN28">28</td><td class="line"> <span class='comment'>* \par</span></td></tr>
+<tr><td class="num" id="LN29">29</td><td class="line"> <span class='comment'>* This program is distributed in the hope that it will be useful,</span></td></tr>
+<tr><td class="num" id="LN30">30</td><td class="line"> <span class='comment'>* but WITHOUT ANY WARRANTY; without even the implied warranty of</span></td></tr>
+<tr><td class="num" id="LN31">31</td><td class="line"> <span class='comment'>* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></td></tr>
+<tr><td class="num" id="LN32">32</td><td class="line"> <span class='comment'>* GNU General Public License for more details.</span></td></tr>
+<tr><td class="num" id="LN33">33</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN34">34</td><td class="line"> <span class='comment'>* \par</span></td></tr>
+<tr><td class="num" id="LN35">35</td><td class="line"> <span class='comment'>* You should have received a copy of the GNU General Public</span></td></tr>
+<tr><td class="num" id="LN36">36</td><td class="line"> <span class='comment'>* License along with this program; if not, write to the Free</span></td></tr>
+<tr><td class="num" id="LN37">37</td><td class="line"> <span class='comment'>* Software Foundation, Inc., 51 Franklin Street, Fifth Floor,</span></td></tr>
+<tr><td class="num" id="LN38">38</td><td class="line"> <span class='comment'>* Boston, MA 02110-1301, USA.</span></td></tr>
+<tr><td class="num" id="LN39">39</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN40">40</td><td class="line"> <span class='comment'>* \see  http://www.gnu.org/copyleft/gpl.html</span></td></tr>
+<tr><td class="num" id="LN41">41</td><td class="line"> <span class='comment'>***************************************************************/</span></td></tr>
+<tr><td class="num" id="LN42">42</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN43">43</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN44">44</td><td class="line"><span class='directive'>#include &lt;ogdf/planarity/FixedEmbeddingInserter.h&gt;</span></td></tr>
+<tr><td class="num" id="LN45">45</td><td class="line"><span class='directive'>#include &lt;ogdf/basic/FaceArray.h&gt;</span></td></tr>
+<tr><td class="num" id="LN46">46</td><td class="line"><span class='directive'>#include &lt;ogdf/basic/Queue.h&gt;</span></td></tr>
+<tr><td class="num" id="LN47">47</td><td class="line"><span class='directive'>#include &lt;ogdf/basic/FaceSet.h&gt;</span></td></tr>
+<tr><td class="num" id="LN48">48</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN49">49</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN50">50</td><td class="line"><span class='keyword'>namespace</span> ogdf {</td></tr>
+<tr><td class="num" id="LN51">51</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN52">52</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN53">53</td><td class="line"><span class='comment'>//---------------------------------------------------------</span></td></tr>
+<tr><td class="num" id="LN54">54</td><td class="line"><span class='comment'>// constructor</span></td></tr>
+<tr><td class="num" id="LN55">55</td><td class="line"><span class='comment'>// sets default values for options</span></td></tr>
+<tr><td class="num" id="LN56">56</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN57">57</td><td class="line">FixedEmbeddingInserter::FixedEmbeddingInserter()</td></tr>
+<tr><td class="num" id="LN58">58</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN59">59</td><td class="line">	m_rrOption = rrNone;</td></tr>
+<tr><td class="num" id="LN60">60</td><td class="line">	m_percentMostCrossed = 25;</td></tr>
+<tr><td class="num" id="LN61">61</td><td class="line">	m_keepEmbedding = <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN62">62</td><td class="line">	m_runsPostprocessing = 0;</td></tr>
+<tr><td class="num" id="LN63">63</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN64">64</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN65">65</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN66">66</td><td class="line"><span class='comment'>//---------------------------------------------------------</span></td></tr>
+<tr><td class="num" id="LN67">67</td><td class="line"><span class='comment'>// FEICrossingsBucket</span></td></tr>
+<tr><td class="num" id="LN68">68</td><td class="line"><span class='comment'>// bucket function for sorting edges by decreasing number</span></td></tr>
+<tr><td class="num" id="LN69">69</td><td class="line"><span class='comment'>// of crossings</span></td></tr>
+<tr><td class="num" id="LN70">70</td><td class="line"><span class='keyword'>class</span> FEICrossingsBucket : <span class='keyword'>public</span> BucketFunc&lt;edge&gt;</td></tr>
+<tr><td class="num" id="LN71">71</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN72">72</td><td class="line">	<span class='keyword'>const</span> PlanRep *m_pPG;</td></tr>
+<tr><td class="num" id="LN73">73</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN74">74</td><td class="line"><span class='keyword'>public</span>:</td></tr>
+<tr><td class="num" id="LN75">75</td><td class="line">	FEICrossingsBucket(<span class='keyword'>const</span> PlanRep *pPG) :</td></tr>
+<tr><td class="num" id="LN76">76</td><td class="line">		m_pPG(pPG) { }</td></tr>
+<tr><td class="num" id="LN77">77</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN78">78</td><td class="line">	<span class='keyword'>int</span> getBucket(<span class='keyword'>const</span> edge &amp;e) {</td></tr>
+<tr><td class="num" id="LN79">79</td><td class="line">		<span class='keyword'>return</span> -m_pPG-&gt;chain(e).size();</td></tr>
+<tr><td class="num" id="LN80">80</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN81">81</td><td class="line">};</td></tr>
+<tr><td class="num" id="LN82">82</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN83">83</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN84">84</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN85">85</td><td class="line"><span class='comment'>//---------------------------------------------------------</span></td></tr>
+<tr><td class="num" id="LN86">86</td><td class="line"><span class='comment'>// actual call (called by all variations of call)</span></td></tr>
+<tr><td class="num" id="LN87">87</td><td class="line"><span class='comment'>//   crossing of generalizations is forbidden if forbidCrossingGens = true</span></td></tr>
+<tr><td class="num" id="LN88">88</td><td class="line"><span class='comment'>//   edge costs are obeyed if costOrig != 0</span></td></tr>
+<tr><td class="num" id="LN89">89</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN90">90</td><td class="line">Module::ReturnType FixedEmbeddingInserter::doCall(</td></tr>
+<tr><td class="num" id="LN91">91</td><td class="line">	PlanRep &amp;PG,</td></tr>
+<tr><td class="num" id="LN92">92</td><td class="line">	<span class='keyword'>const</span> List&lt;edge&gt; &amp;origEdges,</td></tr>
+<tr><td class="num" id="LN93">93</td><td class="line">	<span class='keyword'>bool</span> forbidCrossingGens,</td></tr>
+<tr><td class="num" id="LN94">94</td><td class="line">	<span class='keyword'>const</span> EdgeArray&lt;<span class='keyword'>int</span>&gt;  *costOrig,</td></tr>
+<tr><td class="num" id="LN95">95</td><td class="line">	<span class='keyword'>const</span> EdgeArray&lt;<span class='keyword'>bool</span>&gt; *forbiddenEdgeOrig,</td></tr>
+<tr><td class="num" id="LN96">96</td><td class="line">	<span class='keyword'>const</span> EdgeArray&lt;<span class='keyword'>unsigned</span> <span class='keyword'>int</span>&gt; *edgeSubGraph)</td></tr>
+<tr><td class="num" id="LN97">97</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN98">98</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN99">99</td><td class="line">	<span class='keyword'>double</span> T;</td></tr>
+<tr><td class="num" id="LN100">100</td><td class="line">	usedTime(T);</td></tr>
+<tr><td class="num" id="LN101">101</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN102">102</td><td class="line">	ReturnType retValue = retFeasible;</td></tr>
+<tr><td class="num" id="LN103">103</td><td class="line">	m_runsPostprocessing = 0;</td></tr>
+<tr><td class="num" id="LN104">104</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN105">105</td><td class="line">	<span class='keyword'>if</span>(!m_keepEmbedding) PG.embed();</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path1" class="msg msgControl" style="margin-left:9ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">1</div></td><td>Taking false branch</td><td><div class="PathNav"><a href="#Path2" title="Next event (2)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN106">106</td><td class="line">	OGDF_ASSERT(PG.representsCombEmbedding() == <span class='keyword'>true</span>);</td></tr>
+<tr><td class="num" id="LN107">107</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN108">108</td><td class="line">	<span class='keyword'>if</span> (origEdges.size() == 0)</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path2" class="msg msgControl" style="margin-left:9ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">2</div></td><td><div class="PathNav"><a href="#Path1" title="Previous event (1)">&#x2190;</a></div></td></td><td>Taking false branch</td><td><div class="PathNav"><a href="#Path3" title="Next event (3)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN109">109</td><td class="line">		<span class='keyword'>return</span> retOptimal;  <span class='comment'>// nothing to do</span></td></tr>
+<tr><td class="num" id="LN110">110</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN111">111</td><td class="line">	<span class='comment'>// initialization</span></td></tr>
+<tr><td class="num" id="LN112">112</td><td class="line">	CombinatorialEmbedding E(PG);  <span class='comment'>// embedding of PG</span></td></tr>
+<tr><td class="num" id="LN113">113</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN114">114</td><td class="line">	m_dual.clear();</td></tr>
+<tr><td class="num" id="LN115">115</td><td class="line">	m_primalAdj.init(m_dual);</td></tr>
+<tr><td class="num" id="LN116">116</td><td class="line">	m_nodeOf.init(E);</td></tr>
+<tr><td class="num" id="LN117">117</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN118">118</td><td class="line">	<span class='comment'>// construct dual graph</span></td></tr>
+<tr><td class="num" id="LN119">119</td><td class="line">	m_primalIsGen.init(m_dual,<span class='keyword'>false</span>);</td></tr>
+<tr><td class="num" id="LN120">120</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN121">121</td><td class="line">	OGDF_ASSERT(forbidCrossingGens == <span class='keyword'>false</span> || forbiddenEdgeOrig == 0);</td></tr>
+<tr><td class="num" id="LN122">122</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN123">123</td><td class="line">	<span class='keyword'>if</span>(<span class="mrange">forbidCrossingGens</span>)</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path3" class="msg msgEvent" style="margin-left:12ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexEvent">3</div></td><td><div class="PathNav"><a href="#Path2" title="Previous event (2)">&#x2190;</a></div></td></td><td>Assuming 'forbidCrossingGens' is 0</td><td><div class="PathNav"><a href="#Path4" title="Next event (4)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path4" class="msg msgControl" style="margin-left:9ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">4</div></td><td><div class="PathNav"><a href="#Path3" title="Previous event (3)">&#x2190;</a></div></td></td><td>Taking false branch</td><td><div class="PathNav"><a href="#Path5" title="Next event (5)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN124">124</td><td class="line">		constructDualForbidCrossingGens((<span class='keyword'>const</span> PlanRepUML&amp;)PG,E);</td></tr>
+<tr><td class="num" id="LN125">125</td><td class="line">	<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN126">126</td><td class="line">		constructDual(PG,E,forbiddenEdgeOrig);</td></tr>
+<tr><td class="num" id="LN127">127</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN128">128</td><td class="line">	<span class='comment'>// m_delFaces and m_newFaces are used by removeEdge()</span></td></tr>
+<tr><td class="num" id="LN129">129</td><td class="line">	<span class='comment'>// if we can't allocate memory for them, we throw an exception</span></td></tr>
+<tr><td class="num" id="LN130">130</td><td class="line">	<span class='keyword'>if</span> (removeReinsert() != rrNone) {</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path5" class="msg msgControl" style="margin-left:9ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">5</div></td><td><div class="PathNav"><a href="#Path4" title="Previous event (4)">&#x2190;</a></div></td></td><td>Taking false branch</td><td><div class="PathNav"><a href="#Path6" title="Next event (6)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN131">131</td><td class="line">		m_delFaces = <span class='keyword'>new</span> FaceSetSimple(E);</td></tr>
+<tr><td class="num" id="LN132">132</td><td class="line">		<span class='keyword'>if</span> (m_delFaces == 0)</td></tr>
+<tr><td class="num" id="LN133">133</td><td class="line">			<span class='macro'>OGDF_THROW(InsufficientMemoryException)<span class='expansion'>throw InsufficientMemoryException ( )</span></span>;</td></tr>
+<tr><td class="num" id="LN134">134</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN135">135</td><td class="line">		m_newFaces = <span class='keyword'>new</span> FaceSetPure(E);</td></tr>
+<tr><td class="num" id="LN136">136</td><td class="line">		<span class='keyword'>if</span> (m_newFaces == 0) {</td></tr>
+<tr><td class="num" id="LN137">137</td><td class="line">			<span class='keyword'>delete</span> m_delFaces;</td></tr>
+<tr><td class="num" id="LN138">138</td><td class="line">			<span class='macro'>OGDF_THROW(InsufficientMemoryException)<span class='expansion'>throw InsufficientMemoryException ( )</span></span>;</td></tr>
+<tr><td class="num" id="LN139">139</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN140">140</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN141">141</td><td class="line">	<span class='comment'>// no postprocessing -&gt; no removeEdge()</span></td></tr>
+<tr><td class="num" id="LN142">142</td><td class="line">	} <span class='keyword'>else</span> {</td></tr>
+<tr><td class="num" id="LN143">143</td><td class="line">		m_delFaces = 0;</td></tr>
+<tr><td class="num" id="LN144">144</td><td class="line">		m_newFaces = 0;</td></tr>
+<tr><td class="num" id="LN145">145</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN146">146</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN147">147</td><td class="line">	SListPure&lt;edge&gt; currentOrigEdges;</td></tr>
+<tr><td class="num" id="LN148">148</td><td class="line">	<span class='keyword'>if</span>(removeReinsert() == rrIncremental) {</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path6" class="msg msgControl" style="margin-left:9ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">6</div></td><td><div class="PathNav"><a href="#Path5" title="Previous event (5)">&#x2190;</a></div></td></td><td>Taking false branch</td><td><div class="PathNav"><a href="#Path7" title="Next event (7)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN149">149</td><td class="line">		edge e;</td></tr>
+<tr><td class="num" id="LN150">150</td><td class="line">		<span class='macro'>forall_edges(e,PG)<span class='expansion'>for((e)=(PG).firstEdge(); (e); (e)=(e)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN151">151</td><td class="line">			currentOrigEdges.pushBack(PG.original(e));</td></tr>
+<tr><td class="num" id="LN152">152</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN153">153</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN154">154</td><td class="line">	<span class='comment'>// insertion of edges</span></td></tr>
+<tr><td class="num" id="LN155">155</td><td class="line">	ListConstIterator&lt;edge&gt; it;</td></tr>
+<tr><td class="num" id="LN156">156</td><td class="line">	<span class='keyword'>for</span>(it = origEdges.begin(); it.valid(); ++it)</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path7" class="msg msgControl" style="margin-left:9ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">7</div></td><td><div class="PathNav"><a href="#Path6" title="Previous event (6)">&#x2190;</a></div></td></td><td>Loop condition is false. Execution continues on line 230</td><td><div class="PathNav"><a href="#Path8" title="Next event (8)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN157">157</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN158">158</td><td class="line">		edge eOrig = *it;</td></tr>
+<tr><td class="num" id="LN159">159</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN160">160</td><td class="line">		<span class='keyword'>int</span> eSubGraph = 0;  <span class='comment'>// edgeSubGraph-data of eOrig</span></td></tr>
+<tr><td class="num" id="LN161">161</td><td class="line">		<span class='keyword'>if</span>(edgeSubGraph!=0) eSubGraph = (*edgeSubGraph)[eOrig];</td></tr>
+<tr><td class="num" id="LN162">162</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN163">163</td><td class="line">		SList&lt;adjEntry&gt; crossed;</td></tr>
+<tr><td class="num" id="LN164">164</td><td class="line">		<span class='keyword'>if</span>(costOrig != 0) {</td></tr>
+<tr><td class="num" id="LN165">165</td><td class="line">			findShortestPath(PG, E, *costOrig,</td></tr>
+<tr><td class="num" id="LN166">166</td><td class="line">				PG.copy(eOrig-&gt;source()),PG.copy(eOrig-&gt;target()),</td></tr>
+<tr><td class="num" id="LN167">167</td><td class="line">				forbidCrossingGens ? ((<span class='keyword'>const</span> PlanRepUML&amp;)PG).typeOrig(eOrig) : Graph::association,</td></tr>
+<tr><td class="num" id="LN168">168</td><td class="line">				crossed, edgeSubGraph, eSubGraph);</td></tr>
+<tr><td class="num" id="LN169">169</td><td class="line">		} <span class='keyword'>else</span> {</td></tr>
+<tr><td class="num" id="LN170">170</td><td class="line">			findShortestPath(E,</td></tr>
+<tr><td class="num" id="LN171">171</td><td class="line">				PG.copy(eOrig-&gt;source()),PG.copy(eOrig-&gt;target()),</td></tr>
+<tr><td class="num" id="LN172">172</td><td class="line">				forbidCrossingGens ? ((<span class='keyword'>const</span> PlanRepUML&amp;)PG).typeOrig(eOrig) : Graph::association,</td></tr>
+<tr><td class="num" id="LN173">173</td><td class="line">				crossed);</td></tr>
+<tr><td class="num" id="LN174">174</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN175">175</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN176">176</td><td class="line">		insertEdge(PG,E,eOrig,crossed,forbidCrossingGens,forbiddenEdgeOrig);</td></tr>
+<tr><td class="num" id="LN177">177</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN178">178</td><td class="line">		<span class='keyword'>if</span>(removeReinsert() == rrIncremental || removeReinsert() == rrIncInserted) {</td></tr>
+<tr><td class="num" id="LN179">179</td><td class="line">			currentOrigEdges.pushBack(eOrig);</td></tr>
+<tr><td class="num" id="LN180">180</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN181">181</td><td class="line">			<span class='keyword'>bool</span> improved;</td></tr>
+<tr><td class="num" id="LN182">182</td><td class="line">			<span class='keyword'>do</span> {</td></tr>
+<tr><td class="num" id="LN183">183</td><td class="line">				++m_runsPostprocessing;</td></tr>
+<tr><td class="num" id="LN184">184</td><td class="line">				improved = <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN185">185</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN186">186</td><td class="line">				SListConstIterator&lt;edge&gt; itRR;</td></tr>
+<tr><td class="num" id="LN187">187</td><td class="line">				<span class='keyword'>for</span>(itRR = currentOrigEdges.begin(); itRR.valid(); ++itRR)</td></tr>
+<tr><td class="num" id="LN188">188</td><td class="line">				{</td></tr>
+<tr><td class="num" id="LN189">189</td><td class="line">					edge eOrigRR = *itRR;</td></tr>
+<tr><td class="num" id="LN190">190</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN191">191</td><td class="line">					<span class='keyword'>int</span> pathLength;</td></tr>
+<tr><td class="num" id="LN192">192</td><td class="line">					<span class='keyword'>if</span>(costOrig != 0)</td></tr>
+<tr><td class="num" id="LN193">193</td><td class="line">						pathLength = costCrossed(eOrigRR,PG,*costOrig,edgeSubGraph);</td></tr>
+<tr><td class="num" id="LN194">194</td><td class="line">					<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN195">195</td><td class="line">						pathLength = PG.chain(eOrigRR).size() - 1;</td></tr>
+<tr><td class="num" id="LN196">196</td><td class="line">					<span class='keyword'>if</span> (pathLength == 0) <span class='keyword'>continue</span>; <span class='comment'>// cannot improve</span></td></tr>
+<tr><td class="num" id="LN197">197</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN198">198</td><td class="line">					removeEdge(PG,E,eOrigRR,forbidCrossingGens,forbiddenEdgeOrig);</td></tr>
+<tr><td class="num" id="LN199">199</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN200">200</td><td class="line">					<span class='comment'>// try to find a better insertion path</span></td></tr>
+<tr><td class="num" id="LN201">201</td><td class="line">					SList&lt;adjEntry&gt; crossed;</td></tr>
+<tr><td class="num" id="LN202">202</td><td class="line">					<span class='keyword'>if</span>(costOrig != 0) {</td></tr>
+<tr><td class="num" id="LN203">203</td><td class="line">						<span class='keyword'>int</span> eSubGraph = 0;  <span class='comment'>// edgeSubGraph-data of eOrig</span></td></tr>
+<tr><td class="num" id="LN204">204</td><td class="line">						<span class='keyword'>if</span>(edgeSubGraph!=0) eSubGraph = (*edgeSubGraph)[eOrigRR];</td></tr>
+<tr><td class="num" id="LN205">205</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN206">206</td><td class="line">						findShortestPath(PG, E, *costOrig,</td></tr>
+<tr><td class="num" id="LN207">207</td><td class="line">							PG.copy(eOrigRR-&gt;source()),PG.copy(eOrigRR-&gt;target()),</td></tr>
+<tr><td class="num" id="LN208">208</td><td class="line">							forbidCrossingGens ? ((<span class='keyword'>const</span> PlanRepUML&amp;)PG).typeOrig(eOrigRR) : Graph::association,</td></tr>
+<tr><td class="num" id="LN209">209</td><td class="line">							crossed, edgeSubGraph, eSubGraph);</td></tr>
+<tr><td class="num" id="LN210">210</td><td class="line">					} <span class='keyword'>else</span> {</td></tr>
+<tr><td class="num" id="LN211">211</td><td class="line">						findShortestPath(E,</td></tr>
+<tr><td class="num" id="LN212">212</td><td class="line">							PG.copy(eOrigRR-&gt;source()),PG.copy(eOrigRR-&gt;target()),</td></tr>
+<tr><td class="num" id="LN213">213</td><td class="line">							forbidCrossingGens ? ((<span class='keyword'>const</span> PlanRepUML&amp;)PG).typeOrig(eOrigRR) : Graph::association,</td></tr>
+<tr><td class="num" id="LN214">214</td><td class="line">							crossed);</td></tr>
+<tr><td class="num" id="LN215">215</td><td class="line">					}</td></tr>
+<tr><td class="num" id="LN216">216</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN217">217</td><td class="line">					<span class='comment'>// re-insert edge (insertion path cannot be longer)</span></td></tr>
+<tr><td class="num" id="LN218">218</td><td class="line">					insertEdge(PG,E,eOrigRR,crossed,forbidCrossingGens,forbiddenEdgeOrig);</td></tr>
+<tr><td class="num" id="LN219">219</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN220">220</td><td class="line">					<span class='keyword'>int</span> newPathLength = (costOrig != 0) ? costCrossed(eOrigRR,PG,*costOrig,edgeSubGraph) : (PG.chain(eOrigRR).size() - 1);</td></tr>
+<tr><td class="num" id="LN221">221</td><td class="line">					OGDF_ASSERT(newPathLength &lt;= pathLength);</td></tr>
+<tr><td class="num" id="LN222">222</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN223">223</td><td class="line">					<span class='keyword'>if</span>(newPathLength &lt; pathLength)</td></tr>
+<tr><td class="num" id="LN224">224</td><td class="line">						improved = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN225">225</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN226">226</td><td class="line">			} <span class='keyword'>while</span> (improved);</td></tr>
+<tr><td class="num" id="LN227">227</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN228">228</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN229">229</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN230">230</td><td class="line">	<span class='keyword'>const</span> Graph &amp;G = PG.original();</td></tr>
+<tr><td class="num" id="LN231">231</td><td class="line">	<span class='keyword'>if</span>(removeReinsert() != rrIncremental &amp;&amp; removeReinsert() != rrIncInserted) {</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path8" class="msg msgControl" style="margin-left:9ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">8</div></td><td><div class="PathNav"><a href="#Path7" title="Previous event (7)">&#x2190;</a></div></td></td><td>Taking true branch</td><td><div class="PathNav"><a href="#Path9" title="Next event (9)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN232">232</td><td class="line">		<span class='comment'>// postprocessing (remove-reinsert heuristc)</span></td></tr>
+<tr><td class="num" id="LN233">233</td><td class="line">		SListPure&lt;edge&gt; rrEdges;</td></tr>
+<tr><td class="num" id="LN234">234</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN235">235</td><td class="line">		<span class='keyword'>switch</span>(removeReinsert())</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path9" class="msg msgControl" style="margin-left:17ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">9</div></td><td><div class="PathNav"><a href="#Path8" title="Previous event (8)">&#x2190;</a></div></td></td><td>Control jumps to 'case rrNone:'  at line 259</td><td><div class="PathNav"><a href="#Path10" title="Next event (10)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN236">236</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN237">237</td><td class="line">		<span class='keyword'>case</span> rrAll:</td></tr>
+<tr><td class="num" id="LN238">238</td><td class="line">		<span class='keyword'>case</span> rrMostCrossed: {</td></tr>
+<tr><td class="num" id="LN239">239</td><td class="line">				<span class='keyword'>const</span> List&lt;node&gt; &amp;origInCC = PG.nodesInCC();</td></tr>
+<tr><td class="num" id="LN240">240</td><td class="line">				ListConstIterator&lt;node&gt; itV;</td></tr>
+<tr><td class="num" id="LN241">241</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN242">242</td><td class="line">				<span class='keyword'>for</span>(itV = origInCC.begin(); itV.valid(); ++itV) {</td></tr>
+<tr><td class="num" id="LN243">243</td><td class="line">					node vG = *itV;</td></tr>
+<tr><td class="num" id="LN244">244</td><td class="line">					adjEntry adj;</td></tr>
+<tr><td class="num" id="LN245">245</td><td class="line">					<span class='macro'>forall_adj(adj,vG)<span class='expansion'>for((adj)=(vG)-&gt;firstAdj(); (adj); (adj)=(adj)-&gt;succ())</span></span> {</td></tr>
+<tr><td class="num" id="LN246">246</td><td class="line">						<span class='keyword'>if</span> ((adj-&gt;index() &amp; 1) == 0) <span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN247">247</td><td class="line">						edge eG = adj-&gt;theEdge();</td></tr>
+<tr><td class="num" id="LN248">248</td><td class="line">						rrEdges.pushBack(eG);</td></tr>
+<tr><td class="num" id="LN249">249</td><td class="line">					}</td></tr>
+<tr><td class="num" id="LN250">250</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN251">251</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN252">252</td><td class="line">			<span class='keyword'>break</span>;</td></tr>
+<tr><td class="num" id="LN253">253</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN254">254</td><td class="line">		<span class='keyword'>case</span> rrInserted:</td></tr>
+<tr><td class="num" id="LN255">255</td><td class="line">			<span class='keyword'>for</span>(ListConstIterator&lt;edge&gt; it = origEdges.begin(); it.valid(); ++it)</td></tr>
+<tr><td class="num" id="LN256">256</td><td class="line">				rrEdges.pushBack(*it);</td></tr>
+<tr><td class="num" id="LN257">257</td><td class="line">			<span class='keyword'>break</span>;</td></tr>
+<tr><td class="num" id="LN258">258</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN259">259</td><td class="line">		<span class='keyword'>case</span> rrNone:</td></tr>
+<tr><td class="num" id="LN260">260</td><td class="line">		<span class='keyword'>case</span> rrIncremental:</td></tr>
+<tr><td class="num" id="LN261">261</td><td class="line">		<span class='keyword'>case</span> rrIncInserted:</td></tr>
+<tr><td class="num" id="LN262">262</td><td class="line">			<span class='keyword'>break</span>;</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path10" class="msg msgControl" style="margin-left:25ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">10</div></td><td><div class="PathNav"><a href="#Path9" title="Previous event (9)">&#x2190;</a></div></td></td><td> Execution continues on line 267</td><td><div class="PathNav"><a href="#Path11" title="Next event (11)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN263">263</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN264">264</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN265">265</td><td class="line">		<span class='comment'>// marks the end of the interval of rrEdges over which we iterate</span></td></tr>
+<tr><td class="num" id="LN266">266</td><td class="line">		<span class='comment'>// initially set to invalid iterator which means all edges</span></td></tr>
+<tr><td class="num" id="LN267">267</td><td class="line">		SListConstIterator&lt;edge&gt; itStop;</td></tr>
+<tr><td class="num" id="LN268">268</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN269">269</td><td class="line">		<span class='keyword'>bool</span> improved;</td></tr>
+<tr><td class="num" id="LN270">270</td><td class="line">		<span class='keyword'>do</span> {</td></tr>
+<tr><td class="num" id="LN271">271</td><td class="line">			<span class='comment'>// abort postprocessing if time limit reached</span></td></tr>
+<tr><td class="num" id="LN272">272</td><td class="line">			<span class='keyword'>if</span> (m_timeLimit &gt;= 0 &amp;&amp; m_timeLimit &lt;= usedTime(T)) {</td></tr>
+<tr><td class="num" id="LN273">273</td><td class="line">				retValue = retTimeoutFeasible;</td></tr>
+<tr><td class="num" id="LN274">274</td><td class="line">				<span class='keyword'>break</span>;</td></tr>
+<tr><td class="num" id="LN275">275</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN276">276</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN277">277</td><td class="line">			++m_runsPostprocessing;</td></tr>
+<tr><td class="num" id="LN278">278</td><td class="line">			improved = <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN279">279</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN280">280</td><td class="line">			<span class='keyword'>if</span>(removeReinsert() == rrMostCrossed)</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path11" class="msg msgControl" style="margin-left:25ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">11</div></td><td><div class="PathNav"><a href="#Path10" title="Previous event (10)">&#x2190;</a></div></td></td><td>Taking false branch</td><td><div class="PathNav"><a href="#Path12" title="Next event (12)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN281">281</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN282">282</td><td class="line">				FEICrossingsBucket bucket(&amp;PG);</td></tr>
+<tr><td class="num" id="LN283">283</td><td class="line">				rrEdges.bucketSort(bucket);</td></tr>
+<tr><td class="num" id="LN284">284</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN285">285</td><td class="line">				<span class='keyword'>const</span> <span class='keyword'>int</span> num = <span class='keyword'>int</span>(0.01 * percentMostCrossed() * G.numberOfEdges());</td></tr>
+<tr><td class="num" id="LN286">286</td><td class="line">				itStop = rrEdges.get(num);</td></tr>
+<tr><td class="num" id="LN287">287</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN288">288</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN289">289</td><td class="line">			SListConstIterator&lt;edge&gt; it;</td></tr>
+<tr><td class="num" id="LN290">290</td><td class="line">			<span class='keyword'>for</span>(it = rrEdges.begin(); it != itStop; ++it)</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path12" class="msg msgControl" style="margin-left:25ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">12</div></td><td><div class="PathNav"><a href="#Path11" title="Previous event (11)">&#x2190;</a></div></td></td><td>Loop condition is true.  Entering loop body</td><td><div class="PathNav"><a href="#Path13" title="Next event (13)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN291">291</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN292">292</td><td class="line">				edge eOrig = *it;</td></tr>
+<tr><td class="num" id="LN293">293</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN294">294</td><td class="line">				<span class='comment'>// remove only if crossings on edge;</span></td></tr>
+<tr><td class="num" id="LN295">295</td><td class="line">				<span class='comment'>// in especially: forbidden edges are never handled by postprocessing</span></td></tr>
+<tr><td class="num" id="LN296">296</td><td class="line">				<span class='comment'>//   since there are no crossings on such edges</span></td></tr>
+<tr><td class="num" id="LN297">297</td><td class="line">				<span class='keyword'>int</span> pathLength;</td></tr>
+<tr><td class="num" id="LN298">298</td><td class="line">				<span class='keyword'>if</span>(<span class="mrange">costOrig != 0</span>)</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path13" class="msg msgEvent" style="margin-left:36ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexEvent">13</div></td><td><div class="PathNav"><a href="#Path12" title="Previous event (12)">&#x2190;</a></div></td></td><td>Assuming 'costOrig' is equal to null</td><td><div class="PathNav"><a href="#Path14" title="Next event (14)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path14" class="msg msgControl" style="margin-left:33ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">14</div></td><td><div class="PathNav"><a href="#Path13" title="Previous event (13)">&#x2190;</a></div></td></td><td>Taking false branch</td><td><div class="PathNav"><a href="#Path15" title="Next event (15)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN299">299</td><td class="line">					pathLength = costCrossed(eOrig,PG,*costOrig,edgeSubGraph);</td></tr>
+<tr><td class="num" id="LN300">300</td><td class="line">				<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN301">301</td><td class="line">					pathLength = PG.chain(eOrig).size() - 1;</td></tr>
+<tr><td class="num" id="LN302">302</td><td class="line">				<span class='keyword'>if</span> (<span class="mrange">pathLength == 0</span>) <span class='keyword'>continue</span>; <span class='comment'>// cannot improve</span></td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path15" class="msg msgEvent" style="margin-left:37ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexEvent">15</div></td><td><div class="PathNav"><a href="#Path14" title="Previous event (14)">&#x2190;</a></div></td></td><td>Assuming 'pathLength' is not equal to 0</td><td><div class="PathNav"><a href="#Path16" title="Next event (16)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path16" class="msg msgControl" style="margin-left:33ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">16</div></td><td><div class="PathNav"><a href="#Path15" title="Previous event (15)">&#x2190;</a></div></td></td><td>Taking false branch</td><td><div class="PathNav"><a href="#Path17" title="Next event (17)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN303">303</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN304">304</td><td class="line">				<span class="mrange">removeEdge(PG,E,eOrig,forbidCrossingGens,forbiddenEdgeOrig)</span>;</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path17" class="msg msgEvent" style="margin-left:33ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexEvent">17</div></td><td><div class="PathNav"><a href="#Path16" title="Previous event (16)">&#x2190;</a></div></td></td><td>Calling 'FixedEmbeddingInserter::removeEdge'</td><td><div class="PathNav"><a href="#Path18" title="Next event (18)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN305">305</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN306">306</td><td class="line">				<span class='comment'>// try to find a better insertion path</span></td></tr>
+<tr><td class="num" id="LN307">307</td><td class="line">				SList&lt;adjEntry&gt; crossed;</td></tr>
+<tr><td class="num" id="LN308">308</td><td class="line">				<span class='keyword'>if</span>(costOrig != 0) {</td></tr>
+<tr><td class="num" id="LN309">309</td><td class="line">					<span class='keyword'>int</span> eSubGraph = 0;  <span class='comment'>// edgeSubGraph-data of eOrig</span></td></tr>
+<tr><td class="num" id="LN310">310</td><td class="line">					<span class='keyword'>if</span>(edgeSubGraph!=0) eSubGraph = (*edgeSubGraph)[eOrig];</td></tr>
+<tr><td class="num" id="LN311">311</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN312">312</td><td class="line">					findShortestPath(PG, E, *costOrig,</td></tr>
+<tr><td class="num" id="LN313">313</td><td class="line">						PG.copy(eOrig-&gt;source()),PG.copy(eOrig-&gt;target()),</td></tr>
+<tr><td class="num" id="LN314">314</td><td class="line">						forbidCrossingGens ? ((<span class='keyword'>const</span> PlanRepUML&amp;)PG).typeOrig(eOrig) : Graph::association,</td></tr>
+<tr><td class="num" id="LN315">315</td><td class="line">						crossed, edgeSubGraph, eSubGraph);</td></tr>
+<tr><td class="num" id="LN316">316</td><td class="line">				} <span class='keyword'>else</span> {</td></tr>
+<tr><td class="num" id="LN317">317</td><td class="line">					findShortestPath(E,</td></tr>
+<tr><td class="num" id="LN318">318</td><td class="line">						PG.copy(eOrig-&gt;source()),PG.copy(eOrig-&gt;target()),</td></tr>
+<tr><td class="num" id="LN319">319</td><td class="line">						forbidCrossingGens ? ((<span class='keyword'>const</span> PlanRepUML&amp;)PG).typeOrig(eOrig) : Graph::association,</td></tr>
+<tr><td class="num" id="LN320">320</td><td class="line">						crossed);</td></tr>
+<tr><td class="num" id="LN321">321</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN322">322</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN323">323</td><td class="line">				<span class='comment'>// re-insert edge (insertion path cannot be longer)</span></td></tr>
+<tr><td class="num" id="LN324">324</td><td class="line">				insertEdge(PG,E,eOrig,crossed,forbidCrossingGens,forbiddenEdgeOrig);</td></tr>
+<tr><td class="num" id="LN325">325</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN326">326</td><td class="line">				<span class='keyword'>int</span> newPathLength = (costOrig != 0) ? costCrossed(eOrig,PG,*costOrig,edgeSubGraph) : (PG.chain(eOrig).size() - 1);</td></tr>
+<tr><td class="num" id="LN327">327</td><td class="line">				OGDF_ASSERT(newPathLength &lt;= pathLength);</td></tr>
+<tr><td class="num" id="LN328">328</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN329">329</td><td class="line">				<span class='keyword'>if</span>(newPathLength &lt; pathLength)</td></tr>
+<tr><td class="num" id="LN330">330</td><td class="line">					improved = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN331">331</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN332">332</td><td class="line">		} <span class='keyword'>while</span>(improved); <span class='comment'>// iterate as long as we improve</span></td></tr>
+<tr><td class="num" id="LN333">333</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN334">334</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN335">335</td><td class="line">	<span class='comment'>// verify computed planarization</span></td></tr>
+<tr><td class="num" id="LN336">336</td><td class="line">	OGDF_ASSERT(PG.representsCombEmbedding());</td></tr>
+<tr><td class="num" id="LN337">337</td><td class="line">	OGDF_ASSERT(forbidCrossingGens == <span class='keyword'>false</span> || checkCrossingGens((<span class='keyword'>const</span> PlanRepUML&amp;)PG) == <span class='keyword'>true</span>);</td></tr>
+<tr><td class="num" id="LN338">338</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN339">339</td><td class="line">	<span class='comment'>// free resources</span></td></tr>
+<tr><td class="num" id="LN340">340</td><td class="line">	<span class='keyword'>delete</span> m_newFaces;</td></tr>
+<tr><td class="num" id="LN341">341</td><td class="line">	<span class='keyword'>delete</span> m_delFaces;</td></tr>
+<tr><td class="num" id="LN342">342</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN343">343</td><td class="line">	m_primalIsGen.init();</td></tr>
+<tr><td class="num" id="LN344">344</td><td class="line">	m_nodeOf.init();</td></tr>
+<tr><td class="num" id="LN345">345</td><td class="line">	m_primalAdj.init();</td></tr>
+<tr><td class="num" id="LN346">346</td><td class="line">	m_dual.clear();</td></tr>
+<tr><td class="num" id="LN347">347</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN348">348</td><td class="line">	<span class='keyword'>return</span> retValue;</td></tr>
+<tr><td class="num" id="LN349">349</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN350">350</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN351">351</td><td class="line">edge FixedEmbeddingInserter::crossedEdge(adjEntry adj) <span class='keyword'>const</span></td></tr>
+<tr><td class="num" id="LN352">352</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN353">353</td><td class="line">	edge e = adj-&gt;theEdge();</td></tr>
+<tr><td class="num" id="LN354">354</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN355">355</td><td class="line">	adj = adj-&gt;cyclicSucc();</td></tr>
+<tr><td class="num" id="LN356">356</td><td class="line">	<span class='keyword'>while</span>(adj-&gt;theEdge() == e)</td></tr>
+<tr><td class="num" id="LN357">357</td><td class="line">		adj = adj-&gt;cyclicSucc();</td></tr>
+<tr><td class="num" id="LN358">358</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN359">359</td><td class="line">	<span class='keyword'>return</span> adj-&gt;theEdge();</td></tr>
+<tr><td class="num" id="LN360">360</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN361">361</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN362">362</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN363">363</td><td class="line"><span class='keyword'>int</span> FixedEmbeddingInserter::costCrossed(edge eOrig,</td></tr>
+<tr><td class="num" id="LN364">364</td><td class="line">	<span class='keyword'>const</span> PlanRep &amp;PG,</td></tr>
+<tr><td class="num" id="LN365">365</td><td class="line">	<span class='keyword'>const</span> EdgeArray&lt;<span class='keyword'>int</span>&gt; &amp;costOrig,</td></tr>
+<tr><td class="num" id="LN366">366</td><td class="line">	<span class='keyword'>const</span> EdgeArray&lt;<span class='keyword'>unsigned</span> <span class='keyword'>int</span>&gt; *subgraphs) <span class='keyword'>const</span></td></tr>
+<tr><td class="num" id="LN367">367</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN368">368</td><td class="line">	<span class='keyword'>int</span> c = 0;</td></tr>
+<tr><td class="num" id="LN369">369</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN370">370</td><td class="line">	<span class='keyword'>const</span> List&lt;edge&gt; &amp;L = PG.chain(eOrig);</td></tr>
+<tr><td class="num" id="LN371">371</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN372">372</td><td class="line">	ListConstIterator&lt;edge&gt; it = L.begin();</td></tr>
+<tr><td class="num" id="LN373">373</td><td class="line">	<span class='keyword'>for</span>(++it; it.valid(); ++it) {</td></tr>
+<tr><td class="num" id="LN374">374</td><td class="line">		edge e = PG.original(crossedEdge((*it)-&gt;adjSource()));</td></tr>
+<tr><td class="num" id="LN375">375</td><td class="line">		<span class='keyword'>if</span>(subgraphs!=0) {</td></tr>
+<tr><td class="num" id="LN376">376</td><td class="line">			<span class='keyword'>int</span> subgraphCounter = 0;</td></tr>
+<tr><td class="num" id="LN377">377</td><td class="line">			<span class='keyword'>for</span>(<span class='keyword'>int</span> i=0; i&lt;32; i++)</td></tr>
+<tr><td class="num" id="LN378">378</td><td class="line">				<span class='keyword'>if</span>((((*subgraphs)[e] &amp; (1&lt;&lt;i))!=0) &amp;&amp; (((*subgraphs)[eOrig] &amp; (1&lt;&lt;i))!=0))</td></tr>
+<tr><td class="num" id="LN379">379</td><td class="line">					subgraphCounter++;</td></tr>
+<tr><td class="num" id="LN380">380</td><td class="line">			c += subgraphCounter*costOrig[e];</td></tr>
+<tr><td class="num" id="LN381">381</td><td class="line">		} <span class='keyword'>else</span> {</td></tr>
+<tr><td class="num" id="LN382">382</td><td class="line">			c += costOrig[e];</td></tr>
+<tr><td class="num" id="LN383">383</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN384">384</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN385">385</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN386">386</td><td class="line">	<span class='keyword'>return</span> c;</td></tr>
+<tr><td class="num" id="LN387">387</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN388">388</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN389">389</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN390">390</td><td class="line"><span class='comment'>//---------------------------------------------------------</span></td></tr>
+<tr><td class="num" id="LN391">391</td><td class="line"><span class='comment'>// construct dual graph, marks dual edges corresponding to generalization</span></td></tr>
+<tr><td class="num" id="LN392">392</td><td class="line"><span class='comment'>// in m_primalIsGen</span></td></tr>
+<tr><td class="num" id="LN393">393</td><td class="line"><span class='comment'>// assumes that m_pDual, m_primalAdj and m_nodeOf are already constructed</span></td></tr>
+<tr><td class="num" id="LN394">394</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN395">395</td><td class="line"><span class='keyword'>void</span> FixedEmbeddingInserter::constructDualForbidCrossingGens(</td></tr>
+<tr><td class="num" id="LN396">396</td><td class="line">	<span class='keyword'>const</span> PlanRepUML &amp;PG,</td></tr>
+<tr><td class="num" id="LN397">397</td><td class="line">	<span class='keyword'>const</span> CombinatorialEmbedding &amp;E)</td></tr>
+<tr><td class="num" id="LN398">398</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN399">399</td><td class="line">	<span class='comment'>// insert a node in the dual graph for each face in E</span></td></tr>
+<tr><td class="num" id="LN400">400</td><td class="line">	face f;</td></tr>
+<tr><td class="num" id="LN401">401</td><td class="line">	<span class='macro'>forall_faces(f,E)<span class='expansion'>for((f)=(E).firstFace(); (f); (f)=(f)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN402">402</td><td class="line">		m_nodeOf[f] = m_dual.newNode();</td></tr>
+<tr><td class="num" id="LN403">403</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN404">404</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN405">405</td><td class="line">	<span class='comment'>// Insert an edge into the dual graph for each adjacency entry in E.</span></td></tr>
+<tr><td class="num" id="LN406">406</td><td class="line">	<span class='comment'>// The edges are directed from the left face to the right face.</span></td></tr>
+<tr><td class="num" id="LN407">407</td><td class="line">	node v;</td></tr>
+<tr><td class="num" id="LN408">408</td><td class="line">	<span class='macro'>forall_nodes(v,PG)<span class='expansion'>for((v)=(PG).firstNode(); (v); (v)=(v)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN409">409</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN410">410</td><td class="line">		adjEntry adj;</td></tr>
+<tr><td class="num" id="LN411">411</td><td class="line">		<span class='macro'>forall_adj(adj,v)<span class='expansion'>for((adj)=(v)-&gt;firstAdj(); (adj); (adj)=(adj)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN412">412</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN413">413</td><td class="line">			node vLeft  = m_nodeOf[E.leftFace (adj)];</td></tr>
+<tr><td class="num" id="LN414">414</td><td class="line">			node vRight = m_nodeOf[E.rightFace(adj)];</td></tr>
+<tr><td class="num" id="LN415">415</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN416">416</td><td class="line">			edge e = m_dual.newEdge(vLeft,vRight);</td></tr>
+<tr><td class="num" id="LN417">417</td><td class="line">			m_primalAdj[e] = adj;</td></tr>
+<tr><td class="num" id="LN418">418</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN419">419</td><td class="line">			<span class='comment'>// mark dual edges corresponding to generalizations</span></td></tr>
+<tr><td class="num" id="LN420">420</td><td class="line">			<span class='keyword'>if</span> (PG.typeOf(adj-&gt;theEdge()) == Graph::generalization)</td></tr>
+<tr><td class="num" id="LN421">421</td><td class="line">				m_primalIsGen[e] = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN422">422</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN423">423</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN424">424</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN425">425</td><td class="line">	<span class='comment'>// Augment the dual graph by two new vertices. These are used temporarily</span></td></tr>
+<tr><td class="num" id="LN426">426</td><td class="line">	<span class='comment'>// when searching for a shortest path in the dual graph.</span></td></tr>
+<tr><td class="num" id="LN427">427</td><td class="line">	m_vS = m_dual.newNode();</td></tr>
+<tr><td class="num" id="LN428">428</td><td class="line">	m_vT = m_dual.newNode();</td></tr>
+<tr><td class="num" id="LN429">429</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN430">430</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN431">431</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN432">432</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN433">433</td><td class="line"><span class='comment'>//---------------------------------------------------------</span></td></tr>
+<tr><td class="num" id="LN434">434</td><td class="line"><span class='comment'>// construct dual graph</span></td></tr>
+<tr><td class="num" id="LN435">435</td><td class="line"><span class='comment'>// assumes that m_pDual, m_primalAdj and m_nodeOf are already constructed</span></td></tr>
+<tr><td class="num" id="LN436">436</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN437">437</td><td class="line"><span class='keyword'>void</span> FixedEmbeddingInserter::constructDual(</td></tr>
+<tr><td class="num" id="LN438">438</td><td class="line">	<span class='keyword'>const</span> GraphCopy &amp;GC,</td></tr>
+<tr><td class="num" id="LN439">439</td><td class="line">	<span class='keyword'>const</span> CombinatorialEmbedding &amp;E,</td></tr>
+<tr><td class="num" id="LN440">440</td><td class="line">	<span class='keyword'>const</span> EdgeArray&lt;<span class='keyword'>bool</span>&gt; *forbiddenEdgeOrig)</td></tr>
+<tr><td class="num" id="LN441">441</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN442">442</td><td class="line">	<span class='comment'>// insert a node in the dual graph for each face in E</span></td></tr>
+<tr><td class="num" id="LN443">443</td><td class="line">	face f;</td></tr>
+<tr><td class="num" id="LN444">444</td><td class="line">	<span class='macro'>forall_faces(f,E)<span class='expansion'>for((f)=(E).firstFace(); (f); (f)=(f)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN445">445</td><td class="line">		m_nodeOf[f] = m_dual.newNode();</td></tr>
+<tr><td class="num" id="LN446">446</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN447">447</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN448">448</td><td class="line">	<span class='comment'>// Insert an edge into the dual graph for each adjacency entry in E.</span></td></tr>
+<tr><td class="num" id="LN449">449</td><td class="line">	<span class='comment'>// The edges are directed from the left face to the right face.</span></td></tr>
+<tr><td class="num" id="LN450">450</td><td class="line">	node v;</td></tr>
+<tr><td class="num" id="LN451">451</td><td class="line">	<span class='macro'>forall_nodes(v,GC)<span class='expansion'>for((v)=(GC).firstNode(); (v); (v)=(v)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN452">452</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN453">453</td><td class="line">		adjEntry adj;</td></tr>
+<tr><td class="num" id="LN454">454</td><td class="line">		<span class='macro'>forall_adj(adj,v)<span class='expansion'>for((adj)=(v)-&gt;firstAdj(); (adj); (adj)=(adj)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN455">455</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN456">456</td><td class="line">			<span class='comment'>// Do not insert edges into dual if crossing the original edge</span></td></tr>
+<tr><td class="num" id="LN457">457</td><td class="line">			<span class='comment'>// is forbidden</span></td></tr>
+<tr><td class="num" id="LN458">458</td><td class="line">			<span class='keyword'>if</span>(forbiddenEdgeOrig &amp;&amp; (*forbiddenEdgeOrig)[GC.original(adj-&gt;theEdge())] == <span class='keyword'>true</span>)</td></tr>
+<tr><td class="num" id="LN459">459</td><td class="line">				<span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN460">460</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN461">461</td><td class="line">			node vLeft  = m_nodeOf[E.leftFace (adj)];</td></tr>
+<tr><td class="num" id="LN462">462</td><td class="line">			node vRight = m_nodeOf[E.rightFace(adj)];</td></tr>
+<tr><td class="num" id="LN463">463</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN464">464</td><td class="line">			m_primalAdj[m_dual.newEdge(vLeft,vRight)] = adj;</td></tr>
+<tr><td class="num" id="LN465">465</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN466">466</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN467">467</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN468">468</td><td class="line">	<span class='comment'>// Augment the dual graph by two new vertices. These are used temporarily</span></td></tr>
+<tr><td class="num" id="LN469">469</td><td class="line">	<span class='comment'>// when searching for a shortest path in the dual graph.</span></td></tr>
+<tr><td class="num" id="LN470">470</td><td class="line">	m_vS = m_dual.newNode();</td></tr>
+<tr><td class="num" id="LN471">471</td><td class="line">	m_vT = m_dual.newNode();</td></tr>
+<tr><td class="num" id="LN472">472</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN473">473</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN474">474</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN475">475</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN476">476</td><td class="line"><span class='comment'>//---------------------------------------------------------</span></td></tr>
+<tr><td class="num" id="LN477">477</td><td class="line"><span class='comment'>// finds a shortest path in the dual graph augmented by s and t (represented</span></td></tr>
+<tr><td class="num" id="LN478">478</td><td class="line"><span class='comment'>// by m_vS and m_vT); returns list of crossed adjacency entries (corresponding</span></td></tr>
+<tr><td class="num" id="LN479">479</td><td class="line"><span class='comment'>// to used edges in the dual) in crossed.</span></td></tr>
+<tr><td class="num" id="LN480">480</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN481">481</td><td class="line"><span class='keyword'>void</span> FixedEmbeddingInserter::findShortestPath(</td></tr>
+<tr><td class="num" id="LN482">482</td><td class="line">	<span class='keyword'>const</span> CombinatorialEmbedding &amp;E,</td></tr>
+<tr><td class="num" id="LN483">483</td><td class="line">	node s,</td></tr>
+<tr><td class="num" id="LN484">484</td><td class="line">	node t,</td></tr>
+<tr><td class="num" id="LN485">485</td><td class="line">	Graph::EdgeType eType,</td></tr>
+<tr><td class="num" id="LN486">486</td><td class="line">	SList&lt;adjEntry&gt; &amp;crossed)</td></tr>
+<tr><td class="num" id="LN487">487</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN488">488</td><td class="line">	OGDF_ASSERT(s != t);</td></tr>
+<tr><td class="num" id="LN489">489</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN490">490</td><td class="line">	NodeArray&lt;edge&gt; spPred(m_dual,0);</td></tr>
+<tr><td class="num" id="LN491">491</td><td class="line">	QueuePure&lt;edge&gt; queue;</td></tr>
+<tr><td class="num" id="LN492">492</td><td class="line">	<span class='keyword'>int</span> oldIdCount = m_dual.maxEdgeIndex();</td></tr>
+<tr><td class="num" id="LN493">493</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN494">494</td><td class="line">	<span class='comment'>// augment dual by edges from s to all adjacent faces of s ...</span></td></tr>
+<tr><td class="num" id="LN495">495</td><td class="line">	adjEntry adj;</td></tr>
+<tr><td class="num" id="LN496">496</td><td class="line">	<span class='macro'>forall_adj(adj,s)<span class='expansion'>for((adj)=(s)-&gt;firstAdj(); (adj); (adj)=(adj)-&gt;succ())</span></span> {</td></tr>
+<tr><td class="num" id="LN497">497</td><td class="line">		<span class='comment'>// starting edges of bfs-search are all edges leaving s</span></td></tr>
+<tr><td class="num" id="LN498">498</td><td class="line">		edge eDual = m_dual.newEdge(m_vS, m_nodeOf[E.rightFace(adj)]);</td></tr>
+<tr><td class="num" id="LN499">499</td><td class="line">		m_primalAdj[eDual] = adj;</td></tr>
+<tr><td class="num" id="LN500">500</td><td class="line">		queue.append(eDual);</td></tr>
+<tr><td class="num" id="LN501">501</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN502">502</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN503">503</td><td class="line">	<span class='comment'>// ... and from all adjacent faces of t to t</span></td></tr>
+<tr><td class="num" id="LN504">504</td><td class="line">	<span class='macro'>forall_adj(adj,t)<span class='expansion'>for((adj)=(t)-&gt;firstAdj(); (adj); (adj)=(adj)-&gt;succ())</span></span> {</td></tr>
+<tr><td class="num" id="LN505">505</td><td class="line">		edge eDual = m_dual.newEdge(m_nodeOf[E.rightFace(adj)], m_vT);</td></tr>
+<tr><td class="num" id="LN506">506</td><td class="line">		m_primalAdj[eDual] = adj;</td></tr>
+<tr><td class="num" id="LN507">507</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN508">508</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN509">509</td><td class="line">	<span class='comment'>// actual search (using bfs on directed dual)</span></td></tr>
+<tr><td class="num" id="LN510">510</td><td class="line">	<span class='keyword'>for</span>( ; ;)</td></tr>
+<tr><td class="num" id="LN511">511</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN512">512</td><td class="line">		<span class='comment'>// next candidate edge</span></td></tr>
+<tr><td class="num" id="LN513">513</td><td class="line">		edge eCand = queue.pop();</td></tr>
+<tr><td class="num" id="LN514">514</td><td class="line">		node v = eCand-&gt;target();</td></tr>
+<tr><td class="num" id="LN515">515</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN516">516</td><td class="line">		<span class='comment'>// leads to an unvisited node?</span></td></tr>
+<tr><td class="num" id="LN517">517</td><td class="line">		<span class='keyword'>if</span> (spPred[v] == 0)</td></tr>
+<tr><td class="num" id="LN518">518</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN519">519</td><td class="line">			<span class='comment'>// yes, then we set v's predecessor in search tree</span></td></tr>
+<tr><td class="num" id="LN520">520</td><td class="line">			spPred[v] = eCand;</td></tr>
+<tr><td class="num" id="LN521">521</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN522">522</td><td class="line">			<span class='comment'>// have we reached t ...</span></td></tr>
+<tr><td class="num" id="LN523">523</td><td class="line">			<span class='keyword'>if</span> (v == m_vT)</td></tr>
+<tr><td class="num" id="LN524">524</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN525">525</td><td class="line">				<span class='comment'>// ... then search is done.</span></td></tr>
+<tr><td class="num" id="LN526">526</td><td class="line">				<span class='comment'>// constructed list of used edges (translated to crossed</span></td></tr>
+<tr><td class="num" id="LN527">527</td><td class="line">				<span class='comment'>// adjacency entries in PG) from t back to s (including first</span></td></tr>
+<tr><td class="num" id="LN528">528</td><td class="line">				<span class='comment'>// and last!)</span></td></tr>
+<tr><td class="num" id="LN529">529</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN530">530</td><td class="line">				<span class='keyword'>do</span> {</td></tr>
+<tr><td class="num" id="LN531">531</td><td class="line">					edge eDual = spPred[v];</td></tr>
+<tr><td class="num" id="LN532">532</td><td class="line">					crossed.pushFront(m_primalAdj[eDual]);</td></tr>
+<tr><td class="num" id="LN533">533</td><td class="line">					v = eDual-&gt;source();</td></tr>
+<tr><td class="num" id="LN534">534</td><td class="line">				} <span class='keyword'>while</span>(v != m_vS);</td></tr>
+<tr><td class="num" id="LN535">535</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN536">536</td><td class="line">				<span class='keyword'>break</span>;</td></tr>
+<tr><td class="num" id="LN537">537</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN538">538</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN539">539</td><td class="line">			<span class='comment'>// append next candidate edges to queue</span></td></tr>
+<tr><td class="num" id="LN540">540</td><td class="line">			<span class='comment'>// (all edges leaving v)</span></td></tr>
+<tr><td class="num" id="LN541">541</td><td class="line">			edge e;</td></tr>
+<tr><td class="num" id="LN542">542</td><td class="line">			<span class='macro'>forall_adj_edges(e,v)<span class='expansion'>for(ogdf::adjEntry ogdf_loop_var=(v)-&gt;firstAdj(); ogdf::test_forall_adj_edges<br>(ogdf_loop_var,(e)); ogdf_loop_var=ogdf_loop_var-&gt;succ())</span></span> {</td></tr>
+<tr><td class="num" id="LN543">543</td><td class="line">				<span class='keyword'>if</span> (v == e-&gt;source() &amp;&amp;</td></tr>
+<tr><td class="num" id="LN544">544</td><td class="line">					(eType != Graph::generalization || m_primalIsGen[e] == <span class='keyword'>false</span>))</td></tr>
+<tr><td class="num" id="LN545">545</td><td class="line">				{</td></tr>
+<tr><td class="num" id="LN546">546</td><td class="line">					queue.append(e);</td></tr>
+<tr><td class="num" id="LN547">547</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN548">548</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN549">549</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN550">550</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN551">551</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN552">552</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN553">553</td><td class="line">	<span class='comment'>// remove augmented edges again</span></td></tr>
+<tr><td class="num" id="LN554">554</td><td class="line">	<span class='keyword'>while</span> ((adj = m_vS-&gt;firstAdj()) != 0)</td></tr>
+<tr><td class="num" id="LN555">555</td><td class="line">		m_dual.delEdge(adj-&gt;theEdge());</td></tr>
+<tr><td class="num" id="LN556">556</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN557">557</td><td class="line">	<span class='keyword'>while</span> ((adj = m_vT-&gt;firstAdj()) != 0)</td></tr>
+<tr><td class="num" id="LN558">558</td><td class="line">		m_dual.delEdge(adj-&gt;theEdge());</td></tr>
+<tr><td class="num" id="LN559">559</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN560">560</td><td class="line">	m_dual.resetEdgeIdCount(oldIdCount);</td></tr>
+<tr><td class="num" id="LN561">561</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN562">562</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN563">563</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN564">564</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN565">565</td><td class="line"><span class='keyword'>inline</span> <span class='keyword'>int</span> getCost(<span class='keyword'>const</span> PlanRep &amp;PG, <span class='keyword'>const</span> EdgeArray&lt;<span class='keyword'>int</span>&gt; &amp;cost, edge e, <span class='keyword'>const</span> EdgeArray&lt;<span class='keyword'>unsigned</span> <span class='keyword'>int</span>&gt; *edgeSubGraph, <span class='keyword'>int</span> stSubGraph)</td></tr>
+<tr><td class="num" id="LN566">566</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN567">567</td><td class="line">	edge eOrig = PG.original(e);</td></tr>
+<tr><td class="num" id="LN568">568</td><td class="line">	<span class='keyword'>if</span>(edgeSubGraph==0)</td></tr>
+<tr><td class="num" id="LN569">569</td><td class="line">		<span class='keyword'>return</span> (eOrig == 0) ? 0 : cost[eOrig];</td></tr>
+<tr><td class="num" id="LN570">570</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN571">571</td><td class="line">	<span class='keyword'>int</span> edgeCost = 0;</td></tr>
+<tr><td class="num" id="LN572">572</td><td class="line">	<span class='keyword'>if</span>(eOrig!=0) {</td></tr>
+<tr><td class="num" id="LN573">573</td><td class="line">		<span class='keyword'>for</span>(<span class='keyword'>int</span> i=0; i&lt;32; i++) {</td></tr>
+<tr><td class="num" id="LN574">574</td><td class="line">			<span class='keyword'>if</span>((((*edgeSubGraph)[eOrig] &amp; (1 &lt;&lt; i)) != 0) &amp;&amp; ((stSubGraph &amp; (1 &lt;&lt; i)) != 0))</td></tr>
+<tr><td class="num" id="LN575">575</td><td class="line">				edgeCost++;</td></tr>
+<tr><td class="num" id="LN576">576</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN577">577</td><td class="line">		edgeCost *= cost[eOrig];</td></tr>
+<tr><td class="num" id="LN578">578</td><td class="line">		edgeCost *= 10000;</td></tr>
+<tr><td class="num" id="LN579">579</td><td class="line">		<span class='keyword'>if</span>(edgeCost == 0)</td></tr>
+<tr><td class="num" id="LN580">580</td><td class="line">			edgeCost = 1;</td></tr>
+<tr><td class="num" id="LN581">581</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN582">582</td><td class="line">	<span class='keyword'>return</span> edgeCost;</td></tr>
+<tr><td class="num" id="LN583">583</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN584">584</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN585">585</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN586">586</td><td class="line"><span class='comment'>//---------------------------------------------------------</span></td></tr>
+<tr><td class="num" id="LN587">587</td><td class="line"><span class='comment'>// finds a weighted shortest path in the dual graph augmented by s and t</span></td></tr>
+<tr><td class="num" id="LN588">588</td><td class="line"><span class='comment'>// (represented by m_vS and m_vT) using edges weights given by costOrig;</span></td></tr>
+<tr><td class="num" id="LN589">589</td><td class="line"><span class='comment'>// returns list of crossed adjacency entries (corresponding</span></td></tr>
+<tr><td class="num" id="LN590">590</td><td class="line"><span class='comment'>// to used edges in the dual) in crossed.</span></td></tr>
+<tr><td class="num" id="LN591">591</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN592">592</td><td class="line"><span class='comment'>// running time: O(|dual| + L + C),</span></td></tr>
+<tr><td class="num" id="LN593">593</td><td class="line"><span class='comment'>//   where L ist the weighted length of the insertion path and C the</span></td></tr>
+<tr><td class="num" id="LN594">594</td><td class="line"><span class='comment'>//   maximum cost of an edge</span></td></tr>
+<tr><td class="num" id="LN595">595</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN596">596</td><td class="line"><span class='keyword'>void</span> FixedEmbeddingInserter::findShortestPath(</td></tr>
+<tr><td class="num" id="LN597">597</td><td class="line">	<span class='keyword'>const</span> PlanRep &amp;PG,</td></tr>
+<tr><td class="num" id="LN598">598</td><td class="line">	<span class='keyword'>const</span> CombinatorialEmbedding &amp;E,</td></tr>
+<tr><td class="num" id="LN599">599</td><td class="line">	<span class='keyword'>const</span> EdgeArray&lt;<span class='keyword'>int</span>&gt; &amp;costOrig,</td></tr>
+<tr><td class="num" id="LN600">600</td><td class="line">	node s,</td></tr>
+<tr><td class="num" id="LN601">601</td><td class="line">	node t,</td></tr>
+<tr><td class="num" id="LN602">602</td><td class="line">	Graph::EdgeType eType,</td></tr>
+<tr><td class="num" id="LN603">603</td><td class="line">	SList&lt;adjEntry&gt; &amp;crossed,</td></tr>
+<tr><td class="num" id="LN604">604</td><td class="line">	<span class='keyword'>const</span> EdgeArray&lt;<span class='keyword'>unsigned</span> <span class='keyword'>int</span>&gt; *edgeSubGraph,</td></tr>
+<tr><td class="num" id="LN605">605</td><td class="line">	<span class='keyword'>int</span> eSubGraph)</td></tr>
+<tr><td class="num" id="LN606">606</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN607">607</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN608">608</td><td class="line">	OGDF_ASSERT(s != t);</td></tr>
+<tr><td class="num" id="LN609">609</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN610">610</td><td class="line">	EdgeArray&lt;<span class='keyword'>int</span>&gt; costDual(m_dual, 0);</td></tr>
+<tr><td class="num" id="LN611">611</td><td class="line">	<span class='keyword'>int</span> maxCost = 0;</td></tr>
+<tr><td class="num" id="LN612">612</td><td class="line">	edge eDual;</td></tr>
+<tr><td class="num" id="LN613">613</td><td class="line">	<span class='macro'>forall_edges(eDual, m_dual)<span class='expansion'>for((eDual)=(m_dual).firstEdge(); (eDual); (eDual)=(eDual)-&gt;<br>succ())</span></span> {</td></tr>
+<tr><td class="num" id="LN614">614</td><td class="line">		<span class='keyword'>int</span> c = getCost(PG,costOrig, m_primalAdj[eDual]-&gt;theEdge(), edgeSubGraph, eSubGraph);</td></tr>
+<tr><td class="num" id="LN615">615</td><td class="line">		costDual[eDual] = c;</td></tr>
+<tr><td class="num" id="LN616">616</td><td class="line">		<span class='keyword'>if</span> (c &gt; maxCost)</td></tr>
+<tr><td class="num" id="LN617">617</td><td class="line">			maxCost = c;</td></tr>
+<tr><td class="num" id="LN618">618</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN619">619</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN620">620</td><td class="line">	++maxCost;</td></tr>
+<tr><td class="num" id="LN621">621</td><td class="line">	Array&lt;SListPure&lt;edge&gt; &gt; nodesAtDist(maxCost);</td></tr>
+<tr><td class="num" id="LN622">622</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN623">623</td><td class="line">	NodeArray&lt;edge&gt; spPred(m_dual,0);</td></tr>
+<tr><td class="num" id="LN624">624</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN625">625</td><td class="line">	<span class='keyword'>int</span> oldIdCount = m_dual.maxEdgeIndex();</td></tr>
+<tr><td class="num" id="LN626">626</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN627">627</td><td class="line">	<span class='comment'>// augment dual by edges from s to all adjacent faces of s ...</span></td></tr>
+<tr><td class="num" id="LN628">628</td><td class="line">	adjEntry adj;</td></tr>
+<tr><td class="num" id="LN629">629</td><td class="line">	<span class='macro'>forall_adj(adj,s)<span class='expansion'>for((adj)=(s)-&gt;firstAdj(); (adj); (adj)=(adj)-&gt;succ())</span></span> {</td></tr>
+<tr><td class="num" id="LN630">630</td><td class="line">		<span class='comment'>// starting edges of bfs-search are all edges leaving s</span></td></tr>
+<tr><td class="num" id="LN631">631</td><td class="line">		edge eDual = m_dual.newEdge(m_vS, m_nodeOf[E.rightFace(adj)]);</td></tr>
+<tr><td class="num" id="LN632">632</td><td class="line">		m_primalAdj[eDual] = adj;</td></tr>
+<tr><td class="num" id="LN633">633</td><td class="line">		nodesAtDist[0].pushBack(eDual);</td></tr>
+<tr><td class="num" id="LN634">634</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN635">635</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN636">636</td><td class="line">	<span class='comment'>// ... and from all adjacent faces of t to t</span></td></tr>
+<tr><td class="num" id="LN637">637</td><td class="line">	<span class='macro'>forall_adj(adj,t)<span class='expansion'>for((adj)=(t)-&gt;firstAdj(); (adj); (adj)=(adj)-&gt;succ())</span></span> {</td></tr>
+<tr><td class="num" id="LN638">638</td><td class="line">		edge eDual = m_dual.newEdge(m_nodeOf[E.rightFace(adj)], m_vT);</td></tr>
+<tr><td class="num" id="LN639">639</td><td class="line">		m_primalAdj[eDual] = adj;</td></tr>
+<tr><td class="num" id="LN640">640</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN641">641</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN642">642</td><td class="line">	<span class='comment'>// actual search (using extended bfs on directed dual)</span></td></tr>
+<tr><td class="num" id="LN643">643</td><td class="line">	<span class='keyword'>int</span> currentDist = 0;</td></tr>
+<tr><td class="num" id="LN644">644</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN645">645</td><td class="line">	<span class='keyword'>for</span>( ; ; )</td></tr>
+<tr><td class="num" id="LN646">646</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN647">647</td><td class="line">		<span class='comment'>// next candidate edge</span></td></tr>
+<tr><td class="num" id="LN648">648</td><td class="line">		<span class='keyword'>while</span>(nodesAtDist[currentDist % maxCost].empty())</td></tr>
+<tr><td class="num" id="LN649">649</td><td class="line">			++currentDist;</td></tr>
+<tr><td class="num" id="LN650">650</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN651">651</td><td class="line">		edge eCand = nodesAtDist[currentDist % maxCost].popFrontRet();</td></tr>
+<tr><td class="num" id="LN652">652</td><td class="line">		node v = eCand-&gt;target();</td></tr>
+<tr><td class="num" id="LN653">653</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN654">654</td><td class="line">		<span class='comment'>// leads to an unvisited node?</span></td></tr>
+<tr><td class="num" id="LN655">655</td><td class="line">		<span class='keyword'>if</span> (spPred[v] == 0)</td></tr>
+<tr><td class="num" id="LN656">656</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN657">657</td><td class="line">			<span class='comment'>// yes, then we set v's predecessor in search tree</span></td></tr>
+<tr><td class="num" id="LN658">658</td><td class="line">			spPred[v] = eCand;</td></tr>
+<tr><td class="num" id="LN659">659</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN660">660</td><td class="line">			<span class='comment'>// have we reached t ...</span></td></tr>
+<tr><td class="num" id="LN661">661</td><td class="line">			<span class='keyword'>if</span> (v == m_vT)</td></tr>
+<tr><td class="num" id="LN662">662</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN663">663</td><td class="line">				<span class='comment'>// ... then search is done.</span></td></tr>
+<tr><td class="num" id="LN664">664</td><td class="line">				<span class='comment'>// constructed list of used edges (translated to crossed</span></td></tr>
+<tr><td class="num" id="LN665">665</td><td class="line">				<span class='comment'>// adjacency entries in PG) from t back to s (including first</span></td></tr>
+<tr><td class="num" id="LN666">666</td><td class="line">				<span class='comment'>// and last!)</span></td></tr>
+<tr><td class="num" id="LN667">667</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN668">668</td><td class="line">				<span class='keyword'>do</span> {</td></tr>
+<tr><td class="num" id="LN669">669</td><td class="line">					edge eDual = spPred[v];</td></tr>
+<tr><td class="num" id="LN670">670</td><td class="line">					crossed.pushFront(m_primalAdj[eDual]);</td></tr>
+<tr><td class="num" id="LN671">671</td><td class="line">					v = eDual-&gt;source();</td></tr>
+<tr><td class="num" id="LN672">672</td><td class="line">				} <span class='keyword'>while</span>(v != m_vS);</td></tr>
+<tr><td class="num" id="LN673">673</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN674">674</td><td class="line">				<span class='keyword'>break</span>;</td></tr>
+<tr><td class="num" id="LN675">675</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN676">676</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN677">677</td><td class="line">			<span class='comment'>// append next candidate edges to queue</span></td></tr>
+<tr><td class="num" id="LN678">678</td><td class="line">			<span class='comment'>// (all edges leaving v)</span></td></tr>
+<tr><td class="num" id="LN679">679</td><td class="line">			edge e;</td></tr>
+<tr><td class="num" id="LN680">680</td><td class="line">			<span class='macro'>forall_adj_edges(e,v)<span class='expansion'>for(ogdf::adjEntry ogdf_loop_var=(v)-&gt;firstAdj(); ogdf::test_forall_adj_edges<br>(ogdf_loop_var,(e)); ogdf_loop_var=ogdf_loop_var-&gt;succ())</span></span> {</td></tr>
+<tr><td class="num" id="LN681">681</td><td class="line">				<span class='keyword'>if</span> (v == e-&gt;source() &amp;&amp;</td></tr>
+<tr><td class="num" id="LN682">682</td><td class="line">					(eType != Graph::generalization || m_primalIsGen[e] == <span class='keyword'>false</span>))</td></tr>
+<tr><td class="num" id="LN683">683</td><td class="line">				{</td></tr>
+<tr><td class="num" id="LN684">684</td><td class="line">					<span class='keyword'>int</span> listPos = (currentDist + costDual[e]) % maxCost;</td></tr>
+<tr><td class="num" id="LN685">685</td><td class="line">					nodesAtDist[listPos].pushBack(e);</td></tr>
+<tr><td class="num" id="LN686">686</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN687">687</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN688">688</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN689">689</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN690">690</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN691">691</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN692">692</td><td class="line">	<span class='comment'>// remove augmented edges again</span></td></tr>
+<tr><td class="num" id="LN693">693</td><td class="line">	<span class='keyword'>while</span> ((adj = m_vS-&gt;firstAdj()) != 0)</td></tr>
+<tr><td class="num" id="LN694">694</td><td class="line">		m_dual.delEdge(adj-&gt;theEdge());</td></tr>
+<tr><td class="num" id="LN695">695</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN696">696</td><td class="line">	<span class='keyword'>while</span> ((adj = m_vT-&gt;firstAdj()) != 0)</td></tr>
+<tr><td class="num" id="LN697">697</td><td class="line">		m_dual.delEdge(adj-&gt;theEdge());</td></tr>
+<tr><td class="num" id="LN698">698</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN699">699</td><td class="line">	m_dual.resetEdgeIdCount(oldIdCount);</td></tr>
+<tr><td class="num" id="LN700">700</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN701">701</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN702">702</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN703">703</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN704">704</td><td class="line"><span class='comment'>//---------------------------------------------------------</span></td></tr>
+<tr><td class="num" id="LN705">705</td><td class="line"><span class='comment'>// inserts edge e according to insertion path crossed.</span></td></tr>
+<tr><td class="num" id="LN706">706</td><td class="line"><span class='comment'>// updates embeding and dual graph</span></td></tr>
+<tr><td class="num" id="LN707">707</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN708">708</td><td class="line"><span class='keyword'>void</span> FixedEmbeddingInserter::insertEdge(</td></tr>
+<tr><td class="num" id="LN709">709</td><td class="line">	PlanRep &amp;PG,</td></tr>
+<tr><td class="num" id="LN710">710</td><td class="line">	CombinatorialEmbedding &amp;E,</td></tr>
+<tr><td class="num" id="LN711">711</td><td class="line">	edge eOrig,</td></tr>
+<tr><td class="num" id="LN712">712</td><td class="line">	<span class='keyword'>const</span> SList&lt;adjEntry&gt; &amp;crossed,</td></tr>
+<tr><td class="num" id="LN713">713</td><td class="line">	<span class='keyword'>bool</span> forbidCrossingGens,</td></tr>
+<tr><td class="num" id="LN714">714</td><td class="line">	<span class='keyword'>const</span> EdgeArray&lt;<span class='keyword'>bool</span>&gt; *forbiddenEdgeOrig)</td></tr>
+<tr><td class="num" id="LN715">715</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN716">716</td><td class="line">	<span class='comment'>// remove dual nodes on insertion path</span></td></tr>
+<tr><td class="num" id="LN717">717</td><td class="line">	SListConstIterator&lt;adjEntry&gt; it;</td></tr>
+<tr><td class="num" id="LN718">718</td><td class="line">	<span class='keyword'>for</span>(it = crossed.begin(); it != crossed.rbegin(); ++it) {</td></tr>
+<tr><td class="num" id="LN719">719</td><td class="line">		m_dual.delNode(m_nodeOf[E.rightFace(*it)]);</td></tr>
+<tr><td class="num" id="LN720">720</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN721">721</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN722">722</td><td class="line">	<span class='comment'>// update primal</span></td></tr>
+<tr><td class="num" id="LN723">723</td><td class="line">	PG.insertEdgePathEmbedded(eOrig,E,crossed);</td></tr>
+<tr><td class="num" id="LN724">724</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN725">725</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN726">726</td><td class="line">	<span class='comment'>// insert new face nodes into dual</span></td></tr>
+<tr><td class="num" id="LN727">727</td><td class="line">	<span class='keyword'>const</span> List&lt;edge&gt; &amp;path = PG.chain(eOrig);</td></tr>
+<tr><td class="num" id="LN728">728</td><td class="line">	ListConstIterator&lt;edge&gt; itEdge;</td></tr>
+<tr><td class="num" id="LN729">729</td><td class="line">	<span class='keyword'>for</span>(itEdge = path.begin(); itEdge.valid(); ++itEdge)</td></tr>
+<tr><td class="num" id="LN730">730</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN731">731</td><td class="line">		adjEntry adj = (*itEdge)-&gt;adjSource();</td></tr>
+<tr><td class="num" id="LN732">732</td><td class="line">		m_nodeOf[E.leftFace (adj)] = m_dual.newNode();</td></tr>
+<tr><td class="num" id="LN733">733</td><td class="line">		m_nodeOf[E.rightFace(adj)] = m_dual.newNode();</td></tr>
+<tr><td class="num" id="LN734">734</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN735">735</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN736">736</td><td class="line">	<span class='comment'>// insert new edges into dual</span></td></tr>
+<tr><td class="num" id="LN737">737</td><td class="line">	<span class='keyword'>for</span>(itEdge = path.begin(); itEdge.valid(); ++itEdge)</td></tr>
+<tr><td class="num" id="LN738">738</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN739">739</td><td class="line">		adjEntry adjSrc = (*itEdge)-&gt;adjSource();</td></tr>
+<tr><td class="num" id="LN740">740</td><td class="line">		face f = E.rightFace(adjSrc);  <span class='comment'>// face to the right of adj in loop</span></td></tr>
+<tr><td class="num" id="LN741">741</td><td class="line">		node vRight = m_nodeOf[f];</td></tr>
+<tr><td class="num" id="LN742">742</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN743">743</td><td class="line">		adjEntry adj1 = f-&gt;firstAdj(), adj = adj1;</td></tr>
+<tr><td class="num" id="LN744">744</td><td class="line">		<span class='keyword'>do</span> {</td></tr>
+<tr><td class="num" id="LN745">745</td><td class="line">			<span class='keyword'>if</span>(forbiddenEdgeOrig &amp;&amp; (*forbiddenEdgeOrig)[PG.original(adj-&gt;theEdge())] == <span class='keyword'>true</span>)</td></tr>
+<tr><td class="num" id="LN746">746</td><td class="line">				<span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN747">747</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN748">748</td><td class="line">			node vLeft = m_nodeOf[E.leftFace(adj)];</td></tr>
+<tr><td class="num" id="LN749">749</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN750">750</td><td class="line">			edge eLR = m_dual.newEdge(vLeft,vRight);</td></tr>
+<tr><td class="num" id="LN751">751</td><td class="line">			m_primalAdj[eLR] = adj;</td></tr>
+<tr><td class="num" id="LN752">752</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN753">753</td><td class="line">			edge eRL = m_dual.newEdge(vRight,vLeft);</td></tr>
+<tr><td class="num" id="LN754">754</td><td class="line">			m_primalAdj[eRL] = adj-&gt;twin();</td></tr>
+<tr><td class="num" id="LN755">755</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN756">756</td><td class="line">			<span class='keyword'>if</span>(forbidCrossingGens &amp;&amp;</td></tr>
+<tr><td class="num" id="LN757">757</td><td class="line">				((<span class='keyword'>const</span> PlanRepUML&amp;)PG).typeOf(adj-&gt;theEdge()) == Graph::generalization)</td></tr>
+<tr><td class="num" id="LN758">758</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN759">759</td><td class="line">				m_primalIsGen[eLR] = m_primalIsGen[eRL] = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN760">760</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN761">761</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN762">762</td><td class="line">		<span class='keyword'>while</span>((adj = adj-&gt;faceCycleSucc()) != adj1);</td></tr>
+<tr><td class="num" id="LN763">763</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN764">764</td><td class="line">		<span class='comment'>// the other face adjacent to *itEdge ...</span></td></tr>
+<tr><td class="num" id="LN765">765</td><td class="line">		f = E.rightFace(adjSrc-&gt;twin());</td></tr>
+<tr><td class="num" id="LN766">766</td><td class="line">		vRight = m_nodeOf[f];</td></tr>
+<tr><td class="num" id="LN767">767</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN768">768</td><td class="line">		adj1 = f-&gt;firstAdj();</td></tr>
+<tr><td class="num" id="LN769">769</td><td class="line">		adj = adj1;</td></tr>
+<tr><td class="num" id="LN770">770</td><td class="line">		<span class='keyword'>do</span> {</td></tr>
+<tr><td class="num" id="LN771">771</td><td class="line">			<span class='keyword'>if</span>(forbiddenEdgeOrig &amp;&amp; (*forbiddenEdgeOrig)[PG.original(adj-&gt;theEdge())] == <span class='keyword'>true</span>)</td></tr>
+<tr><td class="num" id="LN772">772</td><td class="line">				<span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN773">773</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN774">774</td><td class="line">			node vLeft = m_nodeOf[E.leftFace(adj)];</td></tr>
+<tr><td class="num" id="LN775">775</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN776">776</td><td class="line">			edge eLR = m_dual.newEdge(vLeft,vRight);</td></tr>
+<tr><td class="num" id="LN777">777</td><td class="line">			m_primalAdj[eLR] = adj;</td></tr>
+<tr><td class="num" id="LN778">778</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN779">779</td><td class="line">			edge eRL = m_dual.newEdge(vRight,vLeft);</td></tr>
+<tr><td class="num" id="LN780">780</td><td class="line">			m_primalAdj[eRL] = adj-&gt;twin();</td></tr>
+<tr><td class="num" id="LN781">781</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN782">782</td><td class="line">			<span class='keyword'>if</span>(forbidCrossingGens &amp;&amp;</td></tr>
+<tr><td class="num" id="LN783">783</td><td class="line">				((<span class='keyword'>const</span> PlanRepUML&amp;)PG).typeOf(adj-&gt;theEdge()) == Graph::generalization)</td></tr>
+<tr><td class="num" id="LN784">784</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN785">785</td><td class="line">				m_primalIsGen[eLR] = m_primalIsGen[eRL] = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN786">786</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN787">787</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN788">788</td><td class="line">		<span class='keyword'>while</span>((adj = adj-&gt;faceCycleSucc()) != adj1);</td></tr>
+<tr><td class="num" id="LN789">789</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN790">790</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN791">791</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN792">792</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN793">793</td><td class="line"><span class='comment'>//---------------------------------------------------------</span></td></tr>
+<tr><td class="num" id="LN794">794</td><td class="line"><span class='comment'>// removes edge eOrig; updates embedding and dual graph</span></td></tr>
+<tr><td class="num" id="LN795">795</td><td class="line"><span class='comment'>//</span></td></tr>
+<tr><td class="num" id="LN796">796</td><td class="line"><span class='keyword'>void</span> FixedEmbeddingInserter::removeEdge(</td></tr>
+<tr><td class="num" id="LN797">797</td><td class="line">	PlanRep &amp;PG,</td></tr>
+<tr><td class="num" id="LN798">798</td><td class="line">	CombinatorialEmbedding &amp;E,</td></tr>
+<tr><td class="num" id="LN799">799</td><td class="line">	edge eOrig,</td></tr>
+<tr><td class="num" id="LN800">800</td><td class="line">	<span class='keyword'>bool</span> forbidCrossingGens,</td></tr>
+<tr><td class="num" id="LN801">801</td><td class="line">	<span class='keyword'>const</span> EdgeArray&lt;<span class='keyword'>bool</span>&gt; *forbiddenEdgeOrig)</td></tr>
+<tr><td class="num" id="LN802">802</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN803">803</td><td class="line">	<span class='keyword'>const</span> List&lt;edge&gt; &amp;path = PG.chain(eOrig);</td></tr>
+<tr><td class="num" id="LN804">804</td><td class="line">	ListConstIterator&lt;edge&gt; itEdge;</td></tr>
+<tr><td class="num" id="LN805">805</td><td class="line">	<span class='keyword'>for</span>(itEdge = path.begin(); itEdge.valid(); ++itEdge)</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path18" class="msg msgControl" style="margin-left:9ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">18</div></td><td><div class="PathNav"><a href="#Path17" title="Previous event (17)">&#x2190;</a></div></td></td><td>Loop condition is true.  Entering loop body</td><td><div class="PathNav"><a href="#EndPath" title="Next event (19)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN806">806</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN807">807</td><td class="line">		adjEntry adj = (*itEdge)-&gt;adjSource();</td></tr>
+<tr><td class="num" id="LN808">808</td><td class="line">		<span class="mrange">m_delFaces</span>-&gt;insert(E.leftFace  (adj));</td></tr>
+<tr><td class="num"></td><td class="line"><div id="EndPath" class="msg msgEvent" style="margin-left:17ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexEvent">19</div></td><td><div class="PathNav"><a href="#Path18" title="Previous event (18)">&#x2190;</a></div></td></td><td>Called C++ object pointer is null</td></tr></table></div></td></tr>
+<tr><td class="num" id="LN809">809</td><td class="line">		m_delFaces-&gt;insert(E.rightFace (adj));</td></tr>
+<tr><td class="num" id="LN810">810</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN811">811</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN812">812</td><td class="line">	<span class='comment'>// delete all corresponding nodes in dual</span></td></tr>
+<tr><td class="num" id="LN813">813</td><td class="line">	SListConstIterator&lt;face&gt; itsF;</td></tr>
+<tr><td class="num" id="LN814">814</td><td class="line">	<span class='keyword'>for</span>(itsF = m_delFaces-&gt;faces().begin(); itsF.valid(); ++itsF)</td></tr>
+<tr><td class="num" id="LN815">815</td><td class="line">		m_dual.delNode(m_nodeOf[*itsF]);</td></tr>
+<tr><td class="num" id="LN816">816</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN817">817</td><td class="line">	m_delFaces-&gt;clear();</td></tr>
+<tr><td class="num" id="LN818">818</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN819">819</td><td class="line">	<span class='comment'>// remove edge path from PG</span></td></tr>
+<tr><td class="num" id="LN820">820</td><td class="line">	PG.removeEdgePathEmbedded(E,eOrig,*m_newFaces);</td></tr>
+<tr><td class="num" id="LN821">821</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN822">822</td><td class="line">	<span class='comment'>// update dual</span></td></tr>
+<tr><td class="num" id="LN823">823</td><td class="line">	<span class='comment'>// insert new nodes</span></td></tr>
+<tr><td class="num" id="LN824">824</td><td class="line">	ListConstIterator&lt;face&gt; itF;</td></tr>
+<tr><td class="num" id="LN825">825</td><td class="line">	<span class='keyword'>for</span>(itF = m_newFaces-&gt;faces().begin(); itF.valid(); ++itF) {</td></tr>
+<tr><td class="num" id="LN826">826</td><td class="line">		m_nodeOf[*itF] = m_dual.newNode();</td></tr>
+<tr><td class="num" id="LN827">827</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN828">828</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN829">829</td><td class="line">	<span class='comment'>// insert new edges into dual</span></td></tr>
+<tr><td class="num" id="LN830">830</td><td class="line">	<span class='keyword'>for</span>(itF = m_newFaces-&gt;faces().begin(); itF.valid(); ++itF)</td></tr>
+<tr><td class="num" id="LN831">831</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN832">832</td><td class="line">		face f = *itF;  <span class='comment'>// face to the right of adj in loop</span></td></tr>
+<tr><td class="num" id="LN833">833</td><td class="line">		node vRight = m_nodeOf[f];</td></tr>
+<tr><td class="num" id="LN834">834</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN835">835</td><td class="line">		adjEntry adj1 = f-&gt;firstAdj(), adj = adj1;</td></tr>
+<tr><td class="num" id="LN836">836</td><td class="line">		<span class='keyword'>do</span> {</td></tr>
+<tr><td class="num" id="LN837">837</td><td class="line">			<span class='keyword'>if</span>(forbiddenEdgeOrig &amp;&amp; (*forbiddenEdgeOrig)[PG.original(adj-&gt;theEdge())] == <span class='keyword'>true</span>)</td></tr>
+<tr><td class="num" id="LN838">838</td><td class="line">				<span class='keyword'>continue</span>;</td></tr>
+<tr><td class="num" id="LN839">839</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN840">840</td><td class="line">			node vLeft = m_nodeOf[E.leftFace(adj)];</td></tr>
+<tr><td class="num" id="LN841">841</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN842">842</td><td class="line">			edge eLR = m_dual.newEdge(vLeft,vRight);</td></tr>
+<tr><td class="num" id="LN843">843</td><td class="line">			m_primalAdj[eLR] = adj;</td></tr>
+<tr><td class="num" id="LN844">844</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN845">845</td><td class="line">			edge eRL = m_dual.newEdge(vRight,vLeft);</td></tr>
+<tr><td class="num" id="LN846">846</td><td class="line">			m_primalAdj[eRL] = adj-&gt;twin();</td></tr>
+<tr><td class="num" id="LN847">847</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN848">848</td><td class="line">			<span class='keyword'>if</span>(forbidCrossingGens &amp;&amp;</td></tr>
+<tr><td class="num" id="LN849">849</td><td class="line">				((<span class='keyword'>const</span> PlanRepUML&amp;)PG).typeOf(adj-&gt;theEdge()) == Graph::generalization)</td></tr>
+<tr><td class="num" id="LN850">850</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN851">851</td><td class="line">				m_primalIsGen[eLR] = m_primalIsGen[eRL] = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN852">852</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN853">853</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN854">854</td><td class="line">		<span class='keyword'>while</span>((adj = adj-&gt;faceCycleSucc()) != adj1);</td></tr>
+<tr><td class="num" id="LN855">855</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN856">856</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN857">857</td><td class="line">	m_newFaces-&gt;clear();</td></tr>
+<tr><td class="num" id="LN858">858</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN859">859</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN860">860</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN861">861</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN862">862</td><td class="line">} <span class='comment'>// end namespace ogdf</span></td></tr>
+</table></body></html>

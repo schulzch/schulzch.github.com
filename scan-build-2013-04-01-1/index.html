@@ -1,0 +1,766 @@
+<html>
+<head>
+<title>build-analyze - scan-build results</title>
+<link type="text/css" rel="stylesheet" href="scanview.css"/>
+<script src="sorttable.js"></script>
+<script language='javascript' type="text/javascript">
+function SetDisplay(RowClass, DisplayVal)
+{
+  var Rows = document.getElementsByTagName("tr");
+  for ( var i = 0 ; i < Rows.length; ++i ) {
+    if (Rows[i].className == RowClass) {
+      Rows[i].style.display = DisplayVal;
+    }
+  }
+}
+
+function CopyCheckedStateToCheckButtons(SummaryCheckButton) {
+  var Inputs = document.getElementsByTagName("input");
+  for ( var i = 0 ; i < Inputs.length; ++i ) {
+    if (Inputs[i].type == "checkbox") {
+      if(Inputs[i] != SummaryCheckButton) {
+        Inputs[i].checked = SummaryCheckButton.checked;
+        Inputs[i].onclick();
+	  }
+    }
+  }
+}
+
+function returnObjById( id ) {
+    if (document.getElementById) 
+        var returnVar = document.getElementById(id);
+    else if (document.all)
+        var returnVar = document.all[id];
+    else if (document.layers) 
+        var returnVar = document.layers[id];
+    return returnVar; 
+}
+
+var NumUnchecked = 0;
+
+function ToggleDisplay(CheckButton, ClassName) {
+  if (CheckButton.checked) {
+    SetDisplay(ClassName, "");
+    if (--NumUnchecked == 0) {
+      returnObjById("AllBugsCheck").checked = true;
+    }
+  }
+  else {
+    SetDisplay(ClassName, "none");
+    NumUnchecked++;
+    returnObjById("AllBugsCheck").checked = false;
+  }
+}
+</script>
+<!-- SUMMARYENDHEAD -->
+</head>
+<body>
+<h1>build-analyze - scan-build results</h1>
+
+<table>
+<tr><th>User:</th><td>schulzch@schulzch-macbook</td></tr>
+<tr><th>Working Directory:</th><td>/Users/schulzch/Documents/qml-ogdf/build-analyze</td></tr>
+<tr><th>Command Line:</th><td>make</td></tr>
+<tr><th>Clang Version:</th><td>clang version 3.3 (tags/checker/checker-272)
+</td></tr>
+<tr><th>Date:</th><td>Mon Apr  1 03:52:26 2013</td></tr>
+<tr><th>Version:</th><td>checker-272 (2013-03-01 14:12:07)</td></tr>
+</table>
+<h2>Bug Summary</h2>
+<p>Results in this analysis run are based on analyzer build <b>checker-272</b>.</p>
+<table>
+<thead><tr><td>Bug Type</td><td>Quantity</td><td class="sorttable_nosort">Display?</td></tr></thead>
+<tr style="font-weight:bold"><td class="SUMM_DESC">All Bugs</td><td class="Q">220</td><td><center><input type="checkbox" id="AllBugsCheck" onClick="CopyCheckedStateToCheckButtons(this);" checked/></center></td></tr>
+<tr><th>Dead store</th><th colspan=2></th></tr>
+<tr><td class="SUMM_DESC">Dead assignment</td><td class="Q">70</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_dead_store_dead_assignment');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Dead increment</td><td class="Q">1</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_dead_store_dead_increment');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Dead initialization</td><td class="Q">20</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_dead_store_dead_initialization');" checked/></center></td></tr>
+<tr><th>Logic error</th><th colspan=2></th></tr>
+<tr><td class="SUMM_DESC">Assigned value is garbage or undefined</td><td class="Q">13</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_logic_error_assigned_value_is_garbage_or_undefined');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Branch condition evaluates to a garbage value</td><td class="Q">3</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_logic_error_branch_condition_evaluates_to_a_garbage_value');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Called C++ object pointer is null</td><td class="Q">26</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_logic_error_called_c++_object_pointer_is_null');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Called C++ object pointer is uninitialized</td><td class="Q">9</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_logic_error_called_c++_object_pointer_is_uninitialized');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Dereference of null pointer</td><td class="Q">48</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_logic_error_dereference_of_null_pointer');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Dereference of undefined pointer value</td><td class="Q">2</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_logic_error_dereference_of_undefined_pointer_value');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Division by zero</td><td class="Q">1</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_logic_error_division_by_zero');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Garbage return value</td><td class="Q">2</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_logic_error_garbage_return_value');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Result of operation is garbage or undefined</td><td class="Q">15</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_logic_error_result_of_operation_is_garbage_or_undefined');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Uninitialized argument value</td><td class="Q">10</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_logic_error_uninitialized_argument_value');" checked/></center></td></tr>
+</table>
+<h2>Reports</h2>
+
+<table class="sortable" style="table-layout:automatic">
+<thead><tr>
+  <td>Bug Group</td>
+  <td class="sorttable_sorted">Bug Type<span id="sorttable_sortfwdind">&nbsp;&#x25BE;</span></td>
+  <td>File</td>
+  <td class="Q">Line</td>
+  <td class="Q">Path Length</td>
+  <td class="sorttable_nosort"></td>
+  <!-- REPORTBUGCOL -->
+</tr></thead>
+<tbody>
+<tr class="bt_logic_error_assigned_value_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Assigned value is garbage or undefined</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/NMM.cpp</td><td class="Q">1999</td><td class="Q">9</td><td><a href="report-cIT924.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-cIT924.html" -->
+</tr>
+<tr class="bt_logic_error_assigned_value_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Assigned value is garbage or undefined</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/NMM.cpp</td><td class="Q">1992</td><td class="Q">9</td><td><a href="report-GdUrEp.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-GdUrEp.html" -->
+</tr>
+<tr class="bt_logic_error_assigned_value_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Assigned value is garbage or undefined</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/Set.cpp</td><td class="Q">233</td><td class="Q">3</td><td><a href="report-KuPaHo.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-KuPaHo.html" -->
+</tr>
+<tr class="bt_logic_error_assigned_value_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Assigned value is garbage or undefined</td><td>src<span class="W"> </span>/simultaneous<span class="W"> </span>/SimDrawColorizer.cpp</td><td class="Q">256</td><td class="Q">6</td><td><a href="report-mAo1mv.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-mAo1mv.html" -->
+</tr>
+<tr class="bt_logic_error_assigned_value_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Assigned value is garbage or undefined</td><td>src<span class="W"> </span>/simultaneous<span class="W"> </span>/SimDrawColorizer.cpp</td><td class="Q">220</td><td class="Q">5</td><td><a href="report-pYVows.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-pYVows.html" -->
+</tr>
+<tr class="bt_logic_error_assigned_value_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Assigned value is garbage or undefined</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedderMinDepthPiTa.cpp</td><td class="Q">1341</td><td class="Q">39</td><td><a href="report-QG9Wmq.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-QG9Wmq.html" -->
+</tr>
+<tr class="bt_logic_error_assigned_value_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Assigned value is garbage or undefined</td><td>src<span class="W"> </span>/simultaneous<span class="W"> </span>/SimDrawColorizer.cpp</td><td class="Q">229</td><td class="Q">5</td><td><a href="report-r62iE2.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-r62iE2.html" -->
+</tr>
+<tr class="bt_logic_error_assigned_value_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Assigned value is garbage or undefined</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/Set.cpp</td><td class="Q">190</td><td class="Q">3</td><td><a href="report-UThPgq.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-UThPgq.html" -->
+</tr>
+<tr class="bt_logic_error_assigned_value_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Assigned value is garbage or undefined</td><td>src<span class="W"> </span>/simultaneous<span class="W"> </span>/SimDrawColorizer.cpp</td><td class="Q">247</td><td class="Q">6</td><td><a href="report-vSB8Pn.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-vSB8Pn.html" -->
+</tr>
+<tr class="bt_logic_error_assigned_value_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Assigned value is garbage or undefined</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/PlanRepExpansion.cpp</td><td class="Q">1187</td><td class="Q">2</td><td><a href="report-WiyimP.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-WiyimP.html" -->
+</tr>
+<tr class="bt_logic_error_assigned_value_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Assigned value is garbage or undefined</td><td>src<span class="W"> </span>/simultaneous<span class="W"> </span>/SimDrawColorizer.cpp</td><td class="Q">211</td><td class="Q">5</td><td><a href="report-Wj3OHw.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-Wj3OHw.html" -->
+</tr>
+<tr class="bt_logic_error_assigned_value_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Assigned value is garbage or undefined</td><td>src<span class="W"> </span>/simultaneous<span class="W"> </span>/SimDrawColorizer.cpp</td><td class="Q">238</td><td class="Q">5</td><td><a href="report-wRzzD9.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-wRzzD9.html" -->
+</tr>
+<tr class="bt_logic_error_assigned_value_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Assigned value is garbage or undefined</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/FMMMLayout.cpp</td><td class="Q">907</td><td class="Q">4</td><td><a href="report-yXnSUa.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-yXnSUa.html" -->
+</tr>
+<tr class="bt_logic_error_branch_condition_evaluates_to_a_garbage_value"><td class="DESC">Logic error</td><td class="DESC">Branch condition evaluates to a garbage value</td><td>src<span class="W"> </span>/planarlayout<span class="W"> </span>/TriconnectedShellingOrder.cpp</td><td class="Q">367</td><td class="Q">14</td><td><a href="report-bvvXc1.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-bvvXc1.html" -->
+</tr>
+<tr class="bt_logic_error_branch_condition_evaluates_to_a_garbage_value"><td class="DESC">Logic error</td><td class="DESC">Branch condition evaluates to a garbage value</td><td>src<span class="W"> </span>/fileformats<span class="W"> </span>/OgmlParser.cpp</td><td class="Q">2337</td><td class="Q">8</td><td><a href="report-Mr2X8S.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-Mr2X8S.html" -->
+</tr>
+<tr class="bt_logic_error_branch_condition_evaluates_to_a_garbage_value"><td class="DESC">Logic error</td><td class="DESC">Branch condition evaluates to a garbage value</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/ArrayGraph.cpp</td><td class="Q">139</td><td class="Q">3</td><td><a href="report-znAs6I.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-znAs6I.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/upward<span class="W"> </span>/LayerBasedUPRLayout.cpp</td><td class="Q">118</td><td class="Q">22</td><td><a href="report-0hNZ4l.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-0hNZ4l.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedPQTree.cpp</td><td class="Q">374</td><td class="Q">5</td><td><a href="report-6sYDPl.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-6sYDPl.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/fileformats<span class="W"> </span>/OgmlParser.cpp</td><td class="Q">2968</td><td class="Q">42</td><td><a href="report-a9nFm4.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-a9nFm4.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/MMVariableEmbeddingInserter.cpp</td><td class="Q">1588</td><td class="Q">6</td><td><a href="report-aOXzjX.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-aOXzjX.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/upward<span class="W"> </span>/LayerBasedUPRLayout.cpp</td><td class="Q">175</td><td class="Q">10</td><td><a href="report-cqkfUC.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-cqkfUC.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/MultiEdgeApproxInserter.cpp</td><td class="Q">707</td><td class="Q">14</td><td><a href="report-EW0C4A.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-EW0C4A.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/planarlayout<span class="W"> </span>/BiconnectedShellingOrder.cpp</td><td class="Q">1268</td><td class="Q">32</td><td><a href="report-f3faXw.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-f3faXw.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/NMM.cpp</td><td class="Q">1182</td><td class="Q">13</td><td><a href="report-fsf5uN.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-fsf5uN.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/FixedEmbeddingInserter.cpp</td><td class="Q">808</td><td class="Q">19</td><td><a href="report-Gs2AoD.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-Gs2AoD.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/augmentation<span class="W"> </span>/PlanarAugmentationFix.cpp</td><td class="Q">176</td><td class="Q">10</td><td><a href="report-KrqkAz.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-KrqkAz.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedPQTree.cpp</td><td class="Q">582</td><td class="Q">6</td><td><a href="report-LoNXZ1.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-LoNXZ1.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/upward<span class="W"> </span>/UpwardPlanarModule.cpp</td><td class="Q">785</td><td class="Q">5</td><td><a href="report-n4bFNa.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-n4bFNa.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/MMVariableEmbeddingInserter.cpp</td><td class="Q">662</td><td class="Q">12</td><td><a href="report-OKlW8s.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-OKlW8s.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/ClusterPlanRep.cpp</td><td class="Q">351</td><td class="Q">21</td><td><a href="report-Owu7ZS.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-Owu7ZS.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/FixedEmbeddingInserter.cpp</td><td class="Q">814</td><td class="Q">19</td><td><a href="report-PxOZNA.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-PxOZNA.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/MultiEdgeApproxInserter.cpp</td><td class="Q">695</td><td class="Q">12</td><td><a href="report-q1ROii.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-q1ROii.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/VariableEmbeddingInserter2.cpp</td><td class="Q">112</td><td class="Q">6</td><td><a href="report-SRNJAD.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-SRNJAD.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedPQTree.cpp</td><td class="Q">512</td><td class="Q">6</td><td><a href="report-UXdhWS.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-UXdhWS.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/incremental<span class="W"> </span>/SimpleIncNodeInserter.cpp</td><td class="Q">292</td><td class="Q">6</td><td><a href="report-v64zTD.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-v64zTD.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/MMVariableEmbeddingInserter.cpp</td><td class="Q">636</td><td class="Q">11</td><td><a href="report-VP8jY9.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-VP8jY9.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/upward<span class="W"> </span>/UpwardPlanarModule.cpp</td><td class="Q">789</td><td class="Q">9</td><td><a href="report-X9LyZr.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-X9LyZr.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/NMM.cpp</td><td class="Q">1107</td><td class="Q">13</td><td><a href="report-xcDPWu.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-xcDPWu.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/MMVariableEmbeddingInserter.cpp</td><td class="Q">734</td><td class="Q">2</td><td><a href="report-xtzPuO.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-xtzPuO.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/upward<span class="W"> </span>/LayerBasedUPRLayout.cpp</td><td class="Q">184</td><td class="Q">12</td><td><a href="report-XYDm5J.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-XYDm5J.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedderMinDepthPiTa.cpp</td><td class="Q">717</td><td class="Q">2</td><td><a href="report-Y25L73.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-Y25L73.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_null"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is null</td><td>src<span class="W"> </span>/upward<span class="W"> </span>/LayerBasedUPRLayout.cpp</td><td class="Q">108</td><td class="Q">22</td><td><a href="report-Y7k9E6.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-Y7k9E6.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_uninitialized"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is uninitialized</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/MMVariableEmbeddingInserter.cpp</td><td class="Q">550</td><td class="Q">19</td><td><a href="report-al7HJJ.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-al7HJJ.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_uninitialized"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is uninitialized</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/BoyerMyrvold.cpp</td><td class="Q">145</td><td class="Q">5</td><td><a href="report-DWK6KD.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-DWK6KD.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_uninitialized"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is uninitialized</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedderMaxFaceLayers.cpp</td><td class="Q">166</td><td class="Q">6</td><td><a href="report-kADKXi.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-kADKXi.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_uninitialized"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is uninitialized</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedderMinDepthMaxFace.cpp</td><td class="Q">115</td><td class="Q">5</td><td><a href="report-KOoaFB.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-KOoaFB.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_uninitialized"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is uninitialized</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedderMinDepthPiTa.cpp</td><td class="Q">857</td><td class="Q">7</td><td><a href="report-LxQO3V.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-LxQO3V.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_uninitialized"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is uninitialized</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedderMinDepthMaxFaceLayers.cpp</td><td class="Q">121</td><td class="Q">5</td><td><a href="report-MDl20i.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-MDl20i.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_uninitialized"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is uninitialized</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedderMaxFace.cpp</td><td class="Q">160</td><td class="Q">6</td><td><a href="report-MGI7wz.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-MGI7wz.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_uninitialized"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is uninitialized</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/Layout.cpp</td><td class="Q">112</td><td class="Q">3</td><td><a href="report-PtQERM.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-PtQERM.html" -->
+</tr>
+<tr class="bt_logic_error_called_c++_object_pointer_is_uninitialized"><td class="DESC">Logic error</td><td class="DESC">Called C++ object pointer is uninitialized</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedderMinDepth.cpp</td><td class="Q">178</td><td class="Q">6</td><td><a href="report-ZYiBAt.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-ZYiBAt.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/fileformats<span class="W"> </span>/OgmlParser.cpp</td><td class="Q">130</td><td class="Q">1</td><td><a href="report-03HoS2.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-03HoS2.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/cluster<span class="W"> </span>/CconnectClusterPlanar.cpp</td><td class="Q">584</td><td class="Q">1</td><td><a href="report-0CkWyT.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-0CkWyT.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/fileformats<span class="W"> </span>/OgmlParser.cpp</td><td class="Q">225</td><td class="Q">1</td><td><a href="report-21qIvp.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-21qIvp.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/PlanRep.cpp</td><td class="Q">623</td><td class="Q">1</td><td><a href="report-2eDdnn.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-2eDdnn.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/packing<span class="W"> </span>/ComponentSplitterLayout.cpp</td><td class="Q">285</td><td class="Q">1</td><td><a href="report-4rO2C1.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-4rO2C1.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/tree<span class="W"> </span>/RadialTreeLayout.cpp</td><td class="Q">235</td><td class="Q">1</td><td><a href="report-5Lg6nM.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-5Lg6nM.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/VariableEmbeddingInserter.cpp</td><td class="Q">947</td><td class="Q">1</td><td><a href="report-5xF3Zp.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-5xF3Zp.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/cluster<span class="W"> </span>/CconnectClusterPlanarEmbed.cpp</td><td class="Q">1515</td><td class="Q">1</td><td><a href="report-6waUYv.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-6waUYv.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>ogdf<span class="W"> </span>/energybased<span class="W"> </span>/SpringEmbedderKK.h</td><td class="Q">196</td><td class="Q">1</td><td><a href="report-7bNyjk.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-7bNyjk.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/augmentation<span class="W"> </span>/PlanarAugmentation.cpp</td><td class="Q">674</td><td class="Q">1</td><td><a href="report-899DnW.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-899DnW.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/basic<span class="W"> </span>/UMLGraph.cpp</td><td class="Q">440</td><td class="Q">1</td><td><a href="report-AQ1jb8.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-AQ1jb8.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/EdgeRouter.cpp</td><td class="Q">2153</td><td class="Q">1</td><td><a href="report-AR4ohB.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-AR4ohB.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/incremental<span class="W"> </span>/SimpleIncNodeInserter.cpp</td><td class="Q">269</td><td class="Q">1</td><td><a href="report-AygJBL.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-AygJBL.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/upward<span class="W"> </span>/UpwardPlanRep.cpp</td><td class="Q">442</td><td class="Q">1</td><td><a href="report-BLvFQz.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-BLvFQz.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/EdgeRouter.cpp</td><td class="Q">2585</td><td class="Q">1</td><td><a href="report-Bx3pj9.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-Bx3pj9.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/VariableEmbeddingInserter2.cpp</td><td class="Q">424</td><td class="Q">1</td><td><a href="report-cDEmm9.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-cDEmm9.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/basic<span class="W"> </span>/UMLGraph.cpp</td><td class="Q">437</td><td class="Q">1</td><td><a href="report-cIUeM5.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-cIUeM5.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/layered<span class="W"> </span>/FastHierarchyLayout.cpp</td><td class="Q">807</td><td class="Q">1</td><td><a href="report-D4lQZt.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-D4lQZt.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/multilevelmixer<span class="W"> </span>/SolarMerger.cpp</td><td class="Q">427</td><td class="Q">1</td><td><a href="report-D5g5Da.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-D5g5Da.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/basic<span class="W"> </span>/GraphCopy.cpp</td><td class="Q">665</td><td class="Q">1</td><td><a href="report-e1txG9.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-e1txG9.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/EdgeRouter.cpp</td><td class="Q">737</td><td class="Q">1</td><td><a href="report-E6C98a.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-E6C98a.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/VariableEmbeddingInserter2.cpp</td><td class="Q">400</td><td class="Q">1</td><td><a href="report-eXPeST.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-eXPeST.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/fileformats<span class="W"> </span>/OgmlParser.cpp</td><td class="Q">143</td><td class="Q">1</td><td><a href="report-F8Q3ot.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-F8Q3ot.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/Multilevel.cpp</td><td class="Q">874</td><td class="Q">1</td><td><a href="report-f8VvIh.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-f8VvIh.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/incremental<span class="W"> </span>/SimpleIncNodeInserter.cpp</td><td class="Q">281</td><td class="Q">1</td><td><a href="report-fhAc36.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-fhAc36.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/NodeInfo.cpp</td><td class="Q">113</td><td class="Q">1</td><td><a href="report-fPu4yf.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-fPu4yf.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/cluster<span class="W"> </span>/CconnectClusterPlanar.cpp</td><td class="Q">527</td><td class="Q">1</td><td><a href="report-HhubiD.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-HhubiD.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/cluster<span class="W"> </span>/ClusterGraph.cpp</td><td class="Q">1413</td><td class="Q">1</td><td><a href="report-Hm5bPA.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-Hm5bPA.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/fileformats<span class="W"> </span>/DinoXmlScanner.cpp</td><td class="Q">208</td><td class="Q">1</td><td><a href="report-Hn773z.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-Hn773z.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/NodeInfo.cpp</td><td class="Q">112</td><td class="Q">1</td><td><a href="report-I2DPxa.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-I2DPxa.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/fileformats<span class="W"> </span>/OgmlParser.cpp</td><td class="Q">197</td><td class="Q">1</td><td><a href="report-iCgFyz.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-iCgFyz.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/VariableEmbeddingInserter.cpp</td><td class="Q">965</td><td class="Q">1</td><td><a href="report-ipDCqi.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-ipDCqi.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/incremental<span class="W"> </span>/SimpleIncNodeInserter.cpp</td><td class="Q">95</td><td class="Q">1</td><td><a href="report-IVqv93.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-IVqv93.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/cluster<span class="W"> </span>/CconnectClusterPlanar.cpp</td><td class="Q">342</td><td class="Q">1</td><td><a href="report-IVtvYh.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-IVtvYh.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/multilevelmixer<span class="W"> </span>/SolarMerger.cpp</td><td class="Q">429</td><td class="Q">1</td><td><a href="report-KL2KlA.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-KL2KlA.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/OrthoRep.cpp</td><td class="Q">894</td><td class="Q">1</td><td><a href="report-kVQYAK.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-kVQYAK.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/SpringEmbedderKK.cpp</td><td class="Q">212</td><td class="Q">1</td><td><a href="report-Ky28ce.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-Ky28ce.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/PlanarizationLayout.cpp</td><td class="Q">120</td><td class="Q">1</td><td><a href="report-L7wi7D.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-L7wi7D.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/VariableEmbeddingInserter2.cpp</td><td class="Q">427</td><td class="Q">1</td><td><a href="report-lo9FmA.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-lo9FmA.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/VariableEmbeddingInserter2.cpp</td><td class="Q">418</td><td class="Q">1</td><td><a href="report-M8nsyI.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-M8nsyI.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/VariableEmbeddingInserter.cpp</td><td class="Q">953</td><td class="Q">1</td><td><a href="report-mFYds4.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-mFYds4.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/cluster<span class="W"> </span>/CconnectClusterPlanarEmbed.cpp</td><td class="Q">1609</td><td class="Q">1</td><td><a href="report-MXutCf.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-MXutCf.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/incremental<span class="W"> </span>/SimpleIncNodeInserter.cpp</td><td class="Q">97</td><td class="Q">1</td><td><a href="report-NAhril.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-NAhril.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/StressMajorizationSimple.cpp</td><td class="Q">146</td><td class="Q">1</td><td><a href="report-phOJHP.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-phOJHP.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/EdgeRouter.cpp</td><td class="Q">2774</td><td class="Q">1</td><td><a href="report-pqQNak.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-pqQNak.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/VariableEmbeddingInserter.cpp</td><td class="Q">971</td><td class="Q">1</td><td><a href="report-Q7jDZU.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-Q7jDZU.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/EdgeRouter.cpp</td><td class="Q">2007</td><td class="Q">1</td><td><a href="report-q983Dl.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-q983Dl.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/multilevelmixer<span class="W"> </span>/SolarMerger.cpp</td><td class="Q">272</td><td class="Q">1</td><td><a href="report-QdloIb.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-QdloIb.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/VariableEmbeddingInserter.cpp</td><td class="Q">974</td><td class="Q">1</td><td><a href="report-QI95Vi.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-QI95Vi.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/cluster<span class="W"> </span>/CconnectClusterPlanar.cpp</td><td class="Q">590</td><td class="Q">1</td><td><a href="report-qiNFNm.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-qiNFNm.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/fileformats<span class="W"> </span>/OgmlParser.cpp</td><td class="Q">625</td><td class="Q">1</td><td><a href="report-sdmr82.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-sdmr82.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/fileformats<span class="W"> </span>/OgmlParser.cpp</td><td class="Q">638</td><td class="Q">1</td><td><a href="report-sLdJpf.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-sLdJpf.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/misclayout<span class="W"> </span>/CircularLayout.cpp</td><td class="Q">940</td><td class="Q">1</td><td><a href="report-SruVVD.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-SruVVD.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/cluster<span class="W"> </span>/CconnectClusterPlanarEmbed.cpp</td><td class="Q">1513</td><td class="Q">1</td><td><a href="report-sS3827.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-sS3827.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/FMMMLayout.cpp</td><td class="Q">1589</td><td class="Q">1</td><td><a href="report-sXKyYo.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-sXKyYo.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/VariableEmbeddingInserter2.cpp</td><td class="Q">409</td><td class="Q">1</td><td><a href="report-T6qRzB.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-T6qRzB.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/VariableEmbeddingInserter2.cpp</td><td class="Q">406</td><td class="Q">1</td><td><a href="report-tCIHLD.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-tCIHLD.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/cluster<span class="W"> </span>/CconnectClusterPlanar.cpp</td><td class="Q">529</td><td class="Q">1</td><td><a href="report-UlLYMV.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-UlLYMV.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/EdgeRouter.cpp</td><td class="Q">2963</td><td class="Q">1</td><td><a href="report-v2u7fA.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-v2u7fA.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/NodeInfo.cpp</td><td class="Q">111</td><td class="Q">1</td><td><a href="report-WfWrML.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-WfWrML.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/SpringEmbedderKK.cpp</td><td class="Q">217</td><td class="Q">1</td><td><a href="report-wLsYKP.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-wLsYKP.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/VariableEmbeddingInserter.cpp</td><td class="Q">956</td><td class="Q">1</td><td><a href="report-X08yWv.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-X08yWv.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/planarlayout<span class="W"> </span>/MixedModelBase.cpp</td><td class="Q">129</td><td class="Q">1</td><td><a href="report-X7Y1RE.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-X7Y1RE.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/cluster<span class="W"> </span>/CconnectClusterPlanarEmbed.cpp</td><td class="Q">2159</td><td class="Q">1</td><td><a href="report-xi30I4.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-xi30I4.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/PlanRep.cpp</td><td class="Q">533</td><td class="Q">1</td><td><a href="report-XoYKAe.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-XoYKAe.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/layered<span class="W"> </span>/FastHierarchyLayout.cpp</td><td class="Q">723</td><td class="Q">1</td><td><a href="report-yeyAGs.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-yeyAGs.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/cluster<span class="W"> </span>/CconnectClusterPlanarEmbed.cpp</td><td class="Q">1591</td><td class="Q">1</td><td><a href="report-ZHpsUB.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-ZHpsUB.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/EdgeRouter.cpp</td><td class="Q">1670</td><td class="Q">1</td><td><a href="report-Zhr7i7.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-Zhr7i7.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/EdgeRouter.cpp</td><td class="Q">2388</td><td class="Q">1</td><td><a href="report-zihsMS.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-zihsMS.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>src<span class="W"> </span>/incremental<span class="W"> </span>/SimpleIncNodeInserter.cpp</td><td class="Q">268</td><td class="Q">1</td><td><a href="report-zyIBo0.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-zyIBo0.html" -->
+</tr>
+<tr class="bt_dead_store_dead_increment"><td class="DESC">Dead store</td><td class="DESC">Dead increment</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/multilevelmixer<span class="W"> </span>/ModularMultilevelMixer.cpp</td><td class="Q">181</td><td class="Q">1</td><td><a href="report-xvjNye.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-xvjNye.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/multilevelmixer<span class="W"> </span>/IndependentSetMerger.cpp</td><td class="Q">222</td><td class="Q">1</td><td><a href="report-14YjpS.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-14YjpS.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/EdgeRouter.cpp</td><td class="Q">2573</td><td class="Q">1</td><td><a href="report-21aXGW.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-21aXGW.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>src<span class="W"> </span>/basic<span class="W"> </span>/System.cpp</td><td class="Q">76</td><td class="Q">1</td><td><a href="report-7UG0SZ.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-7UG0SZ.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/multilevelmixer<span class="W"> </span>/RandomMerger.cpp</td><td class="Q">101</td><td class="Q">1</td><td><a href="report-BSGzlZ.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-BSGzlZ.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/multilevelmixer<span class="W"> </span>/EdgeCoverMerger.cpp</td><td class="Q">168</td><td class="Q">1</td><td><a href="report-czQwOU.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-czQwOU.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/EdgeRouter.cpp</td><td class="Q">2762</td><td class="Q">1</td><td><a href="report-EtqvvE.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-EtqvvE.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/multilevelmixer<span class="W"> </span>/MatchingMerger.cpp</td><td class="Q">129</td><td class="Q">1</td><td><a href="report-F3BTxV.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-F3BTxV.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/multilevelmixer<span class="W"> </span>/LocalBiconnectedMerger.cpp</td><td class="Q">212</td><td class="Q">1</td><td><a href="report-fnILxI.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-fnILxI.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>src<span class="W"> </span>/basic<span class="W"> </span>/System.cpp</td><td class="Q">75</td><td class="Q">1</td><td><a href="report-fsWrlg.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-fsWrlg.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/FastMultipoleEmbedder.cpp</td><td class="Q">459</td><td class="Q">1</td><td><a href="report-iV9DqD.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-iV9DqD.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/EdgeRouter.cpp</td><td class="Q">2951</td><td class="Q">1</td><td><a href="report-klJnsL.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-klJnsL.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>src<span class="W"> </span>/cluster<span class="W"> </span>/CconnectClusterPlanar.cpp</td><td class="Q">210</td><td class="Q">1</td><td><a href="report-MOLKAq.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-MOLKAq.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>src<span class="W"> </span>/planarlayout<span class="W"> </span>/MMCBBase.cpp</td><td class="Q">83</td><td class="Q">1</td><td><a href="report-S5Ggmm.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-S5Ggmm.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>src<span class="W"> </span>/planarlayout<span class="W"> </span>/MMCBBase.cpp</td><td class="Q">83</td><td class="Q">1</td><td><a href="report-s5tVii.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-s5tVii.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>src<span class="W"> </span>/basic<span class="W"> </span>/System.cpp</td><td class="Q">74</td><td class="Q">1</td><td><a href="report-SE6RQV.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-SE6RQV.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>src<span class="W"> </span>/cluster<span class="W"> </span>/ClusterGraph.cpp</td><td class="Q">1405</td><td class="Q">1</td><td><a href="report-SrsDuN.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-SrsDuN.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/EdgeRouter.cpp</td><td class="Q">2374</td><td class="Q">1</td><td><a href="report-t6mXgr.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-t6mXgr.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>src<span class="W"> </span>/upward<span class="W"> </span>/LayerBasedUPRLayout.cpp</td><td class="Q">1149</td><td class="Q">1</td><td><a href="report-uCmtuX.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-uCmtuX.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>src<span class="W"> </span>/cluster<span class="W"> </span>/CconnectClusterPlanarEmbed.cpp</td><td class="Q">1274</td><td class="Q">1</td><td><a href="report-VDKxwH.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-VDKxwH.html" -->
+</tr>
+<tr class="bt_dead_store_dead_initialization"><td class="DESC">Dead store</td><td class="DESC">Dead initialization</td><td>src<span class="W"> </span>/basic<span class="W"> </span>/System.cpp</td><td class="Q">73</td><td class="Q">1</td><td><a href="report-z55ZRO.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-z55ZRO.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/OrthoRep.cpp</td><td class="Q">395</td><td class="Q">11</td><td><a href="report-0BDGud.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-0BDGud.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/tree<span class="W"> </span>/TreeLayout.cpp</td><td class="Q">741</td><td class="Q">26</td><td><a href="report-0Leydp.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-0Leydp.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/basic<span class="W"> </span>/UMLGraph.cpp</td><td class="Q">451</td><td class="Q">8</td><td><a href="report-1oa5zt.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-1oa5zt.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/basic<span class="W"> </span>/extended_graph_alg.cpp</td><td class="Q">151</td><td class="Q">7</td><td><a href="report-2ENnZo.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-2ENnZo.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/fileformats<span class="W"> </span>/OgmlParser.cpp</td><td class="Q">1599</td><td class="Q">13</td><td><a href="report-2T4kzu.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-2T4kzu.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/FindKuratowskis.cpp</td><td class="Q">84</td><td class="Q">6</td><td><a href="report-3E2OzV.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-3E2OzV.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/MMFixedEmbeddingInserter.cpp</td><td class="Q">959</td><td class="Q">7</td><td><a href="report-4EfC6k.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-4EfC6k.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedderMinDepthPiTa.cpp</td><td class="Q">474</td><td class="Q">17</td><td><a href="report-4ZIvH7.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-4ZIvH7.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedderMaxFaceLayers.cpp</td><td class="Q">552</td><td class="Q">17</td><td><a href="report-9AOTc7.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-9AOTc7.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/fileformats<span class="W"> </span>/XmlParser.cpp</td><td class="Q">233</td><td class="Q">22</td><td><a href="report-BI6D0h.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-BI6D0h.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/cluster<span class="W"> </span>/CPlanarEdgeInserter.cpp</td><td class="Q">561</td><td class="Q">3</td><td><a href="report-BVENLZ.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-BVENLZ.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/PlanRepExpansion.cpp</td><td class="Q">1052</td><td class="Q">9</td><td><a href="report-By03qt.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-By03qt.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/EdgeRouter.cpp</td><td class="Q">2183</td><td class="Q">55</td><td><a href="report-cZBFZr.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-cZBFZr.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/planarlayout<span class="W"> </span>/BiconnectedShellingOrder.cpp</td><td class="Q">489</td><td class="Q">2</td><td><a href="report-DPdo0P.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-DPdo0P.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/LongestPathCompaction.cpp</td><td class="Q">172</td><td class="Q">2</td><td><a href="report-DvJ9SJ.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-DvJ9SJ.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/planarlayout<span class="W"> </span>/ShellingOrder.cpp</td><td class="Q">90</td><td class="Q">2</td><td><a href="report-eONmZR.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-eONmZR.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/PlanRepExpansion.cpp</td><td class="Q">698</td><td class="Q">3</td><td><a href="report-gUvigD.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-gUvigD.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedderMinDepthMaxFaceLayers.cpp</td><td class="Q">1029</td><td class="Q">19</td><td><a href="report-H0fZFT.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-H0fZFT.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/PlanRepExpansion.cpp</td><td class="Q">1061</td><td class="Q">9</td><td><a href="report-JAkR89.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-JAkR89.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/planarlayout<span class="W"> </span>/BiconnectedShellingOrder.cpp</td><td class="Q">1275</td><td class="Q">27</td><td><a href="report-k0LH0E.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-k0LH0E.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/ExtractKuratowskis.cpp</td><td class="Q">1435</td><td class="Q">26</td><td><a href="report-K0oTEp.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-K0oTEp.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/augmentation<span class="W"> </span>/PlanarAugmentation.cpp</td><td class="Q">829</td><td class="Q">2</td><td><a href="report-kEAreJ.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-kEAreJ.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/OrthoRep.cpp</td><td class="Q">833</td><td class="Q">32</td><td><a href="report-Lff4Uv.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-Lff4Uv.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/EdgeRouter.cpp</td><td class="Q">2020</td><td class="Q">15</td><td><a href="report-Ll7vZ1.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-Ll7vZ1.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/basic<span class="W"> </span>/UMLGraph.cpp</td><td class="Q">462</td><td class="Q">5</td><td><a href="report-LZCBfe.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-LZCBfe.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/planarlayout<span class="W"> </span>/MixedModelBase.cpp</td><td class="Q">856</td><td class="Q">33</td><td><a href="report-M86VQ2.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-M86VQ2.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedderMinDepthPiTa.cpp</td><td class="Q">348</td><td class="Q">9</td><td><a href="report-makX2K.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-makX2K.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/packing<span class="W"> </span>/ComponentSplitterLayout.cpp</td><td class="Q">297</td><td class="Q">7</td><td><a href="report-MDZSzR.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-MDZSzR.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/basic<span class="W"> </span>/simple_graph_alg.cpp</td><td class="Q">194</td><td class="Q">2</td><td><a href="report-oWzJuo.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-oWzJuo.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/augmentation<span class="W"> </span>/PlanarAugmentation.cpp</td><td class="Q">1087</td><td class="Q">2</td><td><a href="report-pqxFgF.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-pqxFgF.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/upward<span class="W"> </span>/LayerBasedUPRLayout.cpp</td><td class="Q">609</td><td class="Q">2</td><td><a href="report-q2jpnw.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-q2jpnw.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/EdgeRouter.cpp</td><td class="Q">2168</td><td class="Q">38</td><td><a href="report-Q5YyRn.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-Q5YyRn.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/graphalg<span class="W"> </span>/MinimumCut.cpp</td><td class="Q">231</td><td class="Q">16</td><td><a href="report-qYmlF5.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-qYmlF5.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/OrthoRep.cpp</td><td class="Q">380</td><td class="Q">12</td><td><a href="report-RPaijv.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-RPaijv.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/basic<span class="W"> </span>/graph_generators.cpp</td><td class="Q">507</td><td class="Q">8</td><td><a href="report-t09OtD.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-t09OtD.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/MMFixedEmbeddingInserter.cpp</td><td class="Q">1036</td><td class="Q">4</td><td><a href="report-T5oCM3.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-T5oCM3.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/upward<span class="W"> </span>/FixedEmbeddingUpwardEdgeInserter.cpp</td><td class="Q">80</td><td class="Q">8</td><td><a href="report-tb4oCm.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-tb4oCm.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/basic<span class="W"> </span>/graph_generators.cpp</td><td class="Q">1044</td><td class="Q">3</td><td><a href="report-tU6S6Q.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-tU6S6Q.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/basic<span class="W"> </span>/extended_graph_alg.cpp</td><td class="Q">82</td><td class="Q">5</td><td><a href="report-uawqpz.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-uawqpz.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/layered<span class="W"> </span>/FastHierarchyLayout.cpp</td><td class="Q">136</td><td class="Q">6</td><td><a href="report-v0r5CW.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-v0r5CW.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/upward<span class="W"> </span>/LayerBasedUPRLayout.cpp</td><td class="Q">332</td><td class="Q">4</td><td><a href="report-WFmD9G.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-WFmD9G.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/DavidsonHarel.cpp</td><td class="Q">168</td><td class="Q">7</td><td><a href="report-WKh17h.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-WKh17h.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/FindKuratowskis.cpp</td><td class="Q">93</td><td class="Q">7</td><td><a href="report-XMzVxt.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-XMzVxt.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/upward<span class="W"> </span>/UpwardPlanRep.cpp</td><td class="Q">420</td><td class="Q">5</td><td><a href="report-y2MOcJ.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-y2MOcJ.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/GraphReduction.cpp</td><td class="Q">76</td><td class="Q">3</td><td><a href="report-yg3UsU.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-yg3UsU.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/basic<span class="W"> </span>/graph_generators.cpp</td><td class="Q">1046</td><td class="Q">3</td><td><a href="report-z4b6QC.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-z4b6QC.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/planarlayout<span class="W"> </span>/MixedModelBase.cpp</td><td class="Q">711</td><td class="Q">31</td><td><a href="report-ZGNc62.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-ZGNc62.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/PlanRepExpansion.cpp</td><td class="Q">743</td><td class="Q">3</td><td><a href="report-Zp3Vd5.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-Zp3Vd5.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_undefined_pointer_value"><td class="DESC">Logic error</td><td class="DESC">Dereference of undefined pointer value</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/OrthoLayout.cpp</td><td class="Q">228</td><td class="Q">9</td><td><a href="report-a6CSAT.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-a6CSAT.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_undefined_pointer_value"><td class="DESC">Logic error</td><td class="DESC">Dereference of undefined pointer value</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/ClusterOrthoLayout.cpp</td><td class="Q">291</td><td class="Q">18</td><td><a href="report-deaMDJ.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-deaMDJ.html" -->
+</tr>
+<tr class="bt_logic_error_division_by_zero"><td class="DESC">Logic error</td><td class="DESC">Division by zero</td><td>src<span class="W"> </span>/simultaneous<span class="W"> </span>/SimDrawColorizer.cpp</td><td class="Q">156</td><td class="Q">7</td><td><a href="report-RAhmOG.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-RAhmOG.html" -->
+</tr>
+<tr class="bt_logic_error_garbage_return_value"><td class="DESC">Logic error</td><td class="DESC">Garbage return value</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/FMMMLayout.cpp</td><td class="Q">1296</td><td class="Q">5</td><td><a href="report-dPqYUS.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-dPqYUS.html" -->
+</tr>
+<tr class="bt_logic_error_garbage_return_value"><td class="DESC">Logic error</td><td class="DESC">Garbage return value</td><td>src<span class="W"> </span>/fileformats<span class="W"> </span>/DinoXmlParser.cpp</td><td class="Q">96</td><td class="Q">3</td><td><a href="report-JNJ9K9.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-JNJ9K9.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/PlanRepExpansion.cpp</td><td class="Q">986</td><td class="Q">1</td><td><a href="report-4QJSy6.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-4QJSy6.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/EdgeRouter.cpp</td><td class="Q">3758</td><td class="Q">15</td><td><a href="report-4xfyD8.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-4xfyD8.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>src<span class="W"> </span>/decomposition<span class="W"> </span>/TricComp.cpp</td><td class="Q">977</td><td class="Q">22</td><td><a href="report-5sTRkw.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-5sTRkw.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>src<span class="W"> </span>/planarlayout<span class="W"> </span>/BiconnectedShellingOrder.cpp</td><td class="Q">1293</td><td class="Q">8</td><td><a href="report-aCGaWA.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-aCGaWA.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>src<span class="W"> </span>/orthogonal<span class="W"> </span>/NodeInfo.cpp</td><td class="Q">118</td><td class="Q">3</td><td><a href="report-cZr1hV.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-cZr1hV.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/PlanRepExpansion.cpp</td><td class="Q">1002</td><td class="Q">6</td><td><a href="report-Da1Cgj.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-Da1Cgj.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>src<span class="W"> </span>/upward<span class="W"> </span>/VisibilityLayout.cpp</td><td class="Q">209</td><td class="Q">7</td><td><a href="report-f2JzzJ.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-f2JzzJ.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/FMMMLayout.cpp</td><td class="Q">899</td><td class="Q">5</td><td><a href="report-g9vCBi.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-g9vCBi.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>src<span class="W"> </span>/planarlayout<span class="W"> </span>/MMCBBase.cpp</td><td class="Q">130</td><td class="Q">2</td><td><a href="report-HBcami.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-HBcami.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>src<span class="W"> </span>/planarlayout<span class="W"> </span>/BiconnectedShellingOrder.cpp</td><td class="Q">713</td><td class="Q">9</td><td><a href="report-iKnW1i.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-iKnW1i.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/BoyerMyrvold.cpp</td><td class="Q">160</td><td class="Q">21</td><td><a href="report-l0Hbqe.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-l0Hbqe.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/NMM.cpp</td><td class="Q">1971</td><td class="Q">9</td><td><a href="report-ldgAL2.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-ldgAL2.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/NMM.cpp</td><td class="Q">1971</td><td class="Q">9</td><td><a href="report-SboX8P.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-SboX8P.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>src<span class="W"> </span>/augmentation<span class="W"> </span>/PlanarAugmentationFix.cpp</td><td class="Q">265</td><td class="Q">2</td><td><a href="report-vPW9a7.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-vPW9a7.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/Multilevel.cpp</td><td class="Q">687</td><td class="Q">6</td><td><a href="report-X10hyj.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-X10hyj.html" -->
+</tr>
+<tr class="bt_logic_error_uninitialized_argument_value"><td class="DESC">Logic error</td><td class="DESC">Uninitialized argument value</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedderMinDepthMaxFaceLayers.cpp</td><td class="Q">882</td><td class="Q">38</td><td><a href="report-0QOUxf.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-0QOUxf.html" -->
+</tr>
+<tr class="bt_logic_error_uninitialized_argument_value"><td class="DESC">Logic error</td><td class="DESC">Uninitialized argument value</td><td>src<span class="W"> </span>/upward<span class="W"> </span>/VisibilityLayout.cpp</td><td class="Q">203</td><td class="Q">5</td><td><a href="report-3e4Si8.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-3e4Si8.html" -->
+</tr>
+<tr class="bt_logic_error_uninitialized_argument_value"><td class="DESC">Logic error</td><td class="DESC">Uninitialized argument value</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedderMaxFace.cpp</td><td class="Q">386</td><td class="Q">30</td><td><a href="report-4TeD4c.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-4TeD4c.html" -->
+</tr>
+<tr class="bt_logic_error_uninitialized_argument_value"><td class="DESC">Logic error</td><td class="DESC">Uninitialized argument value</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedderMinDepthPiTa.cpp</td><td class="Q">547</td><td class="Q">12</td><td><a href="report-9smOrt.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-9smOrt.html" -->
+</tr>
+<tr class="bt_logic_error_uninitialized_argument_value"><td class="DESC">Logic error</td><td class="DESC">Uninitialized argument value</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/Multilevel.cpp</td><td class="Q">301</td><td class="Q">6</td><td><a href="report-aPO5BW.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-aPO5BW.html" -->
+</tr>
+<tr class="bt_logic_error_uninitialized_argument_value"><td class="DESC">Logic error</td><td class="DESC">Uninitialized argument value</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/MMVariableEmbeddingInserter.cpp</td><td class="Q">556</td><td class="Q">21</td><td><a href="report-lGgEtt.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-lGgEtt.html" -->
+</tr>
+<tr class="bt_logic_error_uninitialized_argument_value"><td class="DESC">Logic error</td><td class="DESC">Uninitialized argument value</td><td>src<span class="W"> </span>/energybased<span class="W"> </span>/multilevelmixer<span class="W"> </span>/RandomMerger.cpp</td><td class="Q">101</td><td class="Q">6</td><td><a href="report-PGqCSj.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-PGqCSj.html" -->
+</tr>
+<tr class="bt_logic_error_uninitialized_argument_value"><td class="DESC">Logic error</td><td class="DESC">Uninitialized argument value</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedderMaxFaceLayers.cpp</td><td class="Q">405</td><td class="Q">36</td><td><a href="report-Vyf4rO.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-Vyf4rO.html" -->
+</tr>
+<tr class="bt_logic_error_uninitialized_argument_value"><td class="DESC">Logic error</td><td class="DESC">Uninitialized argument value</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedderMinDepthMaxFace.cpp</td><td class="Q">877</td><td class="Q">32</td><td><a href="report-xjH0bH.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-xjH0bH.html" -->
+</tr>
+<tr class="bt_logic_error_uninitialized_argument_value"><td class="DESC">Logic error</td><td class="DESC">Uninitialized argument value</td><td>src<span class="W"> </span>/planarity<span class="W"> </span>/EmbedderMinDepth.cpp</td><td class="Q">698</td><td class="Q">31</td><td><a href="report-z1Ntz7.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-z1Ntz7.html" -->
+</tr>
+</tbody>
+</table>
+
+</body></html>

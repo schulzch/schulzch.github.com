@@ -1,0 +1,229 @@
+<!doctype html>
+<html>
+<head>
+<title>/Users/schulzch/Documents/qml-ogdf/ogdf/src/planarity/GraphReduction.cpp</title>
+<style type="text/css">
+ body { color:#000000; background-color:#ffffff }
+ body { font-family:Helvetica, sans-serif; font-size:10pt }
+ h1 { font-size:14pt }
+ .code { border-collapse:collapse; width:100%; }
+ .code { font-family: "Monospace", monospace; font-size:10pt }
+ .code { line-height: 1.2em }
+ .comment { color: green; font-style: oblique }
+ .keyword { color: blue }
+ .string_literal { color: red }
+ .directive { color: darkmagenta }
+ .expansion { display: none; }
+ .macro:hover .expansion { display: block; border: 2px solid #FF0000; padding: 2px; background-color:#FFF0F0; font-weight: normal;   -webkit-border-radius:5px;  -webkit-box-shadow:1px 1px 7px #000; position: absolute; top: -1em; left:10em; z-index: 1 } 
+ .macro { color: darkmagenta; background-color:LemonChiffon; position: relative }
+ .num { width:2.5em; padding-right:2ex; background-color:#eeeeee }
+ .num { text-align:right; font-size:8pt }
+ .num { color:#444444 }
+ .line { padding-left: 1ex; border-left: 3px solid #ccc }
+ .line { white-space: pre }
+ .msg { -webkit-box-shadow:1px 1px 7px #000 }
+ .msg { -webkit-border-radius:5px }
+ .msg { font-family:Helvetica, sans-serif; font-size:8pt }
+ .msg { float:left }
+ .msg { padding:0.25em 1ex 0.25em 1ex }
+ .msg { margin-top:10px; margin-bottom:10px }
+ .msg { font-weight:bold }
+ .msg { max-width:60em; word-wrap: break-word; white-space: pre-wrap }
+ .msgT { padding:0x; spacing:0x }
+ .msgEvent { background-color:#fff8b4; color:#000000 }
+ .msgControl { background-color:#bbbbbb; color:#000000 }
+ .mrange { background-color:#dfddf3 }
+ .mrange { border-bottom:1px solid #6F9DBE }
+ .PathIndex { font-weight: bold; padding:0px 5px; margin-right:5px; }
+ .PathIndex { -webkit-border-radius:8px }
+ .PathIndexEvent { background-color:#bfba87 }
+ .PathIndexControl { background-color:#8c8c8c }
+ .PathNav a { text-decoration:none; font-size: larger }
+ .CodeInsertionHint { font-weight: bold; background-color: #10dd10 }
+ .CodeRemovalHint { background-color:#de1010 }
+ .CodeRemovalHint { border-bottom:1px solid #6F9DBE }
+ table.simpletable {
+   padding: 5px;
+   font-size:12pt;
+   margin:20px;
+   border-collapse: collapse; border-spacing: 0px;
+ }
+ td.rowname {
+   text-align:right; font-weight:bold; color:#444444;
+   padding-right:2ex; }
+</style>
+</head>
+<body>
+<!-- BUGDESC Dereference of null pointer -->
+
+<!-- BUGTYPE Dereference of null pointer -->
+
+<!-- BUGCATEGORY Logic error -->
+
+<!-- BUGFILE /Users/schulzch/Documents/qml-ogdf/ogdf/src/planarity/GraphReduction.cpp -->
+
+<!-- BUGLINE 76 -->
+
+<!-- BUGPATHLENGTH 3 -->
+
+<!-- BUGMETAEND -->
+<!-- REPORTHEADER -->
+<h3>Bug Summary</h3>
+<table class="simpletable">
+<tr><td class="rowname">File:</td><td>src/planarity/GraphReduction.cpp</td></tr>
+<tr><td class="rowname">Location:</td><td><a href="#EndPath">line 76, column 8</a></td></tr>
+<tr><td class="rowname">Description:</td><td>Dereference of null pointer</td></tr>
+</table>
+<!-- REPORTSUMMARYEXTRA -->
+<h3>Annotated Source Code</h3>
+<table class="code">
+<tr><td class="num" id="LN1">1</td><td class="line"><span class='comment'>/*</span></td></tr>
+<tr><td class="num" id="LN2">2</td><td class="line"> <span class='comment'>* $Revision: 2559 $</span></td></tr>
+<tr><td class="num" id="LN3">3</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN4">4</td><td class="line"> <span class='comment'>* last checkin:</span></td></tr>
+<tr><td class="num" id="LN5">5</td><td class="line"> <span class='comment'>*   $Author: gutwenger $</span></td></tr>
+<tr><td class="num" id="LN6">6</td><td class="line"> <span class='comment'>*   $Date: 2012-07-06 15:04:28 +0200 (Fr, 06. Jul 2012) $</span></td></tr>
+<tr><td class="num" id="LN7">7</td><td class="line"> <span class='comment'>***************************************************************/</span></td></tr>
+<tr><td class="num" id="LN8">8</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN9">9</td><td class="line"><span class='comment'>/** \file</span></td></tr>
+<tr><td class="num" id="LN10">10</td><td class="line"> <span class='comment'>* \brief Implements class GraphReduction.</span></td></tr>
+<tr><td class="num" id="LN11">11</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN12">12</td><td class="line"> <span class='comment'>* \author Markus Chimani</span></td></tr>
+<tr><td class="num" id="LN13">13</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN14">14</td><td class="line"> <span class='comment'>* \par License:</span></td></tr>
+<tr><td class="num" id="LN15">15</td><td class="line"> <span class='comment'>* This file is part of the Open Graph Drawing Framework (OGDF).</span></td></tr>
+<tr><td class="num" id="LN16">16</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN17">17</td><td class="line"> <span class='comment'>* \par</span></td></tr>
+<tr><td class="num" id="LN18">18</td><td class="line"> <span class='comment'>* Copyright (C)&lt;br&gt;</span></td></tr>
+<tr><td class="num" id="LN19">19</td><td class="line"> <span class='comment'>* See README.txt in the root directory of the OGDF installation for details.</span></td></tr>
+<tr><td class="num" id="LN20">20</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN21">21</td><td class="line"> <span class='comment'>* \par</span></td></tr>
+<tr><td class="num" id="LN22">22</td><td class="line"> <span class='comment'>* This program is free software; you can redistribute it and/or</span></td></tr>
+<tr><td class="num" id="LN23">23</td><td class="line"> <span class='comment'>* modify it under the terms of the GNU General Public License</span></td></tr>
+<tr><td class="num" id="LN24">24</td><td class="line"> <span class='comment'>* Version 2 or 3 as published by the Free Software Foundation;</span></td></tr>
+<tr><td class="num" id="LN25">25</td><td class="line"> <span class='comment'>* see the file LICENSE.txt included in the packaging of this file</span></td></tr>
+<tr><td class="num" id="LN26">26</td><td class="line"> <span class='comment'>* for details.</span></td></tr>
+<tr><td class="num" id="LN27">27</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN28">28</td><td class="line"> <span class='comment'>* \par</span></td></tr>
+<tr><td class="num" id="LN29">29</td><td class="line"> <span class='comment'>* This program is distributed in the hope that it will be useful,</span></td></tr>
+<tr><td class="num" id="LN30">30</td><td class="line"> <span class='comment'>* but WITHOUT ANY WARRANTY; without even the implied warranty of</span></td></tr>
+<tr><td class="num" id="LN31">31</td><td class="line"> <span class='comment'>* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></td></tr>
+<tr><td class="num" id="LN32">32</td><td class="line"> <span class='comment'>* GNU General Public License for more details.</span></td></tr>
+<tr><td class="num" id="LN33">33</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN34">34</td><td class="line"> <span class='comment'>* \par</span></td></tr>
+<tr><td class="num" id="LN35">35</td><td class="line"> <span class='comment'>* You should have received a copy of the GNU General Public</span></td></tr>
+<tr><td class="num" id="LN36">36</td><td class="line"> <span class='comment'>* License along with this program; if not, write to the Free</span></td></tr>
+<tr><td class="num" id="LN37">37</td><td class="line"> <span class='comment'>* Software Foundation, Inc., 51 Franklin Street, Fifth Floor,</span></td></tr>
+<tr><td class="num" id="LN38">38</td><td class="line"> <span class='comment'>* Boston, MA 02110-1301, USA.</span></td></tr>
+<tr><td class="num" id="LN39">39</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN40">40</td><td class="line"> <span class='comment'>* \see  http://www.gnu.org/copyleft/gpl.html</span></td></tr>
+<tr><td class="num" id="LN41">41</td><td class="line"> <span class='comment'>***************************************************************/</span></td></tr>
+<tr><td class="num" id="LN42">42</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN43">43</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN44">44</td><td class="line"><span class='directive'>#include &lt;ogdf/graphalg/GraphReduction.h&gt;</span></td></tr>
+<tr><td class="num" id="LN45">45</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN46">46</td><td class="line"><span class='keyword'>namespace</span> ogdf {</td></tr>
+<tr><td class="num" id="LN47">47</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN48">48</td><td class="line">GraphReduction::GraphReduction(<span class='keyword'>const</span> Graph &amp;G) : m_pGraph(&amp;G),</td></tr>
+<tr><td class="num" id="LN49">49</td><td class="line">m_vOrig(), m_eOrig(), m_vReduction(), m_eReduction() {</td></tr>
+<tr><td class="num" id="LN50">50</td><td class="line">	Graph::construct(*m_pGraph,m_vReduction,m_eReduction);</td></tr>
+<tr><td class="num" id="LN51">51</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN52">52</td><td class="line">	<span class='keyword'>int</span> d;</td></tr>
+<tr><td class="num" id="LN53">53</td><td class="line">	node v,ov;</td></tr>
+<tr><td class="num" id="LN54">54</td><td class="line">	edge e1,e2;</td></tr>
+<tr><td class="num" id="LN55">55</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN56">56</td><td class="line">	m_vOrig.init(*<span class='keyword'>this</span>);</td></tr>
+<tr><td class="num" id="LN57">57</td><td class="line">	m_eOrig.init(*<span class='keyword'>this</span>);</td></tr>
+<tr><td class="num" id="LN58">58</td><td class="line">	<span class='macro'>forall_nodes(v, *m_pGraph)<span class='expansion'>for((v)=(*m_pGraph).firstNode(); (v); (v)=(v)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN59">59</td><td class="line">		m_vOrig[m_vReduction[v]] = v;</td></tr>
+<tr><td class="num" id="LN60">60</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN61">61</td><td class="line">	<span class='macro'>forall_edges(e1, *m_pGraph)<span class='expansion'>for((e1)=(*m_pGraph).firstEdge(); (e1); (e1)=(e1)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN62">62</td><td class="line">		m_eOrig[m_eReduction[e1]].pushBack(e1);</td></tr>
+<tr><td class="num" id="LN63">63</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN64">64</td><td class="line">	<span class='comment'>// remove selfloops</span></td></tr>
+<tr><td class="num" id="LN65">65</td><td class="line">	<span class='macro'>forall_edges(e1, *<span class='keyword'>this</span>)<span class='expansion'>for((e1)=(*this).firstEdge(); (e1); (e1)=(e1)-&gt;succ())</span></span> {</td></tr>
+<tr><td class="num" id="LN66">66</td><td class="line">		<span class='keyword'>if</span>(e1-&gt;isSelfLoop()) {</td></tr>
+<tr><td class="num" id="LN67">67</td><td class="line">			m_eReduction[e1] = <span class='macro'>NULL<span class='expansion'>__null</span></span>;</td></tr>
+<tr><td class="num" id="LN68">68</td><td class="line">			<span class='keyword'>this</span>-&gt;delEdge(e1);</td></tr>
+<tr><td class="num" id="LN69">69</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN70">70</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN71">71</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN72">72</td><td class="line">	List&lt;node&gt; next;</td></tr>
+<tr><td class="num" id="LN73">73</td><td class="line">	<span class='macro'>forall_nodes(v, *m_pGraph)<span class='expansion'>for((v)=(*m_pGraph).firstNode(); (v); (v)=(v)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN74">74</td><td class="line">		next.pushBack(v);</td></tr>
+<tr><td class="num" id="LN75">75</td><td class="line">	<span class='keyword'>while</span>(next.size()) {</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path1" class="msg msgControl" style="margin-left:9ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">1</div></td><td>Loop condition is true.  Entering loop body</td><td><div class="PathNav"><a href="#Path2" title="Next event (2)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path2" class="msg msgControl" style="margin-left:9ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">2</div></td><td><div class="PathNav"><a href="#Path1" title="Previous event (1)">&#x2190;</a></div></td></td><td>Loop condition is true.  Entering loop body</td><td><div class="PathNav"><a href="#EndPath" title="Next event (3)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN76">76</td><td class="line">		ov = <span class="mrange">next.front()</span>;</td></tr>
+<tr><td class="num"></td><td class="line"><div id="EndPath" class="msg msgEvent" style="margin-left:22ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexEvent">3</div></td><td><div class="PathNav"><a href="#Path2" title="Previous event (2)">&#x2190;</a></div></td></td><td>Dereference of null pointer</td></tr></table></div></td></tr>
+<tr><td class="num" id="LN77">77</td><td class="line">		next.popFront();</td></tr>
+<tr><td class="num" id="LN78">78</td><td class="line">		v = m_vReduction[ov];</td></tr>
+<tr><td class="num" id="LN79">79</td><td class="line">		<span class='keyword'>if</span>( v &amp;&amp; (d=v-&gt;degree()) &lt; 3) {</td></tr>
+<tr><td class="num" id="LN80">80</td><td class="line">			<span class='keyword'>if</span>(d == 2) {</td></tr>
+<tr><td class="num" id="LN81">81</td><td class="line">				e1 = v-&gt;firstAdj()-&gt;theEdge();</td></tr>
+<tr><td class="num" id="LN82">82</td><td class="line">				e2 = v-&gt;lastAdj()-&gt;theEdge();</td></tr>
+<tr><td class="num" id="LN83">83</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN84">84</td><td class="line">				<span class='keyword'>if</span>( e1-&gt;source() == v) {</td></tr>
+<tr><td class="num" id="LN85">85</td><td class="line">					<span class='keyword'>if</span>(e2-&gt;source() == v) m_eOrig[e2].reverse();</td></tr>
+<tr><td class="num" id="LN86">86</td><td class="line">					<span class='keyword'>this</span>-&gt;moveSource(e1, e2-&gt;opposite(v));</td></tr>
+<tr><td class="num" id="LN87">87</td><td class="line">					<span class='keyword'>for</span>(ListConstIterator&lt;edge&gt; it = m_eOrig[e2].rbegin(); it.valid(); --it) {</td></tr>
+<tr><td class="num" id="LN88">88</td><td class="line">						m_eReduction[*it] = e1;</td></tr>
+<tr><td class="num" id="LN89">89</td><td class="line">						m_eOrig[e1].pushFront( *it );</td></tr>
+<tr><td class="num" id="LN90">90</td><td class="line">					}</td></tr>
+<tr><td class="num" id="LN91">91</td><td class="line">				} <span class='keyword'>else</span> {</td></tr>
+<tr><td class="num" id="LN92">92</td><td class="line">					<span class='keyword'>if</span>(e2-&gt;target() == v) m_eOrig[e2].reverse();</td></tr>
+<tr><td class="num" id="LN93">93</td><td class="line">					<span class='keyword'>this</span>-&gt;moveTarget(e1, e2-&gt;opposite(v));</td></tr>
+<tr><td class="num" id="LN94">94</td><td class="line">					<span class='keyword'>for</span>(ListConstIterator&lt;edge&gt; it = m_eOrig[e2].begin(); it.valid(); ++it) {</td></tr>
+<tr><td class="num" id="LN95">95</td><td class="line">						m_eReduction[*it] = e1;</td></tr>
+<tr><td class="num" id="LN96">96</td><td class="line">						m_eOrig[e1].pushBack( *it );</td></tr>
+<tr><td class="num" id="LN97">97</td><td class="line">					}</td></tr>
+<tr><td class="num" id="LN98">98</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN99">99</td><td class="line">				m_eOrig[e2].clear();</td></tr>
+<tr><td class="num" id="LN100">100</td><td class="line">				<span class='keyword'>this</span>-&gt;delEdge(e2);</td></tr>
+<tr><td class="num" id="LN101">101</td><td class="line">			} <span class='keyword'>else</span> <span class='keyword'>if</span>(d == 1) {</td></tr>
+<tr><td class="num" id="LN102">102</td><td class="line">				e1 = v-&gt;firstAdj()-&gt;theEdge();</td></tr>
+<tr><td class="num" id="LN103">103</td><td class="line">				<span class='keyword'>const</span> List&lt;edge&gt;&amp; el = m_eOrig[e1];</td></tr>
+<tr><td class="num" id="LN104">104</td><td class="line">				node nv;</td></tr>
+<tr><td class="num" id="LN105">105</td><td class="line">				<span class='keyword'>if</span>(el.size() == 1)</td></tr>
+<tr><td class="num" id="LN106">106</td><td class="line">					nv = el.front()-&gt;opposite(ov);</td></tr>
+<tr><td class="num" id="LN107">107</td><td class="line">				<span class='keyword'>else</span> {</td></tr>
+<tr><td class="num" id="LN108">108</td><td class="line">					<span class='keyword'>bool</span> front_e1 = el.front()-&gt;source() == ov || el.front()-&gt;target() == ov;</td></tr>
+<tr><td class="num" id="LN109">109</td><td class="line">					edge e3;</td></tr>
+<tr><td class="num" id="LN110">110</td><td class="line">					<span class='keyword'>if</span>(front_e1) {</td></tr>
+<tr><td class="num" id="LN111">111</td><td class="line">						e2 = el.back();</td></tr>
+<tr><td class="num" id="LN112">112</td><td class="line">						e3 = *(el.rbegin().pred());</td></tr>
+<tr><td class="num" id="LN113">113</td><td class="line">					} <span class='keyword'>else</span> {</td></tr>
+<tr><td class="num" id="LN114">114</td><td class="line">						e2 = el.front();</td></tr>
+<tr><td class="num" id="LN115">115</td><td class="line">						e3 = *(el.begin().succ());</td></tr>
+<tr><td class="num" id="LN116">116</td><td class="line">					}</td></tr>
+<tr><td class="num" id="LN117">117</td><td class="line">					nv = (e2-&gt;source() == e3-&gt;source() || e2-&gt;source() == e3-&gt;target()) ? e2-&gt;target() : e2-&gt;source();</td></tr>
+<tr><td class="num" id="LN118">118</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN119">119</td><td class="line">				next.pushBack(nv);</td></tr>
+<tr><td class="num" id="LN120">120</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN121">121</td><td class="line">				<span class='keyword'>for</span>(ListIterator&lt;edge&gt; it = m_eOrig[e1].begin(); it.valid(); it++)</td></tr>
+<tr><td class="num" id="LN122">122</td><td class="line">					m_eReduction[*it] = 0;</td></tr>
+<tr><td class="num" id="LN123">123</td><td class="line">				<span class='keyword'>this</span>-&gt;delEdge(e1);</td></tr>
+<tr><td class="num" id="LN124">124</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN125">125</td><td class="line">			m_vReduction[ ov ] = 0;</td></tr>
+<tr><td class="num" id="LN126">126</td><td class="line">			<span class='keyword'>this</span>-&gt;delNode(v);</td></tr>
+<tr><td class="num" id="LN127">127</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN128">128</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN129">129</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN130">130</td><td class="line"><span class='directive'>#ifdef OGDF_DEBUG</span></td></tr>
+<tr><td class="num" id="LN131">131</td><td class="line">	edge em;</td></tr>
+<tr><td class="num" id="LN132">132</td><td class="line">	<span class='macro'>forall_edges(em, *<span class='keyword'>this</span>)<span class='expansion'>for((em)=(*this).firstEdge(); (em); (em)=(em)-&gt;succ())</span></span> {</td></tr>
+<tr><td class="num" id="LN133">133</td><td class="line">		node t = 0;</td></tr>
+<tr><td class="num" id="LN134">134</td><td class="line">		OGDF_ASSERT( original(em).front()-&gt;source() == original(em-&gt;source()) );</td></tr>
+<tr><td class="num" id="LN135">135</td><td class="line">		<span class='keyword'>for</span>(ListConstIterator&lt;edge&gt; it = original(em).begin(); it.valid(); ++it) {</td></tr>
+<tr><td class="num" id="LN136">136</td><td class="line">			<span class='keyword'>if</span>(t) {</td></tr>
+<tr><td class="num" id="LN137">137</td><td class="line">				OGDF_ASSERT( (*it)-&gt;source() == t);</td></tr>
+<tr><td class="num" id="LN138">138</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN139">139</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN140">140</td><td class="line">		OGDF_ASSERT( original(em).back()-&gt;target() == original(em-&gt;target()) );</td></tr>
+<tr><td class="num" id="LN141">141</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN142">142</td><td class="line"><span class='directive'>#endif</span></td></tr>
+<tr><td class="num" id="LN143">143</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN144">144</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN145">145</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN146">146</td><td class="line">}</td></tr>
+</table></body></html>

@@ -1,0 +1,971 @@
+<!doctype html>
+<html>
+<head>
+<title>/Users/schulzch/Documents/qml-ogdf/ogdf/src/energybased/Multilevel.cpp</title>
+<style type="text/css">
+ body { color:#000000; background-color:#ffffff }
+ body { font-family:Helvetica, sans-serif; font-size:10pt }
+ h1 { font-size:14pt }
+ .code { border-collapse:collapse; width:100%; }
+ .code { font-family: "Monospace", monospace; font-size:10pt }
+ .code { line-height: 1.2em }
+ .comment { color: green; font-style: oblique }
+ .keyword { color: blue }
+ .string_literal { color: red }
+ .directive { color: darkmagenta }
+ .expansion { display: none; }
+ .macro:hover .expansion { display: block; border: 2px solid #FF0000; padding: 2px; background-color:#FFF0F0; font-weight: normal;   -webkit-border-radius:5px;  -webkit-box-shadow:1px 1px 7px #000; position: absolute; top: -1em; left:10em; z-index: 1 } 
+ .macro { color: darkmagenta; background-color:LemonChiffon; position: relative }
+ .num { width:2.5em; padding-right:2ex; background-color:#eeeeee }
+ .num { text-align:right; font-size:8pt }
+ .num { color:#444444 }
+ .line { padding-left: 1ex; border-left: 3px solid #ccc }
+ .line { white-space: pre }
+ .msg { -webkit-box-shadow:1px 1px 7px #000 }
+ .msg { -webkit-border-radius:5px }
+ .msg { font-family:Helvetica, sans-serif; font-size:8pt }
+ .msg { float:left }
+ .msg { padding:0.25em 1ex 0.25em 1ex }
+ .msg { margin-top:10px; margin-bottom:10px }
+ .msg { font-weight:bold }
+ .msg { max-width:60em; word-wrap: break-word; white-space: pre-wrap }
+ .msgT { padding:0x; spacing:0x }
+ .msgEvent { background-color:#fff8b4; color:#000000 }
+ .msgControl { background-color:#bbbbbb; color:#000000 }
+ .mrange { background-color:#dfddf3 }
+ .mrange { border-bottom:1px solid #6F9DBE }
+ .PathIndex { font-weight: bold; padding:0px 5px; margin-right:5px; }
+ .PathIndex { -webkit-border-radius:8px }
+ .PathIndexEvent { background-color:#bfba87 }
+ .PathIndexControl { background-color:#8c8c8c }
+ .PathNav a { text-decoration:none; font-size: larger }
+ .CodeInsertionHint { font-weight: bold; background-color: #10dd10 }
+ .CodeRemovalHint { background-color:#de1010 }
+ .CodeRemovalHint { border-bottom:1px solid #6F9DBE }
+ table.simpletable {
+   padding: 5px;
+   font-size:12pt;
+   margin:20px;
+   border-collapse: collapse; border-spacing: 0px;
+ }
+ td.rowname {
+   text-align:right; font-weight:bold; color:#444444;
+   padding-right:2ex; }
+</style>
+</head>
+<body>
+<!-- BUGDESC Function call argument is an uninitialized value -->
+
+<!-- BUGTYPE Uninitialized argument value -->
+
+<!-- BUGCATEGORY Logic error -->
+
+<!-- BUGFILE /Users/schulzch/Documents/qml-ogdf/ogdf/src/energybased/Multilevel.cpp -->
+
+<!-- BUGLINE 301 -->
+
+<!-- BUGPATHLENGTH 6 -->
+
+<!-- BUGMETAEND -->
+<!-- REPORTHEADER -->
+<h3>Bug Summary</h3>
+<table class="simpletable">
+<tr><td class="rowname">File:</td><td>src/energybased/Multilevel.cpp</td></tr>
+<tr><td class="rowname">Location:</td><td><a href="#EndPath">line 301, column 4</a></td></tr>
+<tr><td class="rowname">Description:</td><td>Function call argument is an uninitialized value</td></tr>
+</table>
+<!-- REPORTSUMMARYEXTRA -->
+<h3>Annotated Source Code</h3>
+<table class="code">
+<tr><td class="num" id="LN1">1</td><td class="line"><span class='comment'>/*</span></td></tr>
+<tr><td class="num" id="LN2">2</td><td class="line"> <span class='comment'>* $Revision: 2552 $</span></td></tr>
+<tr><td class="num" id="LN3">3</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN4">4</td><td class="line"> <span class='comment'>* last checkin:</span></td></tr>
+<tr><td class="num" id="LN5">5</td><td class="line"> <span class='comment'>*   $Author: gutwenger $</span></td></tr>
+<tr><td class="num" id="LN6">6</td><td class="line"> <span class='comment'>*   $Date: 2012-07-05 16:45:20 +0200 (Do, 05. Jul 2012) $</span></td></tr>
+<tr><td class="num" id="LN7">7</td><td class="line"> <span class='comment'>***************************************************************/</span></td></tr>
+<tr><td class="num" id="LN8">8</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN9">9</td><td class="line"><span class='comment'>/** \file</span></td></tr>
+<tr><td class="num" id="LN10">10</td><td class="line"> <span class='comment'>* \brief Implementation of class Multlevel (used by FMMMLayout).</span></td></tr>
+<tr><td class="num" id="LN11">11</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN12">12</td><td class="line"> <span class='comment'>* \author Stefan Hachul</span></td></tr>
+<tr><td class="num" id="LN13">13</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN14">14</td><td class="line"> <span class='comment'>* \par License:</span></td></tr>
+<tr><td class="num" id="LN15">15</td><td class="line"> <span class='comment'>* This file is part of the Open Graph Drawing Framework (OGDF).</span></td></tr>
+<tr><td class="num" id="LN16">16</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN17">17</td><td class="line"> <span class='comment'>* \par</span></td></tr>
+<tr><td class="num" id="LN18">18</td><td class="line"> <span class='comment'>* Copyright (C)&lt;br&gt;</span></td></tr>
+<tr><td class="num" id="LN19">19</td><td class="line"> <span class='comment'>* See README.txt in the root directory of the OGDF installation for details.</span></td></tr>
+<tr><td class="num" id="LN20">20</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN21">21</td><td class="line"> <span class='comment'>* \par</span></td></tr>
+<tr><td class="num" id="LN22">22</td><td class="line"> <span class='comment'>* This program is free software; you can redistribute it and/or</span></td></tr>
+<tr><td class="num" id="LN23">23</td><td class="line"> <span class='comment'>* modify it under the terms of the GNU General Public License</span></td></tr>
+<tr><td class="num" id="LN24">24</td><td class="line"> <span class='comment'>* Version 2 or 3 as published by the Free Software Foundation;</span></td></tr>
+<tr><td class="num" id="LN25">25</td><td class="line"> <span class='comment'>* see the file LICENSE.txt included in the packaging of this file</span></td></tr>
+<tr><td class="num" id="LN26">26</td><td class="line"> <span class='comment'>* for details.</span></td></tr>
+<tr><td class="num" id="LN27">27</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN28">28</td><td class="line"> <span class='comment'>* \par</span></td></tr>
+<tr><td class="num" id="LN29">29</td><td class="line"> <span class='comment'>* This program is distributed in the hope that it will be useful,</span></td></tr>
+<tr><td class="num" id="LN30">30</td><td class="line"> <span class='comment'>* but WITHOUT ANY WARRANTY; without even the implied warranty of</span></td></tr>
+<tr><td class="num" id="LN31">31</td><td class="line"> <span class='comment'>* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></td></tr>
+<tr><td class="num" id="LN32">32</td><td class="line"> <span class='comment'>* GNU General Public License for more details.</span></td></tr>
+<tr><td class="num" id="LN33">33</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN34">34</td><td class="line"> <span class='comment'>* \par</span></td></tr>
+<tr><td class="num" id="LN35">35</td><td class="line"> <span class='comment'>* You should have received a copy of the GNU General Public</span></td></tr>
+<tr><td class="num" id="LN36">36</td><td class="line"> <span class='comment'>* License along with this program; if not, write to the Free</span></td></tr>
+<tr><td class="num" id="LN37">37</td><td class="line"> <span class='comment'>* Software Foundation, Inc., 51 Franklin Street, Fifth Floor,</span></td></tr>
+<tr><td class="num" id="LN38">38</td><td class="line"> <span class='comment'>* Boston, MA 02110-1301, USA.</span></td></tr>
+<tr><td class="num" id="LN39">39</td><td class="line"> <span class='comment'>*</span></td></tr>
+<tr><td class="num" id="LN40">40</td><td class="line"> <span class='comment'>* \see  http://www.gnu.org/copyleft/gpl.html</span></td></tr>
+<tr><td class="num" id="LN41">41</td><td class="line"> <span class='comment'>***************************************************************/</span></td></tr>
+<tr><td class="num" id="LN42">42</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN43">43</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN44">44</td><td class="line"><span class='directive'>#include "Multilevel.h"</span></td></tr>
+<tr><td class="num" id="LN45">45</td><td class="line"><span class='directive'>#include "Set.h"</span></td></tr>
+<tr><td class="num" id="LN46">46</td><td class="line"><span class='directive'>#include "Node.h"</span></td></tr>
+<tr><td class="num" id="LN47">47</td><td class="line"><span class='directive'>#include &lt;ogdf/basic/Array.h&gt;</span></td></tr>
+<tr><td class="num" id="LN48">48</td><td class="line"><span class='directive'>#include &lt;ogdf/basic/Math.h&gt;</span></td></tr>
+<tr><td class="num" id="LN49">49</td><td class="line"><span class='directive'>#include &lt;ogdf/basic/simple_graph_alg.h&gt;</span></td></tr>
+<tr><td class="num" id="LN50">50</td><td class="line"><span class='directive'>#include &lt;ogdf/energybased/FMMMLayout.h&gt;</span></td></tr>
+<tr><td class="num" id="LN51">51</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN52">52</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN53">53</td><td class="line"><span class='keyword'>namespace</span> ogdf {</td></tr>
+<tr><td class="num" id="LN54">54</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN55">55</td><td class="line"><span class='keyword'>void</span> Multilevel::create_multilevel_representations(</td></tr>
+<tr><td class="num" id="LN56">56</td><td class="line">	Graph&amp; G,</td></tr>
+<tr><td class="num" id="LN57">57</td><td class="line">	NodeArray&lt;NodeAttributes&gt;&amp; A,</td></tr>
+<tr><td class="num" id="LN58">58</td><td class="line">	EdgeArray&lt;EdgeAttributes&gt;&amp; E,</td></tr>
+<tr><td class="num" id="LN59">59</td><td class="line">	<span class='keyword'>int</span> rand_seed,</td></tr>
+<tr><td class="num" id="LN60">60</td><td class="line">	<span class='keyword'>int</span> galaxy_choice,</td></tr>
+<tr><td class="num" id="LN61">61</td><td class="line">	<span class='keyword'>int</span> min_Graph_size,</td></tr>
+<tr><td class="num" id="LN62">62</td><td class="line">	<span class='keyword'>int</span> random_tries,</td></tr>
+<tr><td class="num" id="LN63">63</td><td class="line">	Array&lt;Graph*&gt; &amp;G_mult_ptr,</td></tr>
+<tr><td class="num" id="LN64">64</td><td class="line">	Array&lt;NodeArray &lt;NodeAttributes&gt;*&gt; &amp;A_mult_ptr,</td></tr>
+<tr><td class="num" id="LN65">65</td><td class="line">	Array&lt;EdgeArray&lt;EdgeAttributes&gt;*&gt; &amp;E_mult_ptr,</td></tr>
+<tr><td class="num" id="LN66">66</td><td class="line">	<span class='keyword'>int</span> &amp; max_level)</td></tr>
+<tr><td class="num" id="LN67">67</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN68">68</td><td class="line">	<span class='comment'>//make initialisations;</span></td></tr>
+<tr><td class="num" id="LN69">69</td><td class="line">	srand(rand_seed);</td></tr>
+<tr><td class="num" id="LN70">70</td><td class="line">	G_mult_ptr[0] = &amp;G; <span class='comment'>//init graph at level 0 to the original undirected simple</span></td></tr>
+<tr><td class="num" id="LN71">71</td><td class="line">	A_mult_ptr[0] = &amp;A; <span class='comment'>//and loopfree connected graph G/A/E</span></td></tr>
+<tr><td class="num" id="LN72">72</td><td class="line">	E_mult_ptr[0] = &amp;E;</td></tr>
+<tr><td class="num" id="LN73">73</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN74">74</td><td class="line">	<span class='keyword'>int</span> bad_edgenr_counter = 0;</td></tr>
+<tr><td class="num" id="LN75">75</td><td class="line">	<span class='keyword'>int</span> act_level = 0;</td></tr>
+<tr><td class="num" id="LN76">76</td><td class="line">	Graph* act_Graph_ptr = G_mult_ptr[0];</td></tr>
+<tr><td class="num" id="LN77">77</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN78">78</td><td class="line">	<span class='keyword'>while</span>( (act_Graph_ptr-&gt;numberOfNodes() &gt; min_Graph_size) &amp;&amp;</td></tr>
+<tr><td class="num" id="LN79">79</td><td class="line">		edgenumbersum_of_all_levels_is_linear(G_mult_ptr,act_level,bad_edgenr_counter) )</td></tr>
+<tr><td class="num" id="LN80">80</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN81">81</td><td class="line">		Graph* G_new = <span class='keyword'>new</span> (Graph);</td></tr>
+<tr><td class="num" id="LN82">82</td><td class="line">		NodeArray&lt;NodeAttributes&gt;* A_new = <span class='macro'>OGDF_NEW<span class='expansion'>new</span></span> NodeArray&lt;NodeAttributes&gt;;</td></tr>
+<tr><td class="num" id="LN83">83</td><td class="line">		EdgeArray&lt;EdgeAttributes&gt;* E_new = <span class='macro'>OGDF_NEW<span class='expansion'>new</span></span> EdgeArray&lt;EdgeAttributes&gt;;</td></tr>
+<tr><td class="num" id="LN84">84</td><td class="line">		G_mult_ptr[act_level+1] = G_new;</td></tr>
+<tr><td class="num" id="LN85">85</td><td class="line">		A_mult_ptr[act_level+1] = A_new;</td></tr>
+<tr><td class="num" id="LN86">86</td><td class="line">		E_mult_ptr[act_level+1] = E_new;</td></tr>
+<tr><td class="num" id="LN87">87</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN88">88</td><td class="line">		init_multilevel_values(G_mult_ptr,A_mult_ptr,E_mult_ptr,act_level);</td></tr>
+<tr><td class="num" id="LN89">89</td><td class="line">		partition_galaxy_into_solar_systems(G_mult_ptr,A_mult_ptr,E_mult_ptr,rand_seed,</td></tr>
+<tr><td class="num" id="LN90">90</td><td class="line">			galaxy_choice,random_tries,act_level);</td></tr>
+<tr><td class="num" id="LN91">91</td><td class="line">		collaps_solar_systems(G_mult_ptr,A_mult_ptr,E_mult_ptr,act_level);</td></tr>
+<tr><td class="num" id="LN92">92</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN93">93</td><td class="line">		act_level++;</td></tr>
+<tr><td class="num" id="LN94">94</td><td class="line">		act_Graph_ptr = G_mult_ptr[act_level];</td></tr>
+<tr><td class="num" id="LN95">95</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN96">96</td><td class="line">	max_level = act_level;</td></tr>
+<tr><td class="num" id="LN97">97</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN98">98</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN99">99</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN100">100</td><td class="line"><span class='keyword'>bool</span> Multilevel::edgenumbersum_of_all_levels_is_linear(</td></tr>
+<tr><td class="num" id="LN101">101</td><td class="line">	Array&lt;Graph*&gt; &amp;G_mult_ptr,</td></tr>
+<tr><td class="num" id="LN102">102</td><td class="line">	<span class='keyword'>int</span> act_level,</td></tr>
+<tr><td class="num" id="LN103">103</td><td class="line">	<span class='keyword'>int</span>&amp; bad_edgenr_counter)</td></tr>
+<tr><td class="num" id="LN104">104</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN105">105</td><td class="line">	<span class='keyword'>if</span>(act_level == 0)</td></tr>
+<tr><td class="num" id="LN106">106</td><td class="line">		<span class='keyword'>return</span> <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN107">107</td><td class="line">	<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN108">108</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN109">109</td><td class="line">		<span class='keyword'>if</span>(G_mult_ptr[act_level]-&gt;numberOfEdges()&lt;=</td></tr>
+<tr><td class="num" id="LN110">110</td><td class="line">			0.8 * <span class='keyword'>double</span> (G_mult_ptr[act_level-1]-&gt;numberOfEdges()))</td></tr>
+<tr><td class="num" id="LN111">111</td><td class="line">			<span class='keyword'>return</span> <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN112">112</td><td class="line">		<span class='keyword'>else</span> <span class='keyword'>if</span>(bad_edgenr_counter &lt; 5)</td></tr>
+<tr><td class="num" id="LN113">113</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN114">114</td><td class="line">			bad_edgenr_counter++;</td></tr>
+<tr><td class="num" id="LN115">115</td><td class="line">			<span class='keyword'>return</span> <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN116">116</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN117">117</td><td class="line">		<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN118">118</td><td class="line">			<span class='keyword'>return</span> <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN119">119</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN120">120</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN121">121</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN122">122</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN123">123</td><td class="line"><span class='keyword'>inline</span> <span class='keyword'>void</span>  Multilevel::init_multilevel_values(</td></tr>
+<tr><td class="num" id="LN124">124</td><td class="line">	Array&lt;Graph*&gt; &amp;G_mult_ptr,</td></tr>
+<tr><td class="num" id="LN125">125</td><td class="line">	Array&lt;NodeArray&lt;NodeAttributes&gt;*&gt; &amp;A_mult_ptr,</td></tr>
+<tr><td class="num" id="LN126">126</td><td class="line">	Array&lt;EdgeArray&lt;EdgeAttributes&gt;*&gt; &amp;E_mult_ptr,</td></tr>
+<tr><td class="num" id="LN127">127</td><td class="line">	<span class='keyword'>int</span> level)</td></tr>
+<tr><td class="num" id="LN128">128</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN129">129</td><td class="line">	node v;</td></tr>
+<tr><td class="num" id="LN130">130</td><td class="line">	<span class='macro'>forall_nodes(v,*G_mult_ptr[level])<span class='expansion'>for((v)=(*G_mult_ptr[level]).firstNode(); (v); (v)=(v)-&gt;succ<br>())</span></span></td></tr>
+<tr><td class="num" id="LN131">131</td><td class="line">		(*A_mult_ptr[level])[v].init_mult_values();</td></tr>
+<tr><td class="num" id="LN132">132</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN133">133</td><td class="line">	edge e;</td></tr>
+<tr><td class="num" id="LN134">134</td><td class="line">	<span class='macro'>forall_edges(e,*G_mult_ptr[level])<span class='expansion'>for((e)=(*G_mult_ptr[level]).firstEdge(); (e); (e)=(e)-&gt;succ<br>())</span></span></td></tr>
+<tr><td class="num" id="LN135">135</td><td class="line">		(*E_mult_ptr[level])[e].init_mult_values();</td></tr>
+<tr><td class="num" id="LN136">136</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN137">137</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN138">138</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN139">139</td><td class="line"><span class='keyword'>inline</span> <span class='keyword'>void</span> Multilevel::partition_galaxy_into_solar_systems(</td></tr>
+<tr><td class="num" id="LN140">140</td><td class="line">	Array&lt;Graph*&gt; &amp;G_mult_ptr,</td></tr>
+<tr><td class="num" id="LN141">141</td><td class="line">	Array&lt;NodeArray&lt;NodeAttributes&gt;*&gt; &amp;A_mult_ptr,</td></tr>
+<tr><td class="num" id="LN142">142</td><td class="line">	Array&lt;EdgeArray&lt;EdgeAttributes&gt;*&gt; &amp;E_mult_ptr,</td></tr>
+<tr><td class="num" id="LN143">143</td><td class="line">	<span class='keyword'>int</span> rand_seed,</td></tr>
+<tr><td class="num" id="LN144">144</td><td class="line">	<span class='keyword'>int</span> galaxy_choice,</td></tr>
+<tr><td class="num" id="LN145">145</td><td class="line">	<span class='keyword'>int</span> random_tries,</td></tr>
+<tr><td class="num" id="LN146">146</td><td class="line">	<span class='keyword'>int</span> act_level)</td></tr>
+<tr><td class="num" id="LN147">147</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN148">148</td><td class="line">	create_suns_and_planets(G_mult_ptr, A_mult_ptr, E_mult_ptr, rand_seed, galaxy_choice,</td></tr>
+<tr><td class="num" id="LN149">149</td><td class="line">		random_tries, act_level);</td></tr>
+<tr><td class="num" id="LN150">150</td><td class="line">	create_moon_nodes_and_pm_nodes(G_mult_ptr, A_mult_ptr, E_mult_ptr, act_level);</td></tr>
+<tr><td class="num" id="LN151">151</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN152">152</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN153">153</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN154">154</td><td class="line"><span class='keyword'>void</span> Multilevel::create_suns_and_planets(</td></tr>
+<tr><td class="num" id="LN155">155</td><td class="line">	Array&lt;Graph*&gt; &amp;G_mult_ptr,</td></tr>
+<tr><td class="num" id="LN156">156</td><td class="line">	Array&lt;NodeArray&lt;NodeAttributes&gt;*&gt; &amp;A_mult_ptr,</td></tr>
+<tr><td class="num" id="LN157">157</td><td class="line">	Array&lt;EdgeArray&lt;EdgeAttributes&gt;*&gt; &amp;E_mult_ptr,</td></tr>
+<tr><td class="num" id="LN158">158</td><td class="line">	<span class='keyword'>int</span> rand_seed,</td></tr>
+<tr><td class="num" id="LN159">159</td><td class="line">	<span class='keyword'>int</span> galaxy_choice,</td></tr>
+<tr><td class="num" id="LN160">160</td><td class="line">	<span class='keyword'>int</span> random_tries,</td></tr>
+<tr><td class="num" id="LN161">161</td><td class="line">	<span class='keyword'>int</span> act_level)</td></tr>
+<tr><td class="num" id="LN162">162</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN163">163</td><td class="line">	Set Node_Set;</td></tr>
+<tr><td class="num" id="LN164">164</td><td class="line">	node v, sun_node, planet_node, newNode, pos_moon_node;</td></tr>
+<tr><td class="num" id="LN165">165</td><td class="line">	edge sun_edge, e;</td></tr>
+<tr><td class="num" id="LN166">166</td><td class="line">	<span class='keyword'>double</span> dist_to_sun;</td></tr>
+<tr><td class="num" id="LN167">167</td><td class="line">	List&lt;node&gt; planet_nodes;</td></tr>
+<tr><td class="num" id="LN168">168</td><td class="line">	List&lt;node&gt; sun_nodes;</td></tr>
+<tr><td class="num" id="LN169">169</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN170">170</td><td class="line">	<span class='comment'>//make initialisations</span></td></tr>
+<tr><td class="num" id="LN171">171</td><td class="line">	sun_nodes.clear();</td></tr>
+<tr><td class="num" id="LN172">172</td><td class="line">	Node_Set.set_seed(rand_seed); <span class='comment'>//set seed for random number generator</span></td></tr>
+<tr><td class="num" id="LN173">173</td><td class="line">	<span class='macro'>forall_nodes(v,*G_mult_ptr[act_level])<span class='expansion'>for((v)=(*G_mult_ptr[act_level]).firstNode(); (v); (v)=(v)-&gt;<br>succ())</span></span></td></tr>
+<tr><td class="num" id="LN174">174</td><td class="line">		<span class='keyword'>if</span>(act_level == 0) (*A_mult_ptr[act_level])[v].set_mass(1);</td></tr>
+<tr><td class="num" id="LN175">175</td><td class="line">	<span class='keyword'>if</span>(galaxy_choice == FMMMLayout::gcUniformProb)</td></tr>
+<tr><td class="num" id="LN176">176</td><td class="line">		Node_Set.init_node_set(*G_mult_ptr[act_level]);</td></tr>
+<tr><td class="num" id="LN177">177</td><td class="line">	<span class='keyword'>else</span> <span class='comment'>//galaxy_choice != gcUniformProb in FMMMLayout</span></td></tr>
+<tr><td class="num" id="LN178">178</td><td class="line">		Node_Set.init_node_set(*G_mult_ptr[act_level],*A_mult_ptr[act_level]);</td></tr>
+<tr><td class="num" id="LN179">179</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN180">180</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN181">181</td><td class="line">	<span class='keyword'>while</span> (!Node_Set.empty_node_set())</td></tr>
+<tr><td class="num" id="LN182">182</td><td class="line">	{<span class='comment'>//while</span></td></tr>
+<tr><td class="num" id="LN183">183</td><td class="line">		<span class='comment'>//randomly select a sun node</span></td></tr>
+<tr><td class="num" id="LN184">184</td><td class="line">		planet_nodes.clear();</td></tr>
+<tr><td class="num" id="LN185">185</td><td class="line">		<span class='keyword'>if</span>(galaxy_choice == FMMMLayout::gcUniformProb)</td></tr>
+<tr><td class="num" id="LN186">186</td><td class="line">			sun_node = Node_Set.get_random_node();</td></tr>
+<tr><td class="num" id="LN187">187</td><td class="line">		<span class='keyword'>else</span> <span class='keyword'>if</span> (galaxy_choice == FMMMLayout::gcNonUniformProbLowerMass)</td></tr>
+<tr><td class="num" id="LN188">188</td><td class="line">			sun_node = Node_Set.get_random_node_with_lowest_star_mass(random_tries);</td></tr>
+<tr><td class="num" id="LN189">189</td><td class="line">		<span class='keyword'>else</span> <span class='comment'>//galaxy_choice == FMMMLayout::gcNonUniformProbHigherMass</span></td></tr>
+<tr><td class="num" id="LN190">190</td><td class="line">			sun_node = Node_Set.get_random_node_with_highest_star_mass(random_tries);</td></tr>
+<tr><td class="num" id="LN191">191</td><td class="line">		sun_nodes.pushBack(sun_node);</td></tr>
+<tr><td class="num" id="LN192">192</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN193">193</td><td class="line">		<span class='comment'>//create new node at higher level that represents the collapsed solar_system</span></td></tr>
+<tr><td class="num" id="LN194">194</td><td class="line">		newNode = G_mult_ptr[act_level+1]-&gt;newNode();</td></tr>
+<tr><td class="num" id="LN195">195</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN196">196</td><td class="line">		<span class='comment'>//update information for sun_node</span></td></tr>
+<tr><td class="num" id="LN197">197</td><td class="line">		(*A_mult_ptr[act_level])[sun_node].set_higher_level_node(newNode);</td></tr>
+<tr><td class="num" id="LN198">198</td><td class="line">		(*A_mult_ptr[act_level])[sun_node].set_type(1);</td></tr>
+<tr><td class="num" id="LN199">199</td><td class="line">		(*A_mult_ptr[act_level])[sun_node].set_dedicated_sun_node(sun_node);</td></tr>
+<tr><td class="num" id="LN200">200</td><td class="line">		(*A_mult_ptr[act_level])[sun_node].set_dedicated_sun_distance(0);</td></tr>
+<tr><td class="num" id="LN201">201</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN202">202</td><td class="line">		<span class='comment'>//update information for planet_nodes</span></td></tr>
+<tr><td class="num" id="LN203">203</td><td class="line">		<span class='macro'>forall_adj_edges(sun_edge,sun_node)<span class='expansion'>for(ogdf::adjEntry ogdf_loop_var=(sun_node)-&gt;firstAdj(); ogdf<br>::test_forall_adj_edges(ogdf_loop_var,(sun_edge)); ogdf_loop_var<br>=ogdf_loop_var-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN204">204</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN205">205</td><td class="line">			dist_to_sun = (*E_mult_ptr[act_level])[sun_edge].get_length();</td></tr>
+<tr><td class="num" id="LN206">206</td><td class="line">			<span class='keyword'>if</span> (sun_edge-&gt;source() != sun_node)</td></tr>
+<tr><td class="num" id="LN207">207</td><td class="line">				planet_node = sun_edge-&gt;source();</td></tr>
+<tr><td class="num" id="LN208">208</td><td class="line">			<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN209">209</td><td class="line">				planet_node =  sun_edge-&gt;target();</td></tr>
+<tr><td class="num" id="LN210">210</td><td class="line">			(*A_mult_ptr[act_level])[planet_node].set_type(2);</td></tr>
+<tr><td class="num" id="LN211">211</td><td class="line">			(*A_mult_ptr[act_level])[planet_node].set_dedicated_sun_node(sun_node);</td></tr>
+<tr><td class="num" id="LN212">212</td><td class="line">			(*A_mult_ptr[act_level])[planet_node].set_dedicated_sun_distance(dist_to_sun);</td></tr>
+<tr><td class="num" id="LN213">213</td><td class="line">			planet_nodes.pushBack(planet_node);</td></tr>
+<tr><td class="num" id="LN214">214</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN215">215</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN216">216</td><td class="line">		<span class='comment'>//delete all planet_nodes and possible_moon_nodes from Node_Set</span></td></tr>
+<tr><td class="num" id="LN217">217</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN218">218</td><td class="line">		ListConstIterator&lt;node&gt; planet_node_ptr;</td></tr>
+<tr><td class="num" id="LN219">219</td><td class="line">		<span class='comment'>//forall_listiterators(node,planet_node_ptr,planet_nodes)</span></td></tr>
+<tr><td class="num" id="LN220">220</td><td class="line">		<span class='keyword'>for</span>(planet_node_ptr = planet_nodes.begin(); planet_node_ptr.valid(); ++planet_node_ptr)</td></tr>
+<tr><td class="num" id="LN221">221</td><td class="line">			<span class='keyword'>if</span>(!Node_Set.is_deleted(*planet_node_ptr))</td></tr>
+<tr><td class="num" id="LN222">222</td><td class="line">				Node_Set.delete_node(*planet_node_ptr);</td></tr>
+<tr><td class="num" id="LN223">223</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN224">224</td><td class="line">		<span class='keyword'>for</span>(planet_node_ptr = planet_nodes.begin(); planet_node_ptr.valid(); ++planet_node_ptr)</td></tr>
+<tr><td class="num" id="LN225">225</td><td class="line">			<span class='comment'>//forall_listiterators(node,planet_node_ptr,planet_nodes)</span></td></tr>
+<tr><td class="num" id="LN226">226</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN227">227</td><td class="line">			<span class='macro'>forall_adj_edges(e,*planet_node_ptr)<span class='expansion'>for(ogdf::adjEntry ogdf_loop_var=(*planet_node_ptr)-&gt;firstAdj<br>(); ogdf::test_forall_adj_edges(ogdf_loop_var,(e)); ogdf_loop_var<br>=ogdf_loop_var-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN228">228</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN229">229</td><td class="line">				<span class='keyword'>if</span>(e-&gt;source() == *planet_node_ptr)</td></tr>
+<tr><td class="num" id="LN230">230</td><td class="line">					pos_moon_node = e-&gt;target();</td></tr>
+<tr><td class="num" id="LN231">231</td><td class="line">				<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN232">232</td><td class="line">					pos_moon_node = e-&gt;source();</td></tr>
+<tr><td class="num" id="LN233">233</td><td class="line">				<span class='keyword'>if</span>(!Node_Set.is_deleted(pos_moon_node))</td></tr>
+<tr><td class="num" id="LN234">234</td><td class="line">					Node_Set.delete_node(pos_moon_node);</td></tr>
+<tr><td class="num" id="LN235">235</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN236">236</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN237">237</td><td class="line">	}<span class='comment'>//while</span></td></tr>
+<tr><td class="num" id="LN238">238</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN239">239</td><td class="line">	<span class='comment'>//init *A_mult_ptr[act_level+1] and set NodeAttributes information for new nodes</span></td></tr>
+<tr><td class="num" id="LN240">240</td><td class="line">	A_mult_ptr[act_level+1]-&gt;init(*G_mult_ptr[act_level+1]);</td></tr>
+<tr><td class="num" id="LN241">241</td><td class="line">	<span class='macro'>forall_listiterators(node, sun_node_ptr, sun_nodes)<span class='expansion'>for(ListConstIterator&lt; node &gt; sun_node_ptr = (sun_nodes<br>).begin(); sun_node_ptr.valid(); ++sun_node_ptr)</span></span></td></tr>
+<tr><td class="num" id="LN242">242</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN243">243</td><td class="line">		newNode = (*A_mult_ptr[act_level])[*sun_node_ptr].get_higher_level_node();</td></tr>
+<tr><td class="num" id="LN244">244</td><td class="line">		(*A_mult_ptr[act_level+1])[newNode].set_NodeAttributes((*A_mult_ptr[act_level])</td></tr>
+<tr><td class="num" id="LN245">245</td><td class="line">			[*sun_node_ptr].get_width(),</td></tr>
+<tr><td class="num" id="LN246">246</td><td class="line">			(*A_mult_ptr[act_level])</td></tr>
+<tr><td class="num" id="LN247">247</td><td class="line">			[*sun_node_ptr].get_height(),</td></tr>
+<tr><td class="num" id="LN248">248</td><td class="line">			(*A_mult_ptr[act_level])</td></tr>
+<tr><td class="num" id="LN249">249</td><td class="line">			[*sun_node_ptr].get_position(),</td></tr>
+<tr><td class="num" id="LN250">250</td><td class="line">			*sun_node_ptr,<span class='macro'>NULL<span class='expansion'>__null</span></span>);</td></tr>
+<tr><td class="num" id="LN251">251</td><td class="line">		(*A_mult_ptr[act_level+1])[newNode].set_mass(0);</td></tr>
+<tr><td class="num" id="LN252">252</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN253">253</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN254">254</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN255">255</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN256">256</td><td class="line"><span class='keyword'>void</span> Multilevel::create_moon_nodes_and_pm_nodes(</td></tr>
+<tr><td class="num" id="LN257">257</td><td class="line">	Array&lt;Graph*&gt; &amp;G_mult_ptr,</td></tr>
+<tr><td class="num" id="LN258">258</td><td class="line">	Array&lt;NodeArray&lt;NodeAttributes&gt;*&gt; &amp;A_mult_ptr,</td></tr>
+<tr><td class="num" id="LN259">259</td><td class="line">	Array&lt;EdgeArray&lt;EdgeAttributes&gt;*&gt; &amp;E_mult_ptr,</td></tr>
+<tr><td class="num" id="LN260">260</td><td class="line">	<span class='keyword'>int</span> act_level)</td></tr>
+<tr><td class="num" id="LN261">261</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN262">262</td><td class="line">	edge e;</td></tr>
+<tr><td class="num" id="LN263">263</td><td class="line">	node v, nearest_neighbour_node, neighbour_node, dedicated_sun_node;</td></tr>
+<tr><td class="num" id="LN264">264</td><td class="line">	<span class='keyword'>double</span> dist_to_nearest_neighbour, dedicated_sun_distance;</td></tr>
+<tr><td class="num" id="LN265">265</td><td class="line">	<span class='keyword'>bool</span> first_adj_edge;</td></tr>
+<tr><td class="num" id="LN266">266</td><td class="line">	<span class='keyword'>int</span> neighbour_type;</td></tr>
+<tr><td class="num" id="LN267">267</td><td class="line">	<span class="mrange">edge moon_edge</span>;</td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path1" class="msg msgEvent" style="margin-left:9ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexEvent">1</div></td><td>'moon_edge' declared without an initial value</td><td><div class="PathNav"><a href="#Path2" title="Next event (2)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN268">268</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN269">269</td><td class="line">	<span class='macro'>forall_nodes(v,*G_mult_ptr[act_level])<span class='expansion'>for((v)=(*G_mult_ptr[act_level]).firstNode(); (v); (v)=(v)-&gt;<br>succ())</span></span></td></tr>
+<tr><td class="num" id="LN270">270</td><td class="line">		<span class='keyword'>if</span>((*A_mult_ptr[act_level])[v].get_type() == 0) <span class='comment'>//a moon node</span></td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path2" class="msg msgControl" style="margin-left:17ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">2</div></td><td><div class="PathNav"><a href="#Path1" title="Previous event (1)">&#x2190;</a></div></td></td><td>Taking false branch</td><td><div class="PathNav"><a href="#Path3" title="Next event (3)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path3" class="msg msgControl" style="margin-left:17ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">3</div></td><td><div class="PathNav"><a href="#Path2" title="Previous event (2)">&#x2190;</a></div></td></td><td>Taking false branch</td><td><div class="PathNav"><a href="#Path4" title="Next event (4)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path4" class="msg msgControl" style="margin-left:17ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">4</div></td><td><div class="PathNav"><a href="#Path3" title="Previous event (3)">&#x2190;</a></div></td></td><td>Taking false branch</td><td><div class="PathNav"><a href="#Path5" title="Next event (5)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num"></td><td class="line"><div id="Path5" class="msg msgControl" style="margin-left:17ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexControl">5</div></td><td><div class="PathNav"><a href="#Path4" title="Previous event (4)">&#x2190;</a></div></td></td><td>Taking true branch</td><td><div class="PathNav"><a href="#EndPath" title="Next event (6)">&#x2192;</a></div></td></tr></table></div></td></tr>
+<tr><td class="num" id="LN271">271</td><td class="line">		{<span class='comment'>//forall</span></td></tr>
+<tr><td class="num" id="LN272">272</td><td class="line">			<span class='comment'>//find nearest neighbour node</span></td></tr>
+<tr><td class="num" id="LN273">273</td><td class="line">			first_adj_edge = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN274">274</td><td class="line">			<span class='macro'>forall_adj_edges(e,v)<span class='expansion'>for(ogdf::adjEntry ogdf_loop_var=(v)-&gt;firstAdj(); ogdf::test_forall_adj_edges<br>(ogdf_loop_var,(e)); ogdf_loop_var=ogdf_loop_var-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN275">275</td><td class="line">			{<span class='comment'>//forall2</span></td></tr>
+<tr><td class="num" id="LN276">276</td><td class="line">				<span class='keyword'>if</span>(v == e-&gt;source())</td></tr>
+<tr><td class="num" id="LN277">277</td><td class="line">					neighbour_node = e-&gt;target();</td></tr>
+<tr><td class="num" id="LN278">278</td><td class="line">				<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN279">279</td><td class="line">					neighbour_node = e-&gt;source();</td></tr>
+<tr><td class="num" id="LN280">280</td><td class="line">				neighbour_type = (*A_mult_ptr[act_level])[neighbour_node].get_type();</td></tr>
+<tr><td class="num" id="LN281">281</td><td class="line">				<span class='keyword'>if</span>( (neighbour_type == 2) || (neighbour_type == 3) )</td></tr>
+<tr><td class="num" id="LN282">282</td><td class="line">				{<span class='comment'>//if_1</span></td></tr>
+<tr><td class="num" id="LN283">283</td><td class="line">					<span class='keyword'>if</span>(first_adj_edge)</td></tr>
+<tr><td class="num" id="LN284">284</td><td class="line">					{<span class='comment'>//if</span></td></tr>
+<tr><td class="num" id="LN285">285</td><td class="line">						first_adj_edge = <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN286">286</td><td class="line">						moon_edge = e;</td></tr>
+<tr><td class="num" id="LN287">287</td><td class="line">						dist_to_nearest_neighbour = (*E_mult_ptr[act_level])[e].get_length();</td></tr>
+<tr><td class="num" id="LN288">288</td><td class="line">						nearest_neighbour_node =  neighbour_node;</td></tr>
+<tr><td class="num" id="LN289">289</td><td class="line">					}<span class='comment'>//if</span></td></tr>
+<tr><td class="num" id="LN290">290</td><td class="line">					<span class='keyword'>else</span> <span class='keyword'>if</span>(dist_to_nearest_neighbour &gt;(*E_mult_ptr[act_level])[e].get_length())</td></tr>
+<tr><td class="num" id="LN291">291</td><td class="line">					{<span class='comment'>//else</span></td></tr>
+<tr><td class="num" id="LN292">292</td><td class="line">						moon_edge = e;</td></tr>
+<tr><td class="num" id="LN293">293</td><td class="line">						dist_to_nearest_neighbour = (*E_mult_ptr[act_level])[e].get_length();</td></tr>
+<tr><td class="num" id="LN294">294</td><td class="line">						nearest_neighbour_node = neighbour_node;</td></tr>
+<tr><td class="num" id="LN295">295</td><td class="line">					}<span class='comment'>//else</span></td></tr>
+<tr><td class="num" id="LN296">296</td><td class="line">				}<span class='comment'>//if_1</span></td></tr>
+<tr><td class="num" id="LN297">297</td><td class="line">			}<span class='comment'>//forall2</span></td></tr>
+<tr><td class="num" id="LN298">298</td><td class="line">			<span class='comment'>//find dedic. solar system for v and update information in *A_mult_ptr[act_level]</span></td></tr>
+<tr><td class="num" id="LN299">299</td><td class="line">			<span class='comment'>//and *E_mult_ptr[act_level]</span></td></tr>
+<tr><td class="num" id="LN300">300</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN301">301</td><td class="line">			(*E_mult_ptr[act_level])[<span class="mrange">moon_edge</span>].make_moon_edge(); <span class='comment'>//mark this edge</span></td></tr>
+<tr><td class="num"></td><td class="line"><div id="EndPath" class="msg msgEvent" style="margin-left:25ex"><table class="msgT"><tr><td valign="top"><div class="PathIndex PathIndexEvent">6</div></td><td><div class="PathNav"><a href="#Path5" title="Previous event (5)">&#x2190;</a></div></td></td><td>Function call argument is an uninitialized value</td></tr></table></div></td></tr>
+<tr><td class="num" id="LN302">302</td><td class="line">			dedicated_sun_node = (*A_mult_ptr[act_level])[nearest_neighbour_node].</td></tr>
+<tr><td class="num" id="LN303">303</td><td class="line">				get_dedicated_sun_node();</td></tr>
+<tr><td class="num" id="LN304">304</td><td class="line">			dedicated_sun_distance = dist_to_nearest_neighbour + (*A_mult_ptr[act_level])</td></tr>
+<tr><td class="num" id="LN305">305</td><td class="line">				[nearest_neighbour_node].get_dedicated_sun_distance();</td></tr>
+<tr><td class="num" id="LN306">306</td><td class="line">			(*A_mult_ptr[act_level])[v].set_type(4);</td></tr>
+<tr><td class="num" id="LN307">307</td><td class="line">			(*A_mult_ptr[act_level])[v].set_dedicated_sun_node(dedicated_sun_node);</td></tr>
+<tr><td class="num" id="LN308">308</td><td class="line">			(*A_mult_ptr[act_level])[v].set_dedicated_sun_distance(dedicated_sun_distance);</td></tr>
+<tr><td class="num" id="LN309">309</td><td class="line">			(*A_mult_ptr[act_level])[v].set_dedicated_pm_node(nearest_neighbour_node);</td></tr>
+<tr><td class="num" id="LN310">310</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN311">311</td><td class="line">			<span class='comment'>//identify nearest_neighbour_node as a pm_node and update its information</span></td></tr>
+<tr><td class="num" id="LN312">312</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN313">313</td><td class="line">			(*A_mult_ptr[act_level])[nearest_neighbour_node].set_type(3);</td></tr>
+<tr><td class="num" id="LN314">314</td><td class="line">			(*A_mult_ptr[act_level])[nearest_neighbour_node].</td></tr>
+<tr><td class="num" id="LN315">315</td><td class="line">				get_dedicated_moon_node_List_ptr()-&gt;pushBack(v);</td></tr>
+<tr><td class="num" id="LN316">316</td><td class="line">		}<span class='comment'>//forall</span></td></tr>
+<tr><td class="num" id="LN317">317</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN318">318</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN319">319</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN320">320</td><td class="line"><span class='keyword'>inline</span> <span class='keyword'>void</span> Multilevel::collaps_solar_systems(</td></tr>
+<tr><td class="num" id="LN321">321</td><td class="line">	Array&lt;Graph*&gt; &amp;G_mult_ptr,</td></tr>
+<tr><td class="num" id="LN322">322</td><td class="line">	Array&lt;NodeArray&lt;NodeAttributes&gt;*&gt; &amp;A_mult_ptr,</td></tr>
+<tr><td class="num" id="LN323">323</td><td class="line">	Array&lt;EdgeArray&lt;EdgeAttributes&gt;*&gt; &amp;E_mult_ptr,</td></tr>
+<tr><td class="num" id="LN324">324</td><td class="line">	<span class='keyword'>int</span> act_level)</td></tr>
+<tr><td class="num" id="LN325">325</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN326">326</td><td class="line">	EdgeArray&lt;<span class='keyword'>double</span>&gt; new_edgelength;</td></tr>
+<tr><td class="num" id="LN327">327</td><td class="line">	calculate_mass_of_collapsed_nodes(G_mult_ptr, A_mult_ptr, act_level);</td></tr>
+<tr><td class="num" id="LN328">328</td><td class="line">	create_edges_edgedistances_and_lambda_Lists(G_mult_ptr, A_mult_ptr, E_mult_ptr,</td></tr>
+<tr><td class="num" id="LN329">329</td><td class="line">		new_edgelength, act_level);</td></tr>
+<tr><td class="num" id="LN330">330</td><td class="line">	delete_parallel_edges_and_update_edgelength(G_mult_ptr, E_mult_ptr, new_edgelength,</td></tr>
+<tr><td class="num" id="LN331">331</td><td class="line">		act_level);</td></tr>
+<tr><td class="num" id="LN332">332</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN333">333</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN334">334</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN335">335</td><td class="line"><span class='keyword'>inline</span> <span class='keyword'>void</span> Multilevel::calculate_mass_of_collapsed_nodes(</td></tr>
+<tr><td class="num" id="LN336">336</td><td class="line">	Array&lt;Graph*&gt; &amp;G_mult_ptr,</td></tr>
+<tr><td class="num" id="LN337">337</td><td class="line">	Array&lt;NodeArray &lt;NodeAttributes&gt;*&gt; &amp;A_mult_ptr,</td></tr>
+<tr><td class="num" id="LN338">338</td><td class="line">	<span class='keyword'>int</span> act_level)</td></tr>
+<tr><td class="num" id="LN339">339</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN340">340</td><td class="line">	node v;</td></tr>
+<tr><td class="num" id="LN341">341</td><td class="line">	node dedicated_sun,high_level_node;</td></tr>
+<tr><td class="num" id="LN342">342</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN343">343</td><td class="line">	<span class='macro'>forall_nodes(v,*G_mult_ptr[act_level])<span class='expansion'>for((v)=(*G_mult_ptr[act_level]).firstNode(); (v); (v)=(v)-&gt;<br>succ())</span></span></td></tr>
+<tr><td class="num" id="LN344">344</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN345">345</td><td class="line">		dedicated_sun = (*A_mult_ptr[act_level])[v].get_dedicated_sun_node();</td></tr>
+<tr><td class="num" id="LN346">346</td><td class="line">		high_level_node =  (*A_mult_ptr[act_level])[dedicated_sun].get_higher_level_node();</td></tr>
+<tr><td class="num" id="LN347">347</td><td class="line">		(*A_mult_ptr[act_level+1])[high_level_node].set_mass((*A_mult_ptr[act_level+1])</td></tr>
+<tr><td class="num" id="LN348">348</td><td class="line">			[high_level_node].get_mass()+1);</td></tr>
+<tr><td class="num" id="LN349">349</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN350">350</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN351">351</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN352">352</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN353">353</td><td class="line"><span class='keyword'>void</span> Multilevel::create_edges_edgedistances_and_lambda_Lists(</td></tr>
+<tr><td class="num" id="LN354">354</td><td class="line">	Array&lt;Graph*&gt; &amp;G_mult_ptr,</td></tr>
+<tr><td class="num" id="LN355">355</td><td class="line">	Array&lt;NodeArray&lt;NodeAttributes&gt;*&gt; &amp;A_mult_ptr,</td></tr>
+<tr><td class="num" id="LN356">356</td><td class="line">	Array&lt;EdgeArray&lt;EdgeAttributes&gt;*&gt; &amp;E_mult_ptr,</td></tr>
+<tr><td class="num" id="LN357">357</td><td class="line">	EdgeArray&lt;<span class='keyword'>double</span>&gt;&amp; new_edgelength,<span class='keyword'>int</span></td></tr>
+<tr><td class="num" id="LN358">358</td><td class="line">	act_level)</td></tr>
+<tr><td class="num" id="LN359">359</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN360">360</td><td class="line">	edge e, e_new;</td></tr>
+<tr><td class="num" id="LN361">361</td><td class="line">	node s_node, t_node;</td></tr>
+<tr><td class="num" id="LN362">362</td><td class="line">	node s_sun_node, t_sun_node;</td></tr>
+<tr><td class="num" id="LN363">363</td><td class="line">	node high_level_sun_s, high_level_sun_t;</td></tr>
+<tr><td class="num" id="LN364">364</td><td class="line">	<span class='keyword'>double</span> length_e, length_s_edge, length_t_edge, newlength;</td></tr>
+<tr><td class="num" id="LN365">365</td><td class="line">	<span class='keyword'>double</span> lambda_s, lambda_t;</td></tr>
+<tr><td class="num" id="LN366">366</td><td class="line">	List&lt;edge&gt; inter_solar_system_edges;</td></tr>
+<tr><td class="num" id="LN367">367</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN368">368</td><td class="line">	<span class='comment'>//create new edges at act_level+1 and create for each inter solar system edge  at</span></td></tr>
+<tr><td class="num" id="LN369">369</td><td class="line">	<span class='comment'>//act_level a link to its corresponding edge</span></td></tr>
+<tr><td class="num" id="LN370">370</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN371">371</td><td class="line">	<span class='macro'>forall_edges(e,*G_mult_ptr[act_level])<span class='expansion'>for((e)=(*G_mult_ptr[act_level]).firstEdge(); (e); (e)=(e)-&gt;<br>succ())</span></span></td></tr>
+<tr><td class="num" id="LN372">372</td><td class="line">	{<span class='comment'>//forall</span></td></tr>
+<tr><td class="num" id="LN373">373</td><td class="line">		s_node = e-&gt;source();</td></tr>
+<tr><td class="num" id="LN374">374</td><td class="line">		t_node = e-&gt;target();</td></tr>
+<tr><td class="num" id="LN375">375</td><td class="line">		s_sun_node =  (*A_mult_ptr[act_level])[s_node].get_dedicated_sun_node();</td></tr>
+<tr><td class="num" id="LN376">376</td><td class="line">		t_sun_node =  (*A_mult_ptr[act_level])[t_node].get_dedicated_sun_node();</td></tr>
+<tr><td class="num" id="LN377">377</td><td class="line">		<span class='keyword'>if</span>( s_sun_node != t_sun_node) <span class='comment'>//a inter solar system edge</span></td></tr>
+<tr><td class="num" id="LN378">378</td><td class="line">		{<span class='comment'>//if</span></td></tr>
+<tr><td class="num" id="LN379">379</td><td class="line">			high_level_sun_s = (*A_mult_ptr[act_level])[s_sun_node].get_higher_level_node();</td></tr>
+<tr><td class="num" id="LN380">380</td><td class="line">			high_level_sun_t = (*A_mult_ptr[act_level])[t_sun_node].get_higher_level_node();</td></tr>
+<tr><td class="num" id="LN381">381</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN382">382</td><td class="line">			<span class='comment'>//create new edge in *G_mult_ptr[act_level+1]</span></td></tr>
+<tr><td class="num" id="LN383">383</td><td class="line">			e_new = G_mult_ptr[act_level+1]-&gt;newEdge(high_level_sun_s,high_level_sun_t);</td></tr>
+<tr><td class="num" id="LN384">384</td><td class="line">			(*E_mult_ptr[act_level])[e].set_higher_level_edge(e_new);</td></tr>
+<tr><td class="num" id="LN385">385</td><td class="line">			inter_solar_system_edges.pushBack(e);</td></tr>
+<tr><td class="num" id="LN386">386</td><td class="line">		}<span class='comment'>//if</span></td></tr>
+<tr><td class="num" id="LN387">387</td><td class="line">	}<span class='comment'>//forall</span></td></tr>
+<tr><td class="num" id="LN388">388</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN389">389</td><td class="line">	<span class='comment'>//init new_edgelength calculate the values of new_edgelength and the lambda Lists</span></td></tr>
+<tr><td class="num" id="LN390">390</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN391">391</td><td class="line">	new_edgelength.init(*G_mult_ptr[act_level+1]);</td></tr>
+<tr><td class="num" id="LN392">392</td><td class="line">	<span class='macro'>forall_listiterators(edge, e_ptr, inter_solar_system_edges)<span class='expansion'>for(ListConstIterator&lt; edge &gt; e_ptr = (inter_solar_system_edges<br>).begin(); e_ptr.valid(); ++e_ptr)</span></span></td></tr>
+<tr><td class="num" id="LN393">393</td><td class="line">	{<span class='comment'>//forall</span></td></tr>
+<tr><td class="num" id="LN394">394</td><td class="line">		s_node = (*e_ptr)-&gt;source();</td></tr>
+<tr><td class="num" id="LN395">395</td><td class="line">		t_node = (*e_ptr)-&gt;target();</td></tr>
+<tr><td class="num" id="LN396">396</td><td class="line">		s_sun_node =  (*A_mult_ptr[act_level])[s_node].get_dedicated_sun_node();</td></tr>
+<tr><td class="num" id="LN397">397</td><td class="line">		t_sun_node =  (*A_mult_ptr[act_level])[t_node].get_dedicated_sun_node();</td></tr>
+<tr><td class="num" id="LN398">398</td><td class="line">		length_e = (*E_mult_ptr[act_level])[*e_ptr].get_length();</td></tr>
+<tr><td class="num" id="LN399">399</td><td class="line">		length_s_edge =(*A_mult_ptr[act_level])[s_node].get_dedicated_sun_distance();</td></tr>
+<tr><td class="num" id="LN400">400</td><td class="line">		length_t_edge =(*A_mult_ptr[act_level])[t_node].get_dedicated_sun_distance();</td></tr>
+<tr><td class="num" id="LN401">401</td><td class="line">		newlength = length_s_edge + length_e + length_t_edge;</td></tr>
+<tr><td class="num" id="LN402">402</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN403">403</td><td class="line">		<span class='comment'>//set new edge_length in *G_mult_ptr[act_level+1]</span></td></tr>
+<tr><td class="num" id="LN404">404</td><td class="line">		e_new = (*E_mult_ptr[act_level])[*e_ptr].get_higher_level_edge();</td></tr>
+<tr><td class="num" id="LN405">405</td><td class="line">		new_edgelength[e_new] = newlength;</td></tr>
+<tr><td class="num" id="LN406">406</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN407">407</td><td class="line">		<span class='comment'>//create entries in lambda Lists</span></td></tr>
+<tr><td class="num" id="LN408">408</td><td class="line">		lambda_s = length_s_edge/newlength;</td></tr>
+<tr><td class="num" id="LN409">409</td><td class="line">		lambda_t = length_t_edge/newlength;</td></tr>
+<tr><td class="num" id="LN410">410</td><td class="line">		(*A_mult_ptr[act_level])[s_node].get_lambda_List_ptr()-&gt;pushBack(lambda_s);</td></tr>
+<tr><td class="num" id="LN411">411</td><td class="line">		(*A_mult_ptr[act_level])[t_node].get_lambda_List_ptr()-&gt;pushBack(lambda_t);</td></tr>
+<tr><td class="num" id="LN412">412</td><td class="line">		(*A_mult_ptr[act_level])[s_node].get_neighbour_sun_node_List_ptr()-&gt;pushBack(</td></tr>
+<tr><td class="num" id="LN413">413</td><td class="line">			t_sun_node);</td></tr>
+<tr><td class="num" id="LN414">414</td><td class="line">		(*A_mult_ptr[act_level])[t_node].get_neighbour_sun_node_List_ptr()-&gt;pushBack(</td></tr>
+<tr><td class="num" id="LN415">415</td><td class="line">			s_sun_node);</td></tr>
+<tr><td class="num" id="LN416">416</td><td class="line">	}<span class='comment'>//forall</span></td></tr>
+<tr><td class="num" id="LN417">417</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN418">418</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN419">419</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN420">420</td><td class="line"><span class='keyword'>void</span> Multilevel::delete_parallel_edges_and_update_edgelength(</td></tr>
+<tr><td class="num" id="LN421">421</td><td class="line">	Array&lt;Graph*&gt; &amp;G_mult_ptr,</td></tr>
+<tr><td class="num" id="LN422">422</td><td class="line">	Array&lt;EdgeArray&lt;EdgeAttributes&gt;*&gt; &amp;E_mult_ptr,</td></tr>
+<tr><td class="num" id="LN423">423</td><td class="line">	EdgeArray&lt;<span class='keyword'>double</span>&gt;&amp; new_edgelength,<span class='keyword'>int</span></td></tr>
+<tr><td class="num" id="LN424">424</td><td class="line">	act_level)</td></tr>
+<tr><td class="num" id="LN425">425</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN426">426</td><td class="line">	EdgeMaxBucketFunc get_max_index;</td></tr>
+<tr><td class="num" id="LN427">427</td><td class="line">	EdgeMinBucketFunc get_min_index;</td></tr>
+<tr><td class="num" id="LN428">428</td><td class="line">	edge e_act, e_save;</td></tr>
+<tr><td class="num" id="LN429">429</td><td class="line">	Edge f_act;</td></tr>
+<tr><td class="num" id="LN430">430</td><td class="line">	List&lt;Edge&gt; sorted_edges;</td></tr>
+<tr><td class="num" id="LN431">431</td><td class="line">	Graph* Graph_ptr = G_mult_ptr[act_level+1];</td></tr>
+<tr><td class="num" id="LN432">432</td><td class="line">	<span class='keyword'>int</span> save_s_index,save_t_index,act_s_index,act_t_index;</td></tr>
+<tr><td class="num" id="LN433">433</td><td class="line">	<span class='keyword'>int</span> counter = 1;</td></tr>
+<tr><td class="num" id="LN434">434</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN435">435</td><td class="line">	<span class='comment'>//make *G_mult_ptr[act_level+1] undirected</span></td></tr>
+<tr><td class="num" id="LN436">436</td><td class="line">	makeSimpleUndirected(*G_mult_ptr[act_level+1]);</td></tr>
+<tr><td class="num" id="LN437">437</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN438">438</td><td class="line">	<span class='comment'>//sort the List sorted_edges</span></td></tr>
+<tr><td class="num" id="LN439">439</td><td class="line">	<span class='macro'>forall_edges(e_act,*Graph_ptr)<span class='expansion'>for((e_act)=(*Graph_ptr).firstEdge(); (e_act); (e_act)=(e_act<br>)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN440">440</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN441">441</td><td class="line">		f_act.set_Edge(e_act,Graph_ptr);</td></tr>
+<tr><td class="num" id="LN442">442</td><td class="line">		sorted_edges.pushBack(f_act);</td></tr>
+<tr><td class="num" id="LN443">443</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN444">444</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN445">445</td><td class="line">	sorted_edges.bucketSort(0,Graph_ptr-&gt;numberOfNodes()-1,get_max_index);</td></tr>
+<tr><td class="num" id="LN446">446</td><td class="line">	sorted_edges.bucketSort(0,Graph_ptr-&gt;numberOfNodes()-1,get_min_index);</td></tr>
+<tr><td class="num" id="LN447">447</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN448">448</td><td class="line">	<span class='comment'>//now parallel edges are consecutive in sorted_edges</span></td></tr>
+<tr><td class="num" id="LN449">449</td><td class="line">	<span class='macro'>forall_listiterators(Edge, EdgeIterator,sorted_edges)<span class='expansion'>for(ListConstIterator&lt; Edge &gt; EdgeIterator = (sorted_edges<br>).begin(); EdgeIterator.valid(); ++EdgeIterator)</span></span></td></tr>
+<tr><td class="num" id="LN450">450</td><td class="line">	{<span class='comment'>//for</span></td></tr>
+<tr><td class="num" id="LN451">451</td><td class="line">		e_act = (*EdgeIterator).get_edge();</td></tr>
+<tr><td class="num" id="LN452">452</td><td class="line">		act_s_index = e_act-&gt;source()-&gt;index();</td></tr>
+<tr><td class="num" id="LN453">453</td><td class="line">		act_t_index = e_act-&gt;target()-&gt;index();</td></tr>
+<tr><td class="num" id="LN454">454</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN455">455</td><td class="line">		<span class='keyword'>if</span>(EdgeIterator != sorted_edges.begin())</td></tr>
+<tr><td class="num" id="LN456">456</td><td class="line">		{<span class='comment'>//if</span></td></tr>
+<tr><td class="num" id="LN457">457</td><td class="line">			<span class='keyword'>if</span>( (act_s_index == save_s_index &amp;&amp; act_t_index == save_t_index) ||</td></tr>
+<tr><td class="num" id="LN458">458</td><td class="line">				(act_s_index == save_t_index &amp;&amp; act_t_index == save_s_index) )</td></tr>
+<tr><td class="num" id="LN459">459</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN460">460</td><td class="line">				new_edgelength[e_save] += new_edgelength[e_act];</td></tr>
+<tr><td class="num" id="LN461">461</td><td class="line">				Graph_ptr-&gt;delEdge(e_act);</td></tr>
+<tr><td class="num" id="LN462">462</td><td class="line">				counter++;</td></tr>
+<tr><td class="num" id="LN463">463</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN464">464</td><td class="line">			<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN465">465</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN466">466</td><td class="line">				<span class='keyword'>if</span> (counter &gt; 1)</td></tr>
+<tr><td class="num" id="LN467">467</td><td class="line">				{</td></tr>
+<tr><td class="num" id="LN468">468</td><td class="line">					new_edgelength[e_save] /= counter;</td></tr>
+<tr><td class="num" id="LN469">469</td><td class="line">					counter = 1;</td></tr>
+<tr><td class="num" id="LN470">470</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN471">471</td><td class="line">				save_s_index = act_s_index;</td></tr>
+<tr><td class="num" id="LN472">472</td><td class="line">				save_t_index = act_t_index;</td></tr>
+<tr><td class="num" id="LN473">473</td><td class="line">				e_save = e_act;</td></tr>
+<tr><td class="num" id="LN474">474</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN475">475</td><td class="line">		}<span class='comment'>//if</span></td></tr>
+<tr><td class="num" id="LN476">476</td><td class="line">		<span class='keyword'>else</span> <span class='comment'>//first edge</span></td></tr>
+<tr><td class="num" id="LN477">477</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN478">478</td><td class="line">			save_s_index = act_s_index;</td></tr>
+<tr><td class="num" id="LN479">479</td><td class="line">			save_t_index = act_t_index;</td></tr>
+<tr><td class="num" id="LN480">480</td><td class="line">			e_save = e_act;</td></tr>
+<tr><td class="num" id="LN481">481</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN482">482</td><td class="line">	}<span class='comment'>//for</span></td></tr>
+<tr><td class="num" id="LN483">483</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN484">484</td><td class="line">	<span class='comment'>//treat special case (last edges were multiple edges)</span></td></tr>
+<tr><td class="num" id="LN485">485</td><td class="line">	<span class='keyword'>if</span>(counter &gt;1)</td></tr>
+<tr><td class="num" id="LN486">486</td><td class="line">		new_edgelength[e_save] /= counter;</td></tr>
+<tr><td class="num" id="LN487">487</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN488">488</td><td class="line">	<span class='comment'>//init *E_mult_ptr[act_level+1] and import EdgeAttributes</span></td></tr>
+<tr><td class="num" id="LN489">489</td><td class="line">	E_mult_ptr[act_level+1]-&gt;init(*G_mult_ptr[act_level+1]);</td></tr>
+<tr><td class="num" id="LN490">490</td><td class="line">	<span class='macro'>forall_edges(e_act,*Graph_ptr)<span class='expansion'>for((e_act)=(*Graph_ptr).firstEdge(); (e_act); (e_act)=(e_act<br>)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN491">491</td><td class="line">		(*E_mult_ptr[act_level+1])[e_act].set_length(new_edgelength[e_act]);</td></tr>
+<tr><td class="num" id="LN492">492</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN493">493</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN494">494</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN495">495</td><td class="line"><span class='keyword'>void</span> Multilevel::find_initial_placement_for_level(</td></tr>
+<tr><td class="num" id="LN496">496</td><td class="line">	<span class='keyword'>int</span> level,</td></tr>
+<tr><td class="num" id="LN497">497</td><td class="line">	<span class='keyword'>int</span> init_placement_way,</td></tr>
+<tr><td class="num" id="LN498">498</td><td class="line">	Array&lt;Graph*&gt; &amp;G_mult_ptr,</td></tr>
+<tr><td class="num" id="LN499">499</td><td class="line">	Array&lt;NodeArray&lt;NodeAttributes&gt;*&gt; &amp;A_mult_ptr,</td></tr>
+<tr><td class="num" id="LN500">500</td><td class="line">	Array&lt;EdgeArray&lt;EdgeAttributes&gt;*&gt; &amp;E_mult_ptr)</td></tr>
+<tr><td class="num" id="LN501">501</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN502">502</td><td class="line">	List&lt;node&gt; pm_nodes;</td></tr>
+<tr><td class="num" id="LN503">503</td><td class="line">	set_initial_positions_of_sun_nodes(level, G_mult_ptr, A_mult_ptr);</td></tr>
+<tr><td class="num" id="LN504">504</td><td class="line">	set_initial_positions_of_planet_and_moon_nodes(level, init_placement_way, G_mult_ptr,</td></tr>
+<tr><td class="num" id="LN505">505</td><td class="line">		A_mult_ptr, E_mult_ptr, pm_nodes);</td></tr>
+<tr><td class="num" id="LN506">506</td><td class="line">	set_initial_positions_of_pm_nodes(level, init_placement_way, A_mult_ptr,</td></tr>
+<tr><td class="num" id="LN507">507</td><td class="line">		E_mult_ptr, pm_nodes);</td></tr>
+<tr><td class="num" id="LN508">508</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN509">509</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN510">510</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN511">511</td><td class="line"><span class='keyword'>void</span> Multilevel::set_initial_positions_of_sun_nodes(</td></tr>
+<tr><td class="num" id="LN512">512</td><td class="line">	<span class='keyword'>int</span> level,</td></tr>
+<tr><td class="num" id="LN513">513</td><td class="line">	Array&lt;Graph*&gt; &amp;G_mult_ptr,</td></tr>
+<tr><td class="num" id="LN514">514</td><td class="line">	Array&lt;NodeArray &lt;NodeAttributes&gt;*&gt; &amp;A_mult_ptr)</td></tr>
+<tr><td class="num" id="LN515">515</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN516">516</td><td class="line">	node v_high, v_act;</td></tr>
+<tr><td class="num" id="LN517">517</td><td class="line">	DPoint new_pos;</td></tr>
+<tr><td class="num" id="LN518">518</td><td class="line">	<span class='macro'>forall_nodes(v_high,*G_mult_ptr[level+1])<span class='expansion'>for((v_high)=(*G_mult_ptr[level+1]).firstNode(); (v_high); (v_high<br>)=(v_high)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN519">519</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN520">520</td><td class="line">		v_act = (*A_mult_ptr[level+1])[v_high].get_lower_level_node();</td></tr>
+<tr><td class="num" id="LN521">521</td><td class="line">		new_pos = (*A_mult_ptr[level+1])[v_high].get_position();</td></tr>
+<tr><td class="num" id="LN522">522</td><td class="line">		(*A_mult_ptr[level])[v_act].set_position(new_pos);</td></tr>
+<tr><td class="num" id="LN523">523</td><td class="line">		(*A_mult_ptr[level])[v_act].place();</td></tr>
+<tr><td class="num" id="LN524">524</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN525">525</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN526">526</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN527">527</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN528">528</td><td class="line"><span class='keyword'>void</span> Multilevel::set_initial_positions_of_planet_and_moon_nodes(</td></tr>
+<tr><td class="num" id="LN529">529</td><td class="line">	<span class='keyword'>int</span> level,</td></tr>
+<tr><td class="num" id="LN530">530</td><td class="line">	<span class='keyword'>int</span> init_placement_way,</td></tr>
+<tr><td class="num" id="LN531">531</td><td class="line">	Array&lt;Graph*&gt; &amp;G_mult_ptr,</td></tr>
+<tr><td class="num" id="LN532">532</td><td class="line">	Array&lt;NodeArray&lt;NodeAttributes&gt;*&gt; &amp;A_mult_ptr,</td></tr>
+<tr><td class="num" id="LN533">533</td><td class="line">	Array&lt;EdgeArray&lt;EdgeAttributes&gt;*&gt; &amp;E_mult_ptr,</td></tr>
+<tr><td class="num" id="LN534">534</td><td class="line">	List&lt;node&gt;&amp; pm_nodes)</td></tr>
+<tr><td class="num" id="LN535">535</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN536">536</td><td class="line">	<span class='keyword'>double</span> lambda, dedicated_sun_distance;</td></tr>
+<tr><td class="num" id="LN537">537</td><td class="line">	<span class='keyword'>int</span> node_type;</td></tr>
+<tr><td class="num" id="LN538">538</td><td class="line">	node v, v_adj, dedicated_sun;</td></tr>
+<tr><td class="num" id="LN539">539</td><td class="line">	edge e;</td></tr>
+<tr><td class="num" id="LN540">540</td><td class="line">	DPoint new_pos,dedicated_sun_pos, adj_sun_pos;</td></tr>
+<tr><td class="num" id="LN541">541</td><td class="line">	List&lt;DPoint&gt; L;</td></tr>
+<tr><td class="num" id="LN542">542</td><td class="line">	ListIterator&lt;<span class='keyword'>double</span>&gt; lambdaIterator;</td></tr>
+<tr><td class="num" id="LN543">543</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN544">544</td><td class="line">	create_all_placement_sectors(G_mult_ptr,A_mult_ptr,E_mult_ptr,level);</td></tr>
+<tr><td class="num" id="LN545">545</td><td class="line">	<span class='macro'>forall_nodes(v,*G_mult_ptr[level])<span class='expansion'>for((v)=(*G_mult_ptr[level]).firstNode(); (v); (v)=(v)-&gt;succ<br>())</span></span></td></tr>
+<tr><td class="num" id="LN546">546</td><td class="line">	{<span class='comment'>//for</span></td></tr>
+<tr><td class="num" id="LN547">547</td><td class="line">		node_type = (*A_mult_ptr[level])[v].get_type();</td></tr>
+<tr><td class="num" id="LN548">548</td><td class="line">		<span class='keyword'>if</span>(node_type == 3)</td></tr>
+<tr><td class="num" id="LN549">549</td><td class="line">			pm_nodes.pushBack(v);</td></tr>
+<tr><td class="num" id="LN550">550</td><td class="line">		<span class='keyword'>else</span> <span class='keyword'>if</span>(node_type == 2 || node_type == 4) <span class='comment'>//a planet_node or moon_node</span></td></tr>
+<tr><td class="num" id="LN551">551</td><td class="line">		{<span class='comment'>//else</span></td></tr>
+<tr><td class="num" id="LN552">552</td><td class="line">			L.clear();</td></tr>
+<tr><td class="num" id="LN553">553</td><td class="line">			dedicated_sun = (*A_mult_ptr[level])[v].get_dedicated_sun_node();</td></tr>
+<tr><td class="num" id="LN554">554</td><td class="line">			dedicated_sun_pos = (*A_mult_ptr[level])[dedicated_sun].get_position();</td></tr>
+<tr><td class="num" id="LN555">555</td><td class="line">			dedicated_sun_distance = (*A_mult_ptr[level])[v].get_dedicated_sun_distance();</td></tr>
+<tr><td class="num" id="LN556">556</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN557">557</td><td class="line">			<span class='keyword'>if</span>(init_placement_way == FMMMLayout::ipmAdvanced)</td></tr>
+<tr><td class="num" id="LN558">558</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN559">559</td><td class="line">				<span class='macro'>forall_adj_edges(e,v)<span class='expansion'>for(ogdf::adjEntry ogdf_loop_var=(v)-&gt;firstAdj(); ogdf::test_forall_adj_edges<br>(ogdf_loop_var,(e)); ogdf_loop_var=ogdf_loop_var-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN560">560</td><td class="line">				{</td></tr>
+<tr><td class="num" id="LN561">561</td><td class="line">					<span class='keyword'>if</span>(e-&gt;source() != v)</td></tr>
+<tr><td class="num" id="LN562">562</td><td class="line">						v_adj = e-&gt;source();</td></tr>
+<tr><td class="num" id="LN563">563</td><td class="line">					<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN564">564</td><td class="line">						v_adj = e-&gt;target();</td></tr>
+<tr><td class="num" id="LN565">565</td><td class="line">					<span class='keyword'>if</span>( ( (*A_mult_ptr[level])[v].get_dedicated_sun_node() ==</td></tr>
+<tr><td class="num" id="LN566">566</td><td class="line">						(*A_mult_ptr[level])[v_adj].get_dedicated_sun_node() ) &amp;&amp;</td></tr>
+<tr><td class="num" id="LN567">567</td><td class="line">						( (*A_mult_ptr[level])[v_adj].get_type() != 1 ) &amp;&amp;</td></tr>
+<tr><td class="num" id="LN568">568</td><td class="line">						( (*A_mult_ptr[level])[v_adj].is_placed() ) )</td></tr>
+<tr><td class="num" id="LN569">569</td><td class="line">					{</td></tr>
+<tr><td class="num" id="LN570">570</td><td class="line">						new_pos = calculate_position(dedicated_sun_pos,(*A_mult_ptr[level])</td></tr>
+<tr><td class="num" id="LN571">571</td><td class="line">							[v_adj].get_position(),dedicated_sun_distance,</td></tr>
+<tr><td class="num" id="LN572">572</td><td class="line">							(*E_mult_ptr[level])[e].get_length());</td></tr>
+<tr><td class="num" id="LN573">573</td><td class="line">						L.pushBack(new_pos);</td></tr>
+<tr><td class="num" id="LN574">574</td><td class="line">					}</td></tr>
+<tr><td class="num" id="LN575">575</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN576">576</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN577">577</td><td class="line">			<span class='keyword'>if</span> ((*A_mult_ptr[level])[v].get_lambda_List_ptr()-&gt;empty())</td></tr>
+<tr><td class="num" id="LN578">578</td><td class="line">			{<span class='comment'>//special case</span></td></tr>
+<tr><td class="num" id="LN579">579</td><td class="line">				<span class='keyword'>if</span>(L.empty())</td></tr>
+<tr><td class="num" id="LN580">580</td><td class="line">				{</td></tr>
+<tr><td class="num" id="LN581">581</td><td class="line">					new_pos = create_random_pos(dedicated_sun_pos,(*A_mult_ptr[level])</td></tr>
+<tr><td class="num" id="LN582">582</td><td class="line">						[v].get_dedicated_sun_distance(),</td></tr>
+<tr><td class="num" id="LN583">583</td><td class="line">						(*A_mult_ptr[level])[v].get_angle_1(),</td></tr>
+<tr><td class="num" id="LN584">584</td><td class="line">						(*A_mult_ptr[level])[v].get_angle_2());</td></tr>
+<tr><td class="num" id="LN585">585</td><td class="line">					L.pushBack(new_pos);</td></tr>
+<tr><td class="num" id="LN586">586</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN587">587</td><td class="line">			}<span class='comment'>//special case</span></td></tr>
+<tr><td class="num" id="LN588">588</td><td class="line">			<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN589">589</td><td class="line">			{<span class='comment'>//usual case</span></td></tr>
+<tr><td class="num" id="LN590">590</td><td class="line">				lambdaIterator = (*A_mult_ptr[level])[v].get_lambda_List_ptr()-&gt;begin();</td></tr>
+<tr><td class="num" id="LN591">591</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN592">592</td><td class="line">				<span class='macro'>forall_listiterators(node, adj_sun_ptr,*(*A_mult_ptr[level])[v].<span class='expansion'>for(ListConstIterator&lt; node &gt; adj_sun_ptr = (*(*A_mult_ptr<br>[level])[v]. get_neighbour_sun_node_List_ptr()).begin(); adj_sun_ptr<br>.valid(); ++adj_sun_ptr)</span></span></td></tr>
+<tr><td class="num" id="LN593">593</td><td class="line">					<span class='macro'>get_neighbour_sun_node_List_ptr())<span class='expansion'>for(ListConstIterator&lt; node &gt; adj_sun_ptr = (*(*A_mult_ptr<br>[level])[v]. get_neighbour_sun_node_List_ptr()).begin(); adj_sun_ptr<br>.valid(); ++adj_sun_ptr)</span></span></td></tr>
+<tr><td class="num" id="LN594">594</td><td class="line">				{</td></tr>
+<tr><td class="num" id="LN595">595</td><td class="line">					lambda = *lambdaIterator;</td></tr>
+<tr><td class="num" id="LN596">596</td><td class="line">					adj_sun_pos = (*A_mult_ptr[level])[*adj_sun_ptr].get_position();</td></tr>
+<tr><td class="num" id="LN597">597</td><td class="line">					new_pos = get_waggled_inbetween_position(dedicated_sun_pos,adj_sun_pos,</td></tr>
+<tr><td class="num" id="LN598">598</td><td class="line">						lambda);</td></tr>
+<tr><td class="num" id="LN599">599</td><td class="line">					L.pushBack(new_pos);</td></tr>
+<tr><td class="num" id="LN600">600</td><td class="line">					<span class='keyword'>if</span>(lambdaIterator != (*A_mult_ptr[level])[v].get_lambda_List_ptr()</td></tr>
+<tr><td class="num" id="LN601">601</td><td class="line">						-&gt;rbegin())</td></tr>
+<tr><td class="num" id="LN602">602</td><td class="line">						lambdaIterator = (*A_mult_ptr[level])[v].get_lambda_List_ptr()</td></tr>
+<tr><td class="num" id="LN603">603</td><td class="line">						-&gt;cyclicSucc(lambdaIterator);</td></tr>
+<tr><td class="num" id="LN604">604</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN605">605</td><td class="line">			}<span class='comment'>//usual case</span></td></tr>
+<tr><td class="num" id="LN606">606</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN607">607</td><td class="line">			(*A_mult_ptr[level])[v].set_position(get_barycenter_position(L));</td></tr>
+<tr><td class="num" id="LN608">608</td><td class="line">			(*A_mult_ptr[level])[v].place();</td></tr>
+<tr><td class="num" id="LN609">609</td><td class="line">		}<span class='comment'>//else</span></td></tr>
+<tr><td class="num" id="LN610">610</td><td class="line">	}<span class='comment'>//for</span></td></tr>
+<tr><td class="num" id="LN611">611</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN612">612</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN613">613</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN614">614</td><td class="line"><span class='keyword'>void</span> Multilevel::create_all_placement_sectors(</td></tr>
+<tr><td class="num" id="LN615">615</td><td class="line">	Array&lt;Graph*&gt; &amp;G_mult_ptr,</td></tr>
+<tr><td class="num" id="LN616">616</td><td class="line">	Array&lt;NodeArray&lt;NodeAttributes&gt;*&gt; &amp;A_mult_ptr,</td></tr>
+<tr><td class="num" id="LN617">617</td><td class="line">	Array&lt;EdgeArray&lt;EdgeAttributes&gt;*&gt; &amp;E_mult_ptr,</td></tr>
+<tr><td class="num" id="LN618">618</td><td class="line">	<span class='keyword'>int</span> level)</td></tr>
+<tr><td class="num" id="LN619">619</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN620">620</td><td class="line">	node v_high, w_high, sun_node, v, ded_sun;</td></tr>
+<tr><td class="num" id="LN621">621</td><td class="line">	edge e_high;</td></tr>
+<tr><td class="num" id="LN622">622</td><td class="line">	List&lt;DPoint&gt; adj_pos;</td></tr>
+<tr><td class="num" id="LN623">623</td><td class="line">	<span class='keyword'>double</span> angle_1, angle_2, act_angle_1, act_angle_2, next_angle, min_next_angle;</td></tr>
+<tr><td class="num" id="LN624">624</td><td class="line">	DPoint start_pos, end_pos;</td></tr>
+<tr><td class="num" id="LN625">625</td><td class="line">	<span class='keyword'>int</span> MAX = 10; <span class='comment'>//the biggest of at most MAX random selected sectors is choosen</span></td></tr>
+<tr><td class="num" id="LN626">626</td><td class="line">	<span class='keyword'>int</span> steps;</td></tr>
+<tr><td class="num" id="LN627">627</td><td class="line">	ListIterator&lt;DPoint&gt; it, next_pos_ptr;</td></tr>
+<tr><td class="num" id="LN628">628</td><td class="line">	<span class='keyword'>bool</span> first_angle;</td></tr>
+<tr><td class="num" id="LN629">629</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN630">630</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN631">631</td><td class="line">	<span class='macro'>forall_nodes(v_high,(*G_mult_ptr[level+1]))<span class='expansion'>for((v_high)=((*G_mult_ptr[level+1])).firstNode(); (v_high); (<br>v_high)=(v_high)-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN632">632</td><td class="line">	{<span class='comment'>//forall</span></td></tr>
+<tr><td class="num" id="LN633">633</td><td class="line">		<span class='comment'>//find pos of adjacent nodes</span></td></tr>
+<tr><td class="num" id="LN634">634</td><td class="line">		adj_pos.clear();</td></tr>
+<tr><td class="num" id="LN635">635</td><td class="line">		DPoint v_high_pos ((*A_mult_ptr[level+1])[v_high].get_x(),</td></tr>
+<tr><td class="num" id="LN636">636</td><td class="line">			(*A_mult_ptr[level+1])[v_high].get_y());</td></tr>
+<tr><td class="num" id="LN637">637</td><td class="line">		<span class='macro'>forall_adj_edges(e_high,v_high)<span class='expansion'>for(ogdf::adjEntry ogdf_loop_var=(v_high)-&gt;firstAdj(); ogdf<br>::test_forall_adj_edges(ogdf_loop_var,(e_high)); ogdf_loop_var<br>=ogdf_loop_var-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN638">638</td><td class="line">			<span class='keyword'>if</span>(!(*E_mult_ptr[level+1])[e_high].is_extra_edge())</td></tr>
+<tr><td class="num" id="LN639">639</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN640">640</td><td class="line">				<span class='keyword'>if</span>(v_high == e_high-&gt;source())</td></tr>
+<tr><td class="num" id="LN641">641</td><td class="line">					w_high = e_high-&gt;target();</td></tr>
+<tr><td class="num" id="LN642">642</td><td class="line">				<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN643">643</td><td class="line">					w_high = e_high-&gt;source();</td></tr>
+<tr><td class="num" id="LN644">644</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN645">645</td><td class="line">				DPoint w_high_pos ((*A_mult_ptr[level+1])[w_high].get_x(),</td></tr>
+<tr><td class="num" id="LN646">646</td><td class="line">					(*A_mult_ptr[level+1])[w_high].get_y());</td></tr>
+<tr><td class="num" id="LN647">647</td><td class="line">				adj_pos.pushBack(w_high_pos);</td></tr>
+<tr><td class="num" id="LN648">648</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN649">649</td><td class="line">			<span class='keyword'>if</span>(adj_pos.empty()) <span class='comment'>//easy case</span></td></tr>
+<tr><td class="num" id="LN650">650</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN651">651</td><td class="line">				angle_1 = 0;</td></tr>
+<tr><td class="num" id="LN652">652</td><td class="line">				angle_2 = 6.2831853;</td></tr>
+<tr><td class="num" id="LN653">653</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN654">654</td><td class="line">			<span class='keyword'>else</span> <span class='keyword'>if</span>(adj_pos.size() == 1) <span class='comment'>//special case</span></td></tr>
+<tr><td class="num" id="LN655">655</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN656">656</td><td class="line">				<span class='comment'>//create angle_1</span></td></tr>
+<tr><td class="num" id="LN657">657</td><td class="line">				start_pos = *adj_pos.begin();</td></tr>
+<tr><td class="num" id="LN658">658</td><td class="line">				DPoint x_parallel_pos (v_high_pos.m_x + 1, v_high_pos.m_y);</td></tr>
+<tr><td class="num" id="LN659">659</td><td class="line">				angle_1 = angle(v_high_pos,x_parallel_pos,start_pos);</td></tr>
+<tr><td class="num" id="LN660">660</td><td class="line">				<span class='comment'>//create angle_2</span></td></tr>
+<tr><td class="num" id="LN661">661</td><td class="line">				angle_2 = angle_1 + Math::pi;</td></tr>
+<tr><td class="num" id="LN662">662</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN663">663</td><td class="line">			<span class='keyword'>else</span> <span class='comment'>//usual case</span></td></tr>
+<tr><td class="num" id="LN664">664</td><td class="line">			{<span class='comment'>//else</span></td></tr>
+<tr><td class="num" id="LN665">665</td><td class="line">				steps = 1;</td></tr>
+<tr><td class="num" id="LN666">666</td><td class="line">				it = adj_pos.begin();</td></tr>
+<tr><td class="num" id="LN667">667</td><td class="line">				<span class='keyword'>do</span></td></tr>
+<tr><td class="num" id="LN668">668</td><td class="line">				{</td></tr>
+<tr><td class="num" id="LN669">669</td><td class="line">					<span class='comment'>//create act_angle_1</span></td></tr>
+<tr><td class="num" id="LN670">670</td><td class="line">					start_pos = *it;</td></tr>
+<tr><td class="num" id="LN671">671</td><td class="line">					DPoint x_parallel_pos (v_high_pos.m_x + 1, v_high_pos.m_y);</td></tr>
+<tr><td class="num" id="LN672">672</td><td class="line">					act_angle_1 = angle(v_high_pos,x_parallel_pos,start_pos);</td></tr>
+<tr><td class="num" id="LN673">673</td><td class="line">					<span class='comment'>//create act_angle_2</span></td></tr>
+<tr><td class="num" id="LN674">674</td><td class="line">					first_angle = <span class='keyword'>true</span>;</td></tr>
+<tr><td class="num" id="LN675">675</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN676">676</td><td class="line">					<span class='keyword'>for</span>(next_pos_ptr = adj_pos.begin();next_pos_ptr.valid();++next_pos_ptr)</td></tr>
+<tr><td class="num" id="LN677">677</td><td class="line">					{</td></tr>
+<tr><td class="num" id="LN678">678</td><td class="line">						next_angle = angle(v_high_pos,start_pos,*next_pos_ptr);</td></tr>
+<tr><td class="num" id="LN679">679</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN680">680</td><td class="line">						<span class='keyword'>if</span>(start_pos != *next_pos_ptr &amp;&amp; (first_angle || next_angle &lt;</td></tr>
+<tr><td class="num" id="LN681">681</td><td class="line">							min_next_angle))</td></tr>
+<tr><td class="num" id="LN682">682</td><td class="line">						{</td></tr>
+<tr><td class="num" id="LN683">683</td><td class="line">							min_next_angle = next_angle;</td></tr>
+<tr><td class="num" id="LN684">684</td><td class="line">							first_angle = <span class='keyword'>false</span>;</td></tr>
+<tr><td class="num" id="LN685">685</td><td class="line">						}</td></tr>
+<tr><td class="num" id="LN686">686</td><td class="line">					}</td></tr>
+<tr><td class="num" id="LN687">687</td><td class="line">					act_angle_2 = act_angle_1 + min_next_angle;</td></tr>
+<tr><td class="num" id="LN688">688</td><td class="line">					<span class='keyword'>if</span>((it == adj_pos.begin())||((act_angle_2-act_angle_1)&gt;(angle_2-angle_1)))</td></tr>
+<tr><td class="num" id="LN689">689</td><td class="line">					{</td></tr>
+<tr><td class="num" id="LN690">690</td><td class="line">						angle_1 = act_angle_1;</td></tr>
+<tr><td class="num" id="LN691">691</td><td class="line">						angle_2 = act_angle_2;</td></tr>
+<tr><td class="num" id="LN692">692</td><td class="line">					}</td></tr>
+<tr><td class="num" id="LN693">693</td><td class="line">					<span class='keyword'>if</span>(it != adj_pos.rbegin())</td></tr>
+<tr><td class="num" id="LN694">694</td><td class="line">						it = adj_pos.cyclicSucc(it);</td></tr>
+<tr><td class="num" id="LN695">695</td><td class="line">					steps++;</td></tr>
+<tr><td class="num" id="LN696">696</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN697">697</td><td class="line">				<span class='keyword'>while</span>((steps &lt;= MAX) &amp;&amp; (it != adj_pos.rbegin()));</td></tr>
+<tr><td class="num" id="LN698">698</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN699">699</td><td class="line">				<span class='keyword'>if</span>(angle_1 == angle_2)</td></tr>
+<tr><td class="num" id="LN700">700</td><td class="line">					angle_2 = angle_1 + Math::pi;</td></tr>
+<tr><td class="num" id="LN701">701</td><td class="line">			}<span class='comment'>//else</span></td></tr>
+<tr><td class="num" id="LN702">702</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN703">703</td><td class="line">			<span class='comment'>//import angle_1 and angle_2 to the dedicated suns at level level</span></td></tr>
+<tr><td class="num" id="LN704">704</td><td class="line">			sun_node = (*A_mult_ptr[level+1])[v_high].get_lower_level_node();</td></tr>
+<tr><td class="num" id="LN705">705</td><td class="line">			(*A_mult_ptr[level])[sun_node].set_angle_1(angle_1);</td></tr>
+<tr><td class="num" id="LN706">706</td><td class="line">			(*A_mult_ptr[level])[sun_node].set_angle_2(angle_2);</td></tr>
+<tr><td class="num" id="LN707">707</td><td class="line">	}<span class='comment'>//forall</span></td></tr>
+<tr><td class="num" id="LN708">708</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN709">709</td><td class="line">	<span class='comment'>//import the angle values from the values of the dedicated sun nodes</span></td></tr>
+<tr><td class="num" id="LN710">710</td><td class="line">	<span class='macro'>forall_nodes(v,*G_mult_ptr[level])<span class='expansion'>for((v)=(*G_mult_ptr[level]).firstNode(); (v); (v)=(v)-&gt;succ<br>())</span></span></td></tr>
+<tr><td class="num" id="LN711">711</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN712">712</td><td class="line">		ded_sun = (*A_mult_ptr[level])[v].get_dedicated_sun_node();</td></tr>
+<tr><td class="num" id="LN713">713</td><td class="line">		(*A_mult_ptr[level])[v].set_angle_1((*A_mult_ptr[level])[ded_sun].get_angle_1());</td></tr>
+<tr><td class="num" id="LN714">714</td><td class="line">		(*A_mult_ptr[level])[v].set_angle_2((*A_mult_ptr[level])[ded_sun].get_angle_2());</td></tr>
+<tr><td class="num" id="LN715">715</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN716">716</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN717">717</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN718">718</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN719">719</td><td class="line"><span class='keyword'>void</span> Multilevel::set_initial_positions_of_pm_nodes(</td></tr>
+<tr><td class="num" id="LN720">720</td><td class="line">	<span class='keyword'>int</span> level,</td></tr>
+<tr><td class="num" id="LN721">721</td><td class="line">	<span class='keyword'>int</span> init_placement_way,</td></tr>
+<tr><td class="num" id="LN722">722</td><td class="line">	Array&lt;NodeArray&lt;NodeAttributes&gt;*&gt; &amp;A_mult_ptr,</td></tr>
+<tr><td class="num" id="LN723">723</td><td class="line">	Array&lt;EdgeArray&lt;EdgeAttributes&gt;*&gt; &amp;E_mult_ptr,</td></tr>
+<tr><td class="num" id="LN724">724</td><td class="line">	List&lt;node&gt;&amp; pm_nodes)</td></tr>
+<tr><td class="num" id="LN725">725</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN726">726</td><td class="line">	<span class='keyword'>double</span> moon_dist, sun_dist, lambda;</td></tr>
+<tr><td class="num" id="LN727">727</td><td class="line">	node v_adj, sun_node;</td></tr>
+<tr><td class="num" id="LN728">728</td><td class="line">	edge e;</td></tr>
+<tr><td class="num" id="LN729">729</td><td class="line">	DPoint sun_pos, moon_pos, new_pos, adj_sun_pos;</td></tr>
+<tr><td class="num" id="LN730">730</td><td class="line">	List&lt;DPoint&gt; L;</td></tr>
+<tr><td class="num" id="LN731">731</td><td class="line">	ListIterator&lt;<span class='keyword'>double</span>&gt; lambdaIterator;</td></tr>
+<tr><td class="num" id="LN732">732</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN733">733</td><td class="line">	<span class='macro'>forall_listiterators(node,v_ptr,pm_nodes)<span class='expansion'>for(ListConstIterator&lt; node &gt; v_ptr = (pm_nodes).begin(<br>); v_ptr.valid(); ++v_ptr)</span></span></td></tr>
+<tr><td class="num" id="LN734">734</td><td class="line">	{<span class='comment'>//forall</span></td></tr>
+<tr><td class="num" id="LN735">735</td><td class="line">		L.clear();</td></tr>
+<tr><td class="num" id="LN736">736</td><td class="line">		sun_node = (*A_mult_ptr[level])[*v_ptr].get_dedicated_sun_node();</td></tr>
+<tr><td class="num" id="LN737">737</td><td class="line">		sun_pos =  (*A_mult_ptr[level])[sun_node].get_position();</td></tr>
+<tr><td class="num" id="LN738">738</td><td class="line">		sun_dist = (*A_mult_ptr[level])[*v_ptr].get_dedicated_sun_distance();</td></tr>
+<tr><td class="num" id="LN739">739</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN740">740</td><td class="line">		<span class='keyword'>if</span>(init_placement_way == FMMMLayout::ipmAdvanced)</td></tr>
+<tr><td class="num" id="LN741">741</td><td class="line">		{<span class='comment'>//if</span></td></tr>
+<tr><td class="num" id="LN742">742</td><td class="line">			<span class='macro'>forall_adj_edges(e,*v_ptr)<span class='expansion'>for(ogdf::adjEntry ogdf_loop_var=(*v_ptr)-&gt;firstAdj(); ogdf<br>::test_forall_adj_edges(ogdf_loop_var,(e)); ogdf_loop_var=ogdf_loop_var<br>-&gt;succ())</span></span></td></tr>
+<tr><td class="num" id="LN743">743</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN744">744</td><td class="line">				<span class='keyword'>if</span>(e-&gt;source() != *v_ptr)</td></tr>
+<tr><td class="num" id="LN745">745</td><td class="line">					v_adj = e-&gt;source();</td></tr>
+<tr><td class="num" id="LN746">746</td><td class="line">				<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN747">747</td><td class="line">					v_adj = e-&gt;target();</td></tr>
+<tr><td class="num" id="LN748">748</td><td class="line">				<span class='keyword'>if</span>( (!(*E_mult_ptr[level])[e].is_moon_edge()) &amp;&amp;</td></tr>
+<tr><td class="num" id="LN749">749</td><td class="line">					( (*A_mult_ptr[level])[*v_ptr].get_dedicated_sun_node() ==</td></tr>
+<tr><td class="num" id="LN750">750</td><td class="line">					(*A_mult_ptr[level])[v_adj].get_dedicated_sun_node() ) &amp;&amp;</td></tr>
+<tr><td class="num" id="LN751">751</td><td class="line">					( (*A_mult_ptr[level])[v_adj].get_type() != 1 ) &amp;&amp;</td></tr>
+<tr><td class="num" id="LN752">752</td><td class="line">					( (*A_mult_ptr[level])[v_adj].is_placed() ) )</td></tr>
+<tr><td class="num" id="LN753">753</td><td class="line">				{</td></tr>
+<tr><td class="num" id="LN754">754</td><td class="line">					new_pos = calculate_position(sun_pos,(*A_mult_ptr[level])[v_adj].</td></tr>
+<tr><td class="num" id="LN755">755</td><td class="line">						get_position(),sun_dist,(*E_mult_ptr[level])</td></tr>
+<tr><td class="num" id="LN756">756</td><td class="line">						[e].get_length());</td></tr>
+<tr><td class="num" id="LN757">757</td><td class="line">					L.pushBack(new_pos);</td></tr>
+<tr><td class="num" id="LN758">758</td><td class="line">				}</td></tr>
+<tr><td class="num" id="LN759">759</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN760">760</td><td class="line">		}<span class='comment'>//if</span></td></tr>
+<tr><td class="num" id="LN761">761</td><td class="line">		<span class='macro'>forall_listiterators(node, moon_node_ptr,*(*A_mult_ptr[level])[*v_ptr].<span class='expansion'>for(ListConstIterator&lt; node &gt; moon_node_ptr = (*(*A_mult_ptr<br>[level])[*v_ptr]. get_dedicated_moon_node_List_ptr()).begin()<br>; moon_node_ptr.valid(); ++moon_node_ptr)</span></span></td></tr>
+<tr><td class="num" id="LN762">762</td><td class="line">			<span class='macro'>get_dedicated_moon_node_List_ptr())<span class='expansion'>for(ListConstIterator&lt; node &gt; moon_node_ptr = (*(*A_mult_ptr<br>[level])[*v_ptr]. get_dedicated_moon_node_List_ptr()).begin()<br>; moon_node_ptr.valid(); ++moon_node_ptr)</span></span></td></tr>
+<tr><td class="num" id="LN763">763</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN764">764</td><td class="line">			moon_pos = (*A_mult_ptr[level])[*moon_node_ptr].get_position();</td></tr>
+<tr><td class="num" id="LN765">765</td><td class="line">			moon_dist =  (*A_mult_ptr[level])[*moon_node_ptr].get_dedicated_sun_distance();</td></tr>
+<tr><td class="num" id="LN766">766</td><td class="line">			lambda = sun_dist/moon_dist;</td></tr>
+<tr><td class="num" id="LN767">767</td><td class="line">			new_pos = get_waggled_inbetween_position(sun_pos,moon_pos,lambda);</td></tr>
+<tr><td class="num" id="LN768">768</td><td class="line">			L.pushBack(new_pos);</td></tr>
+<tr><td class="num" id="LN769">769</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN770">770</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN771">771</td><td class="line">		<span class='keyword'>if</span> (!(*A_mult_ptr[level])[*v_ptr].get_lambda_List_ptr()-&gt;empty())</td></tr>
+<tr><td class="num" id="LN772">772</td><td class="line">		{</td></tr>
+<tr><td class="num" id="LN773">773</td><td class="line">			lambdaIterator = (*A_mult_ptr[level])[*v_ptr].get_lambda_List_ptr()-&gt;begin();</td></tr>
+<tr><td class="num" id="LN774">774</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN775">775</td><td class="line">			<span class='macro'>forall_listiterators(node,adj_sun_ptr,*(*A_mult_ptr[level])[*v_ptr].<span class='expansion'>for(ListConstIterator&lt; node &gt; adj_sun_ptr = (*(*A_mult_ptr<br>[level])[*v_ptr]. get_neighbour_sun_node_List_ptr()).begin();<br> adj_sun_ptr.valid(); ++adj_sun_ptr)</span></span></td></tr>
+<tr><td class="num" id="LN776">776</td><td class="line">				<span class='macro'>get_neighbour_sun_node_List_ptr())<span class='expansion'>for(ListConstIterator&lt; node &gt; adj_sun_ptr = (*(*A_mult_ptr<br>[level])[*v_ptr]. get_neighbour_sun_node_List_ptr()).begin();<br> adj_sun_ptr.valid(); ++adj_sun_ptr)</span></span></td></tr>
+<tr><td class="num" id="LN777">777</td><td class="line">			{</td></tr>
+<tr><td class="num" id="LN778">778</td><td class="line">				lambda = *lambdaIterator;</td></tr>
+<tr><td class="num" id="LN779">779</td><td class="line">				adj_sun_pos = (*A_mult_ptr[level])[*adj_sun_ptr].get_position();</td></tr>
+<tr><td class="num" id="LN780">780</td><td class="line">				new_pos = get_waggled_inbetween_position(sun_pos,adj_sun_pos,lambda);</td></tr>
+<tr><td class="num" id="LN781">781</td><td class="line">				L.pushBack(new_pos);</td></tr>
+<tr><td class="num" id="LN782">782</td><td class="line">				<span class='keyword'>if</span>(lambdaIterator != (*A_mult_ptr[level])[*v_ptr].get_lambda_List_ptr()</td></tr>
+<tr><td class="num" id="LN783">783</td><td class="line">					-&gt;rbegin())</td></tr>
+<tr><td class="num" id="LN784">784</td><td class="line">					lambdaIterator = (*A_mult_ptr[level])[*v_ptr].get_lambda_List_ptr()</td></tr>
+<tr><td class="num" id="LN785">785</td><td class="line">					-&gt;cyclicSucc(lambdaIterator);</td></tr>
+<tr><td class="num" id="LN786">786</td><td class="line">			}</td></tr>
+<tr><td class="num" id="LN787">787</td><td class="line">		}</td></tr>
+<tr><td class="num" id="LN788">788</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN789">789</td><td class="line">		(*A_mult_ptr[level])[*v_ptr].set_position(get_barycenter_position(L));</td></tr>
+<tr><td class="num" id="LN790">790</td><td class="line">		(*A_mult_ptr[level])[*v_ptr].place();</td></tr>
+<tr><td class="num" id="LN791">791</td><td class="line">	}<span class='comment'>//forall</span></td></tr>
+<tr><td class="num" id="LN792">792</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN793">793</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN794">794</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN795">795</td><td class="line"><span class='keyword'>inline</span> DPoint Multilevel::create_random_pos(DPoint center,<span class='keyword'>double</span> radius,<span class='keyword'>double</span> angle_1,</td></tr>
+<tr><td class="num" id="LN796">796</td><td class="line">	<span class='keyword'>double</span> angle_2)</td></tr>
+<tr><td class="num" id="LN797">797</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN798">798</td><td class="line">	<span class='keyword'>const</span> <span class='keyword'>int</span> BILLION = 1000000000;</td></tr>
+<tr><td class="num" id="LN799">799</td><td class="line">	DPoint new_point;</td></tr>
+<tr><td class="num" id="LN800">800</td><td class="line">	<span class='keyword'>double</span> rnd = <span class='keyword'>double</span>(randomNumber(1,BILLION)+1)/(BILLION+2);<span class='comment'>//rand number in (0,1)</span></td></tr>
+<tr><td class="num" id="LN801">801</td><td class="line">	<span class='keyword'>double</span> rnd_angle = angle_1 +(angle_2-angle_1)*rnd;</td></tr>
+<tr><td class="num" id="LN802">802</td><td class="line">	<span class='keyword'>double</span> dx = cos(rnd_angle) * radius;</td></tr>
+<tr><td class="num" id="LN803">803</td><td class="line">	<span class='keyword'>double</span> dy = sin(rnd_angle) * radius;</td></tr>
+<tr><td class="num" id="LN804">804</td><td class="line">	new_point.m_x = center.m_x + dx ;</td></tr>
+<tr><td class="num" id="LN805">805</td><td class="line">	new_point.m_y = center.m_y + dy;</td></tr>
+<tr><td class="num" id="LN806">806</td><td class="line">	<span class='keyword'>return</span> new_point;</td></tr>
+<tr><td class="num" id="LN807">807</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN808">808</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN809">809</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN810">810</td><td class="line"><span class='keyword'>inline</span> DPoint Multilevel::get_waggled_inbetween_position(DPoint s, DPoint t, <span class='keyword'>double</span> lambda)</td></tr>
+<tr><td class="num" id="LN811">811</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN812">812</td><td class="line">	<span class='keyword'>const</span> <span class='keyword'>double</span> WAGGLEFACTOR = 0.05;</td></tr>
+<tr><td class="num" id="LN813">813</td><td class="line">	<span class='keyword'>const</span> <span class='keyword'>int</span> BILLION = 1000000000;</td></tr>
+<tr><td class="num" id="LN814">814</td><td class="line">	DPoint inbetween_point;</td></tr>
+<tr><td class="num" id="LN815">815</td><td class="line">	inbetween_point.m_x = s.m_x + lambda*(t.m_x - s.m_x);</td></tr>
+<tr><td class="num" id="LN816">816</td><td class="line">	inbetween_point.m_y = s.m_y + lambda*(t.m_y - s.m_y);</td></tr>
+<tr><td class="num" id="LN817">817</td><td class="line">	<span class='keyword'>double</span> radius = WAGGLEFACTOR * (t-s).norm();</td></tr>
+<tr><td class="num" id="LN818">818</td><td class="line">	<span class='keyword'>double</span> rnd = <span class='keyword'>double</span>(randomNumber(1,BILLION)+1)/(BILLION+2);<span class='comment'>//rand number in (0,1)</span></td></tr>
+<tr><td class="num" id="LN819">819</td><td class="line">	<span class='keyword'>double</span> rand_radius =  radius * rnd;</td></tr>
+<tr><td class="num" id="LN820">820</td><td class="line">	<span class='keyword'>return</span> create_random_pos(inbetween_point,rand_radius,0,6.2831853);</td></tr>
+<tr><td class="num" id="LN821">821</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN822">822</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN823">823</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN824">824</td><td class="line"><span class='keyword'>inline</span> DPoint Multilevel::get_barycenter_position(List&lt;DPoint&gt;&amp; L)</td></tr>
+<tr><td class="num" id="LN825">825</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN826">826</td><td class="line">	DPoint sum (0,0);</td></tr>
+<tr><td class="num" id="LN827">827</td><td class="line">	DPoint barycenter;</td></tr>
+<tr><td class="num" id="LN828">828</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN829">829</td><td class="line">	<span class='macro'>forall_listiterators(DPoint, act_point_ptr,L)<span class='expansion'>for(ListConstIterator&lt; DPoint &gt; act_point_ptr = (L).begin<br>(); act_point_ptr.valid(); ++act_point_ptr)</span></span></td></tr>
+<tr><td class="num" id="LN830">830</td><td class="line">		sum = sum + (*act_point_ptr);</td></tr>
+<tr><td class="num" id="LN831">831</td><td class="line">	barycenter.m_x = sum.m_x/L.size();</td></tr>
+<tr><td class="num" id="LN832">832</td><td class="line">	barycenter.m_y = sum.m_y/L.size();</td></tr>
+<tr><td class="num" id="LN833">833</td><td class="line">	<span class='keyword'>return</span> barycenter;</td></tr>
+<tr><td class="num" id="LN834">834</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN835">835</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN836">836</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN837">837</td><td class="line"><span class='keyword'>inline</span> DPoint Multilevel::calculate_position(DPoint P, DPoint Q, <span class='keyword'>double</span> dist_P, <span class='keyword'>double</span> dist_Q)</td></tr>
+<tr><td class="num" id="LN838">838</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN839">839</td><td class="line">	<span class='keyword'>double</span> dist_PQ = (P-Q).norm();</td></tr>
+<tr><td class="num" id="LN840">840</td><td class="line">	<span class='keyword'>double</span> lambda = (dist_P + (dist_PQ - dist_P - dist_Q)/2)/dist_PQ;</td></tr>
+<tr><td class="num" id="LN841">841</td><td class="line">	<span class='keyword'>return</span> get_waggled_inbetween_position(P,Q,lambda);</td></tr>
+<tr><td class="num" id="LN842">842</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN843">843</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN844">844</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN845">845</td><td class="line"><span class='keyword'>void</span> Multilevel::delete_multilevel_representations(</td></tr>
+<tr><td class="num" id="LN846">846</td><td class="line">	Array&lt;Graph*&gt; &amp;G_mult_ptr,</td></tr>
+<tr><td class="num" id="LN847">847</td><td class="line">	Array&lt;NodeArray&lt;NodeAttributes&gt;*&gt; &amp;A_mult_ptr,</td></tr>
+<tr><td class="num" id="LN848">848</td><td class="line">	Array&lt;EdgeArray&lt;EdgeAttributes&gt;*&gt; &amp;E_mult_ptr,</td></tr>
+<tr><td class="num" id="LN849">849</td><td class="line">	<span class='keyword'>int</span> max_level)</td></tr>
+<tr><td class="num" id="LN850">850</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN851">851</td><td class="line">	<span class='keyword'>for</span>(<span class='keyword'>int</span> i=1; i&lt;= max_level; i++)</td></tr>
+<tr><td class="num" id="LN852">852</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN853">853</td><td class="line">		<span class='keyword'>delete</span> G_mult_ptr[i];</td></tr>
+<tr><td class="num" id="LN854">854</td><td class="line">		<span class='keyword'>delete</span> A_mult_ptr[i];</td></tr>
+<tr><td class="num" id="LN855">855</td><td class="line">		<span class='keyword'>delete</span> E_mult_ptr[i];</td></tr>
+<tr><td class="num" id="LN856">856</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN857">857</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN858">858</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN859">859</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN860">860</td><td class="line"><span class='keyword'>double</span> Multilevel::angle(DPoint&amp; P, DPoint&amp; Q, DPoint&amp; R)</td></tr>
+<tr><td class="num" id="LN861">861</td><td class="line">{</td></tr>
+<tr><td class="num" id="LN862">862</td><td class="line">	<span class='keyword'>double</span> dx1 = Q.m_x - P.m_x;</td></tr>
+<tr><td class="num" id="LN863">863</td><td class="line">	<span class='keyword'>double</span> dy1 = Q.m_y - P.m_y;</td></tr>
+<tr><td class="num" id="LN864">864</td><td class="line">	<span class='keyword'>double</span> dx2 = R.m_x - P.m_x;</td></tr>
+<tr><td class="num" id="LN865">865</td><td class="line">	<span class='keyword'>double</span> dy2 = R.m_y - P.m_y;</td></tr>
+<tr><td class="num" id="LN866">866</td><td class="line">	<span class='keyword'>double</span> fi;<span class='comment'>//the angle</span></td></tr>
+<tr><td class="num" id="LN867">867</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN868">868</td><td class="line">	<span class='keyword'>if</span> ((dx1 == 0 &amp;&amp; dy1 == 0) || (dx2 == 0 &amp;&amp; dy2 == 0))</td></tr>
+<tr><td class="num" id="LN869">869</td><td class="line">		cout&lt;&lt;<span class='string_literal'>"Multilevel::angle()"</span>&lt;&lt;endl;</td></tr>
+<tr><td class="num" id="LN870">870</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN871">871</td><td class="line">	<span class='keyword'>double</span> norm  = (dx1*dx1+dy1*dy1)*(dx2*dx2+dy2*dy2);</td></tr>
+<tr><td class="num" id="LN872">872</td><td class="line">	<span class='keyword'>double</span> cosfi = (dx1*dx2+dy1*dy2) / sqrt(norm);</td></tr>
+<tr><td class="num" id="LN873">873</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN874">874</td><td class="line">	<span class='keyword'>if</span> (cosfi &gt;=  1.0 ) fi = 0;</td></tr>
+<tr><td class="num" id="LN875">875</td><td class="line">	<span class='keyword'>if</span> (cosfi &lt;= -1.0 ) fi = Math::pi;</td></tr>
+<tr><td class="num" id="LN876">876</td><td class="line">	<span class='keyword'>else</span></td></tr>
+<tr><td class="num" id="LN877">877</td><td class="line">	{</td></tr>
+<tr><td class="num" id="LN878">878</td><td class="line">		fi = acos(cosfi);</td></tr>
+<tr><td class="num" id="LN879">879</td><td class="line">		<span class='keyword'>if</span> (dx1*dy2 &lt; dy1*dx2) fi = -fi;</td></tr>
+<tr><td class="num" id="LN880">880</td><td class="line">		<span class='keyword'>if</span> (fi &lt; 0) fi += 2*Math::pi;</td></tr>
+<tr><td class="num" id="LN881">881</td><td class="line">	}</td></tr>
+<tr><td class="num" id="LN882">882</td><td class="line">	<span class='keyword'>return</span> fi;</td></tr>
+<tr><td class="num" id="LN883">883</td><td class="line">}</td></tr>
+<tr><td class="num" id="LN884">884</td><td class="line"> </td></tr>
+<tr><td class="num" id="LN885">885</td><td class="line">}<span class='comment'>//namespace ogdf</span></td></tr>
+</table></body></html>
